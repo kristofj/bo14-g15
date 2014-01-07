@@ -1,5 +1,5 @@
 <header>
-	<a href="http://http://frigg.hiof.no/bo14-g15/"><img class="logo" src="img/logo.png" alt="Logo" /></div></a>
+	<a href="http://frigg.hiof.no/bo14-g15/"><img class="logo" src="img/logo.png" alt="Logo" /></div></a>
 	<p>Bachelorprosjekt - Værstasjon</p>
 	<nav>
 		<?php $url="http://frigg.hiof.no/bo14-g15/?i="; ?>
