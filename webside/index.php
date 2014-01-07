@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>energi.hiof.no</title>
+		<title>bo14-g15</title>
 		<link rel="icon" type="image/ico" href="img/favicon.ico">
 		<link rel="stylesheet" type="text/css" href="style/style.css" />
 		<script type="text/javascript" src="src/functions.js"></script>
