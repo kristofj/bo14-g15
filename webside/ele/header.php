@@ -1,5 +1,5 @@
 <header>
-	<a href="index.php"><img class="logo" src="img/logo.png" alt="Logo" /></div></a>
+	<a href="index.php"><img class="logo" src="img/logo.png" alt="Logo"  /></div></a>
 	<p>Bachelorprosjekt - Værstasjon</p>
 	<nav>
 		<a class="header" href="?i=home">Hjem</a>
