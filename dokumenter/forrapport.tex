@@ -1,9 +1,10 @@
 ﻿\documentclass[11pt,a4paper]{report} 
 
-\usepackage[utf8]{inputenc} 
+\usepackage[utf8x]{inputenc} 
 \usepackage[norsk]{babel} 
 \usepackage{lipsum,paralist}
 \usepackage[none]{hyphenat}
+\usepackage[colorinlistoftodos]{todonotes}
 
 
 \begin{document}
@@ -20,19 +21,29 @@ Kristian Norum Karlsen, Mikael Johansen Grimstad, \\* \LARGE Kristoffer Jensen o
 
 \section*{Prosjektgruppen}
 
+Morten Lindstad(født 10.05.1992) gikk tidligere på elektrofag med studiekompetanse(2008-2011) før han startet på dataningeniørlinja på Høgskolen i Østfold. Dette viste seg å ha flere fordeler med tanke på at flere av faga går igjen med hva han hadde på videregående. Han har alltid hatt en stor interesse for elektronikk og data, alt fra elektriske gitarer til dataspill. Dette er også en fordel fordi han og vil mest sannsynlig ha en enklere forståelse for Bacheloroppgaven.  \\
+
+Mikael Johansen Grimstad(født 23.08.1991) gikk tidligere studiespesialisering ved Frederik II VGS i Fredrikstad(2007-2010). Deretter utførte han førstegangstjenesten som Gardist ved Hans Majestet Kongens Garde(2010-2011). Han valgte å studere Informatikk - Design og utvikling av IT-systemer ved HiØ(2011-2014) fordi han alltid har hatt en stor interesse for elektronikk, data og programmering. \\
+
+
+
+
 Kort beskrivelse av dere selv: Faglig bakgrunn, interesser etc.
 
-\lipsum[1-2]
 
 \section*{Oppdragsgiver}
 
-Kort beskrivelse av oppdragsgiver: Hva slags type bedrift, hva gjÃ¸r de, hvor mange er de, etc.
+Kort beskrivelse av oppdragsgiver: Hva slags type bedrift, hva gjør de, hvor mange er de, etc.\\
 
-\lipsum[3-4]
+Oppdragsgiver er Erling P. Strand. Han er foreleser ved Høgskolen i Østfold. Han underviser i fag som tressfysikk, datakommunikasjon, fysikk/kjemi og datateknikk.Han har tidligere bakgrunn som sivilingeniør som han utdannet seg i Trondheim.\\
+
+Han har i tillegg et prosjekt ved siden av han kaller Prosject Hessdalen. Etter det ble oppdaget ukjente lysfenomener i Hessdalen i slutten av 1981 ble Prosject Hessdalen grunnlagt. Det har i senere tid blitt mye mediaoppmerksomhet med "Hessdalsfenomenet". Strand er idag leder av Hessdalen prosjektet
+
+
 
 \section*{Oppdraget}
 
-Beskriv selve oppdraget, hvorfor dette er interessant/viktig for oppdragsgiver, evt. hva slags verktøy dere skal bruke etc. Det er viktig at selve rammen rundt prosjektet blir tydelig. Enkelte oppdragsgivere gir ganske frie tÃ¸yler, mens andre har ganske konkrete krav og ønsker.
+Beskriv selve oppdraget, hvorfor dette er interessant/viktig for oppdragsgiver, evt. hva slags verktøy dere skal bruke etc. Det er viktig at selve rammen rundt prosjektet blir tydelig. Enkelte oppdragsgivere gir ganske frie tøyler, mens andre har ganske konkrete krav og ønsker.
 
 I denne delen skal dere også ta for dere  tre sentrale aspekter: Formål, leveranser og metode. {\em Formålet} (ofte bare kalt {\em målet}, skal beskrive virkningen av prosjektet på et overordnet plan (f.eks. øke omsetningen i et firma). 
 {\em Leveransene} er konkrete resultater (tangibles) som blir produsert underveis (f.eks. programvare med tilhørende brukerdokumentasjon), mao.\ {\em hva} som skal produseres. 
@@ -107,11 +118,51 @@ Prosjektplanen kan f.eks. presenteres på denne måten\footnote{Det kan jo være
 	\item Slutt: 19/1
 	\item Bemanning: Alle
 	\item Leveranse: Oppdragsgiver
-	\item Beskrivelse: Finne de sensorene vi behøver og som passer til Ethernut 2.1
+	\item Beskrivelse: Finne de ulike sensorene som passer til Ethernut 2.1
     \item Prioritet:
 	\end{compactitem}
     
-    \item [Aktivitetet 4:] Første versjon av prosjektrapport
+    \item [Aktivitetet 4:] Opprette databasen
+	\begin{compactitem}
+	\item Start: 20/1
+	\item Slutt: 26/1
+	\item Bemanning: Alle 
+	\item Leveranse: Ingen leveranse 
+	\item Beskrivelse: Opprette databasen som skal lagre dataene til værstasjonen.
+    \item Prioritet:
+	\end{compactitem}
+    
+    \item [Aktivitetet 5:] Mota sensorer
+	\begin{compactitem}
+	\item Start:20/1
+	\item Slutt: 26/1
+	\item Bemanning Alle
+	\item Leveranse: Prosjektgruppe
+	\item Beskrivelse: Venter på å mota sensorene fra leverandør.
+    \item Prioritet:
+	\end{compactitem}
+    
+    \item [Aktivitetet 6:] Tilpasse sensorene til Ethernut 2.1
+	\begin{compactitem}
+	\item Start: 26/1
+	\item Slutt: 9/2
+	\item Bemanning: Alle 
+	\item Leveranse: Ingen leveranse
+	\item Beskrivelse: Gjøre eventuelle endringer på sensorene for å kunne koble de til Ethernut 2.1.
+    \item Prioritet:
+	\end{compactitem}
+    
+    \item [Aktivitetet 7:] Programmere Ethernut 2.1
+	\begin{compactitem}
+	\item Start: 26/1
+	\item Slutt: 16/3
+	\item Bemanning: Alle 
+	\item Leveranse: Ingen leveranse
+	\item Beskrivelse: Sikre kommunikasjon mellom Ethernut 2.1 og sensorene, og mellom Ethernut 2.1 og databasen.  
+    \item Prioritet:
+	\end{compactitem}
+    
+    \item [Aktivitetet 8:] Første versjon av prosjektrapport
 	\begin{compactitem}
 	\item Start: 17/1
 	\item Slutt: 14/3
@@ -121,7 +172,27 @@ Prosjektplanen kan f.eks. presenteres på denne måten\footnote{Det kan jo være
     \item Prioritet:
 	\end{compactitem}
     
-    \item [Aktivitetet 5:] Andre versjon av prosjektrapport
+    \item [Aktivitetet 9:] Teste systemet på skolen
+	\begin{compactitem}
+	\item Start: 17/3
+	\item Slutt: 24/3
+	\item Bemanning: Alle
+	\item Leveranse: Ingen leveranse
+	\item Beskrivelse: Sette opp værstasjonen på skolen og se at alt fungere som det skal.
+    \item Prioritet:
+	\end{compactitem}
+    
+    \item [Aktivitetet 10:] Innstallere værstasjonen i Hessdalen
+	\begin{compactitem}
+	\item Start: 25/3
+	\item Slutt: 4/4
+	\item Bemanning: Alle
+	\item Leveranse: Oppdragsgiver
+	\item Beskrivelse: Systemet skal innstalleres i Hessdalen.
+    \item Prioritet:
+	\end{compactitem}
+    
+    \item [Aktivitetet 11:] Andre versjon av prosjektrapport
 	\begin{compactitem}
 	\item Start: 14/3
 	\item Slutt: 25/4
@@ -131,7 +202,7 @@ Prosjektplanen kan f.eks. presenteres på denne måten\footnote{Det kan jo være
     \item Prioritet:
 	\end{compactitem}
     
-    \item [Aktivitetet 6:] Mediastrategi
+    \item [Aktivitetet 12:] Mediastrategi
 	\begin{compactitem}
 	\item Start: 25/4
 	\item Slutt: 9/5
@@ -141,7 +212,7 @@ Prosjektplanen kan f.eks. presenteres på denne måten\footnote{Det kan jo være
     \item Prioritet:
 	\end{compactitem}
     
-    \item [Aktivitetet 7:] Prosjektrapport med vedlegg pluss eventuelt ferdig produkt skal leveres
+    \item [Aktivitetet 13:] Prosjektrapport med vedlegg pluss eventuelt ferdig produkt skal leveres
 	\begin{compactitem}
 	\item Start: 25/4
 	\item Slutt: 23/5
@@ -151,7 +222,7 @@ Prosjektplanen kan f.eks. presenteres på denne måten\footnote{Det kan jo være
     \item Prioritet:
 	\end{compactitem}
     
-    \item [Aktivitetet 8:] Opphenging av prosjektplakat
+    \item [Aktivitetet 14:] Opphenging av prosjektplakat
 	\begin{compactitem}
 	\item Start: 23/5
 	\item Slutt: 2/6
@@ -161,7 +232,7 @@ Prosjektplanen kan f.eks. presenteres på denne måten\footnote{Det kan jo være
     \item Prioritet:
 	\end{compactitem}
     
-    \item [Aktivitetet 9:] Presentasjon av prosjektet
+    \item [Aktivitetet 15:] Presentasjon av prosjektet
 	\begin{compactitem}
 	\item Start: 4/6
 	\item Slutt: 6/6
@@ -179,14 +250,14 @@ Det kan være lurt å lage en prioritert plan, dvs. at noen av oppgavene vil bli
 
 \section*{Gjennomføring}
 
-Møter med arbeidsgiver vil i hovedsak foregå hver XX dag, og med veileder hver 14 dag. Siden både arbeidsgiver og veileder jobber på Høgskolen i Østfold, vil det til nøds være mulig med uanmeldte besøk dersom vi har spørsmål. Vi vil hovedsaklig benytte mail for å kontakte arbeidsgiver og veileder. Ved disse møtene ønsker ærlige og konkrete tilbakemeldinger som gir oss en pekepinn på hva som kan gjøres annerledes og hvor fornøyd arbeidsgiver/veileder er med det vi produserer.\\
+Møter med arbeidsgiver vil i hovedsak foregå hver XX dag, og med veileder hver 14 dag. Siden både arbeidsgiver og veileder jobber på HiØ, vil det til nøds være mulig med uanmeldte besøk dersom vi har spørsmål. Vi vil hovedsaklig benytte mail for å kontakte arbeidsgiver og veileder. Ved disse møtene ønsker vi ærlige og konkrete tilbakemeldinger som gir oss en pekepinn på hva som evt. kan gjøres annerledes og hvor fornøyd arbeidsgiver/veileder er med det vi produserer.\\
 
-Rollen(e) vi skal forholde oss til i gruppen er (prosjektleder og) sekretær. NOE OM PROSJEKTLEDER(typ. Vi har valgt/ikke valgt å ha fordi). Sekretærrollen skal rullere ukentlig.\\
+Den eneste predefinerte rollen vi har bestemt oss for å ha i gruppen, er sekretær. Sekretæren vil i all hovedsak stå for skriving av møte- og ukesrapporter, men også få ansvaret for andre oppgaver som passer denne rollen. Sekretæransvaret vil ha ukentlig rundgang slik at alle både for prøvd seg på det, og for å unngå skjev fordeling i arbeidsmenge. Vi har altså valgt å ikke ha noen lederrolle, da denne gruppen har jobbet sammen tidligere, og av erfaring tar vi best slike avgjørelser i plenum. \\
 
 Vi skal ikke bruke en spesifikk arbeidsteknikk som f.eks SCRUM, men vi vil fordele oppgaver på gruppemedlemmene og sette frister disse oppgavene skal være ferdigstilt til. Dette for å sikre at vi får en jevn fremgang i prosjektet.\\
 
-For å overholde versjonskontrol og sikre at vi hele tiden har backups av prosjektet, vil vi bruke GitHub (https://github.com/) til lagring av ALLE filer. Her logges alle endringer, og man har mulighet til å hente opp tidligere versjoner av filer. Dette kombinert med å bruke LaTeX (http://www.latex-project.org/) vil gi oss god versjonskontroll.\\
+For å overholde versjonskontrol og sikre at vi hele tiden har backups av prosjektet, vil vi bruke GitHub (https://github.com/) til lagring av ALLE filer. Her hver eneste endring, og man har mulighet til å hente opp tidligere versjoner av filer. Dette kombinert med å bruke LaTeX (http://www.latex-project.org/) som gir mye mer ryddige tekstfiler i ukompilert form vil gi oss god versjonskontroll.\\
 
-Dersom et gruppemedlem ikke overholder frister for innlevering uten noen spesifikk grunn, vil vi bli nødt til å ta dette opp med personen og prøve å finne en løsning på problemet. Dersom et gruppemedlem pga. sykdom, o.l ikke kan overholde frister, fører dette til at vi må delegere mer arbeid på de andre, og muligens prioritere oppgavene slik at det viktigste blir ferdigstilt.
+Dersom et gruppemedlem ikke overholder frister for innlevering uten noen spesifikk grunn, vil vi bli nødt til å ta dette opp med personen og prøve å finne en løsning på problemet. Dersom et gruppemedlem pga. sykdom, o.l ikke kan overholde frister, fører dette til at vi må delegere mer arbeid på de andre, og muligens prioritere oppgavene slik at vi sikrer at det viktigste blir ferdigstilt.
 
 \end{document}
