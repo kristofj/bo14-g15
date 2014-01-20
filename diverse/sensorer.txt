@@ -1,1 +1,4 @@
-
+- Vaisala værtransmitter WXT520
+	Multisensor som måler vindhastighet og retning, nedbør, lufttrykk, luftfuktighet og lufttemperatur
+	Link: http://www.axflow.com/no/site/produkter/kategori/amr/sensorer/vindsystemer/digitale-vindtransmittere/
+	Pris: N/A
