@@ -1,0 +1,26 @@
+Vindhastighet:
+	http://www.fuehlersysteme.de/wind-speed-transmitter-compact.html
+	Pris: €440 = 3700 NOK
+
+Vindretning:
+	http://www.fuehlersysteme.de/wind-direction-transmitter-compact.html
+	Pris: €520 = 4380 NOK
+	
+	Feste for vindsensorer:
+	http://www.fuehlersysteme.de/meteorology-accessories.html
+	Pris: €98 = 825 NOK
+
+	Alternativ:
+	http://www.lawicel-shop.se/prod/Weather-Meters_660366/Weather_85898/ENG/EUR
+	Pris: €86,25 = 725 NOK
+
+Lufttrykk:
+	http://www.adafruit.com/products/992
+	Pris: $11,95 = 74 NOK
+
+	http://www.adafruit.com/products/1603
+	Pris: $9,95 = 62 NOK
+
+Temperatur/Luftfuktighet:
+	http://www.adafruit.com/products/1298
+	Pris: $49,95 = 308 NOK
