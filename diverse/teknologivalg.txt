@@ -1,0 +1,22 @@
+--Unformatert--
+
+Teknologivalg for fremvisning av værdata
+
+I vårt valg av hvilke teknologier vi skal bruke for å presentere værdata på hessdalen.org, har vi tatt utangspunkt i de vi hadde grei kunskap om fra før. Det vil si JavaScript, PHP, og CGI-basert Python.
+
+For å best kunne vurdere hva vi skulle velge, satt vi opp en liste med fordeler og ulemper ved de forskjellige metodene.
+
+CGI-basert Python.
+Fordeler: Den fulle kraften av Python implementert i nettsiden. Mange muligheter, og en stort menge biblioteker tilgjengelig.
+Ulemper: Hvis man ikke bruker alternative måter å kjøre CGI på, kan det fort bli treg utførelsetid på serveren. All kode kjøres også på serveren, noe som fører til større belastning.
+
+JavaScript.
+Fordeler: Laget for webprogrammering! Stor mengde relevante bilioteker for presentering av data (Grafer, diagrammer, osv.) God samhandling med AJAX-teknologi for sømløs lasting av innhold. Veldig utbredt språk, så det er mye dokumentasjon. Kode kjøres av nettleser, noe som fører til lavere belastning på server.
+Ulemper: Krever litt mer å debugge, men Firebug (utvidelse til Firefox og Chrome) ordner dette relativt greit.
+
+PHP.
+Fordeler: Veldig lett syntaks og debugging. Tilgivende språk (det meste fortsetter å kjøre selv om man har kodefeil). 
+Ulemper: Hatt mange problemer med sikkerhet i sin levetid. All kode kjøres også på serveren, noe som fører til større belastning.
+
+På bakgrunn av dette har vi bestemt oss for å presentere data ved å hovedsaklig bruke JavaScript med AJAX-teknologi og biblioteker for grafer, osv. så langt det lar seg gjøre. Kjører vi oss fast, vil det være mulig å lage enkelt moduler i PHP, men vi vil styre helt unna CGI-basert programmering.
+
