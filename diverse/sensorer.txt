@@ -2,3 +2,20 @@
 	Multisensor som måler vindhastighet og retning, nedbør, lufttrykk, luftfuktighet og lufttemperatur
 	Link: http://www.axflow.com/no/site/produkter/kategori/amr/sensorer/vindsystemer/digitale-vindtransmittere/
 	Pris: N/A
+- elfaelektronikk.no
+	- Fuktighetssensorer:
+		link: https://www.elfaelektronikk.no/elfa3~no_no/elfa/init.do?toc=19455&name=Moisture+sensors
+	- Temperatursensorer:
+		link: https://www.elfaelektronikk.no/elfa3~no_no/elfa/init.do?toc=19387&name=Temperatur
+	- Trykksensorer:
+		link: https://www.elfaelektronikk.no/elfa3~no_no/elfa/init.do?toc=19347&name=Pressure+sensors
+- modern device
+	Open-source komponenter som er lagd for å brukes med mikrokontrollere som raspberry pi, virker litt mer "hjemmemekka".
+	Bonus er at det er billig.
+	link: http://moderndevice.com/shop/
+- Gill Instruments
+	Samme opplegg som vaisala, multisensor som kan måle alt. De har også ultrasoniske anemometere.
+	link: http://www.gillinstruments.com/products/anemometer/meteorological_instruments.htm
+	sammenligning av anemometerene til Gill: http://www.meacon.co.za/Weather%20Instrumentation/weather/anemometer_comparison.html
+
+

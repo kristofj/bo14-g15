@@ -1,0 +1,55 @@
+Temperatur/Luftfuktighet:
+    http://www.adafruit.com/products/1298
+    Dette er en samlet digital temperatur- og luftfuktighetssensor i en kappe som er vanntett, men ikke lufttett. Er egentlig ment for å brukes i jord, men fordi den er vanntett skal den være værsikker.
+    Fungerer fra -40 til +120 grader med nøyaktighet på 0.5 grader og 4.5% fuktighet.
+   
+    Pris: $49,95 = 308 NOK
+    Lagerstatus: 9 på lager i USA, sendes ved hjelp av UPS International Worldwide. Forventet leveringstid er 2-5 dager.
+
+Lufttrykk:
+    http://www.adafruit.com/products/1603
+    Digital lufttrykksensor som kommuniserer med I²C.
+    Måler mellom 300-1100 hPa med nøyaktighet på 0.03 hPa og fungerer mellom -40 og +85 grader.
+    Er også en integrert temperatursensor i denne kretsen, men den kommer vi mest sannynligvis ikke til å bruke.
+
+    Pris: $9,95 = 62 NOK
+    Lagerstatus: På lager i USA, sendes ved hjelp av UPS International Worldwide. Forventet leveringstid er 2-5 dager.
+
+Vindhastighet:
+    http://www.fuehlersysteme.de/wind-speed-transmitter-compact.html
+
+    Analog vindhastighetssensor som gir ut enten en spenning på 0-2/5/10V(kan endres ved hjelp av motstander) eller en strøm mellom 4-20 mA (er to versjoner). Er integrert oppvarming som krever ekstern strømforsyning på 24 V AC/DC.
+    Vet ikke helt hvem vi skal velge her, enten versionen med 0-10V(må da dempes ned til f.eks 5V for å lese på analog inngang) eller 4-20mA.
+    Måler fra 0-50 m/s med en makshastighet på 80m/s i 30 minutter. Sterkeste vind målt av yr.no for Hessdalen i fjor var 21.4 m/s.
+    Fungerer i temperaturer mellom -40 og +70 grader.
+
+    Lagerstatus: På lager, sendes på dagen fra Tyskland
+    Pris: €440 = 3700 NOK
+
+Vindretning:
+    http://www.fuehlersysteme.de/wind-direction-transmitter-compact.html
+
+    Analog vindretningssensor som gir ut enten en spenning på 0-2/5/10V(kan endres ved hjelp av motstander) eller en strøm mellom 4-20 mA(to forskjellige modeller).
+    Krever også strømforsyning på 24 V AC/DC for oppvarming o.l.
+    Måler fra 0-360 grader med nøyaktighet på +-2 grader.
+    Fungerer i temperaturer mellom -40 og +70 grader.
+   
+    Lagerstatus: Spennigsmodellen er på lager og blir sendt på dagen, strømmodellen forventes å sendes etter 5-7 dager.
+    Pris: €520 = 4380 NOK
+   
+    Tilbehør:   
+    Begge disse sensorene trenger et form for feste, samme bedrift selger en tverrbjelke som begge sensoren kan festes til.
+
+    http://www.fuehlersysteme.de/meteorology-accessories.html
+
+    Modellnr: ZM/O-40
+    Pris: €98 = 825 NOK
+    Lagerstatus: Sendes på dagen.
+
+    Lynavleder kan også være interessant ved ekstremvær:
+    Modellnr.: ZM/O-80
+    Pris: €31 = 260 NOK
+    Lagerstatus: Sendes på dagen.
+
+
+Vi kommer muligens til å trenge noen motstander. Kan vi få dette fra skolen? Hvis ikke kan det bestilles ifra Norge, er nok av leverandører på motstander.
