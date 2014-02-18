@@ -1,0 +1,92 @@
+\documentclass[11pt,a4paper,twoside]{report} % DO NOT CHANGE, UNLESS IF CHANGING STYLE
+
+\usepackage{graphicx,subfigure,listings,amssymb,url,paralist,tabularx,rotating,longtable,lscape}
+\usepackage{layouts,hyperref,fancyhdr,listings,color,times,lipsum,chemfig,wasysym}
+\usepackage[utf8]{inputenc} 
+\usepackage[norsk]{babel} 
+\usepackage[absolute]{textpos}
+\usepackage{hiofreport}
+\usepackage{makeidx}
+\usepackage{pdfpages}
+
+\input{meta}       % Use this to fill in author, title and other metadata used on front page
+\input{defs}        % DO NOT CHANGE
+
+\makeindex
+
+\begin{document}
+
+% FRONT MATTER
+    % DO NOT CHANGE
+    %-------------------------------------------------    
+    \includepdf[pages={1, {}}] {titlepage} % Make your own catchy PDF title page, named titlepage.pdf
+    \maketitle
+    \input{preface} % TO BE REMOVED IN FINAL REPORT
+    %\cleardoublepage % TO BE REMOVED IN FINAL REPORT
+    \input{abstract}
+    \addcontentsline{toc}{chapter}{Sammendrag}
+    %-------------------------------------------------
+
+    % OPTIONAL
+    %-------------------------------------------------
+    \input{acknowledgements}
+    \addcontentsline{toc}{chapter}{Takk Til}
+    %-------------------------------------------------
+
+	%\cleardoublepage % DO NOT CHANGE    
+	\setcounter{tocdepth}{1}
+    \tableofcontents  % DO NOT CHANGE    
+    %\cleardoublepage % DO NOT CHANGE    
+    
+    % OPTIONAL
+    %-------------------------------------------------
+    \listoffigures
+    \addcontentsline{toc}{chapter}{Figurliste}
+    %\cleardoublepage
+    \listoftables
+    \addcontentsline{toc}{chapter}{Tabelliste}
+    %\cleardoublepage
+    \lstlistoflistings
+    \addcontentsline{toc}{chapter}{Kodeliste}
+    %\cleardoublepage
+    %-------------------------------------------------
+       
+    \pagenumbering{arabic} % DO NOT CHANGE, OR REMOVE IF CHANGING STYLE
+    \setcounter{page}{1}       % DO NOT CHANGE, OR REMOVE IF CHANGING STYLE 		
+	
+% BODY
+    % YOU MAY CHANGE TITLES AND ORDER (WITHIN LIMITS)
+    %-------------------------------------------------
+    \input{introduction}
+    \input{analysis}
+    \input{design}
+    \input{implementation}
+    \input{evaluation}
+    \input{discussion}
+    \input{conclusion}
+    %-------------------------------------------------
+
+
+% BACK MATTER
+    % DO NOT CHANGE
+    %-------------------------------------------------   
+    \bibliographystyle{plain} % IEEE    
+    \bibliography{project_bibliography}
+    \addcontentsline{toc}{chapter}{Bibliografi}
+    %-------------------------------------------------
+        
+    % OPTIONAL
+    %-------------------------------------------------
+    %\cleardoublepage    
+    %To make a good index is quite laborsome, and perhaps a bit outside the scope in this context    
+    \printindex
+    \addcontentsline{toc}{chapter}{Register}
+    %\cleardoublepage    
+    \appendix
+    \input{how-to}
+    %-------------------------------------------------
+    
+    %\cleardoublepage %DO NOT CHANGE
+    %\blankpage          %DO NOT CHANGE
+    %\blankpage          %DO NOT CHANGE
+\end{document}
