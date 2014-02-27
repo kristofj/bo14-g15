@@ -9,10 +9,10 @@
 
 //Standard C-library headers
 #include <stdint.h>
-#include <io.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <io.h>
 
 //Definisjoner på strenglengder for JSON-strenger.
 #define JSON_MAX_DATETIME_LENGTH	39
@@ -20,15 +20,17 @@
 #define JSON_MAX_WSTRING_LENGTH		163
 #define JSON_MAX_LENGTH			631
 
-//MAC address for this device
+//MAC addresse for denne enheten
 #define MAC { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xC2 }
 
+//Representerer argumenter for tråden Send_data_thread
 typedef struct {
 	const char *data;
 	const char *address;
 	uint16_t port;
 } network_thread_args;
 
+//Tråd for å sende data til en server med TCP
 THREAD(Send_data_thread, arg)
 {
 	puts("Sending data...");
@@ -96,12 +98,9 @@ char *get_json(char *date_time, char *json_string1, char *json_string2, char *js
 	return json_data;
 }
 
-//Format for sending av data:
-//verdi;min;max;avg;timeMin,timeMax,dateTime:verdi;min;max;avg;timeMin,timeMax,dateTime osv.
-//Tidsformat: "YYYY-MM-DD HH:MM:SS"
 int send_data(const char *data, const char *address, uint16_t port)
 {
-	network_thread_args *arguments = malloc(sizeof(network_thread_args));
+	network_thread_args *arguments = (network_thread_args *)malloc(sizeof(network_thread_args));
 	arguments->data = data;
 	arguments->address = address;
 	arguments->port = port;
@@ -123,10 +122,11 @@ int configure_network(uint8_t *mac_address)
 		puts("Configuring " DEV_ETHER_NAME " failed.");
 		return 2;
 	}
-	printf("I'm at %s.\n", inet_ntoa(confnet.cdn_ip_addr));
+	printf("I'm at %s.\n", inet_ntoa(confnet.cdn_ip_addr)); //Printer IP-adressen til standard output
 	return 0;
 }
 
+//Registerer output på serieutgang for debug.
 void configure_debug(u_long baud)
 {
 	NutRegisterDevice(&DEV_DEBUG, 0, 0);
