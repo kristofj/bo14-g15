@@ -2,3 +2,5 @@ java -cp .:mysql-connector-java-5.1.29-bin.jar Db
 evt
 CLASSPATH=".:/usr/lib64/jvm/java-1.7.0-openjdk-1.7.0/lib:/home/mikael/devel/mysql-connector/mysql-connector-java-5.1.29-bin.jar"
 export CLASSPATH
+
+http://code.google.com/p/quick-json/
