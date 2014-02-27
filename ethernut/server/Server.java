@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+import java.sql.*;
 
 public class Server
 {
@@ -33,7 +34,9 @@ public class Server
 	
 	public static void main(String a[])
 	{
+		Db empOne = new Db("SELECT id FROM logId");
 		new Server();
 	}
 	
 }
+
