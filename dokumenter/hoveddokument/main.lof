@@ -1,0 +1,14 @@
+\select@language {norsk}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Layout for recto sider}}{14}{figure.4.1}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {A.1}{\ignorespaces The \textlatin {\LaTeX }\ ``bible'', 2. edition }}{19}{figure.A.1}
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Input and result from running the Douglas-Peucker line simplification algorithm \cite {douglas73afr} (from \cite {kjeldsen05cor})}}{23}{figure.A.2}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {input}}}{23}{figure.A.2}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {output}}}{23}{figure.A.2}

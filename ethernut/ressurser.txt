@@ -1,1 +1,2 @@
-http://www.ethernut.de/nutwiki/Main_Page
+WIKI: http://www.ethernut.de/nutwiki/Main_Page
+API: http://www.ethernut.de/api/index.html
