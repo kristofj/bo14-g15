@@ -1,11 +1,12 @@
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
-public class Hello {
+public class DbManager {
     static int entryKey;
     static String mainDatetime;
     static JSONObject json;
-    static String jsonString = "{" +
+    static String jsonString;
+    /*static String jsonString = "{" +
             "     \"mainDatetime\": \"1991-08-23 22:55:45\"," +
             "     \"temp\":" +
             "     {" +
@@ -44,9 +45,10 @@ public class Hello {
             "         \"min\": 1.2," +
             "         \"timeMin\": \"1991-08-23 22:55:45\"" +
             "     }" +
-            " }";
+            " }";*/
 
-    public static void main(String a[]) {
+    public DbManager(String json){
+        jsonString=json;
         jsonParse();
         makeMainEntry();
         makeTempEntry();

@@ -1,5 +1,4 @@
 import java.sql.*;
-import java.util.Properties;
 
 public class Db {
 	static final String DB_URL = "jdbc:mysql://j3nsen.com/hessdalen_weather";  
