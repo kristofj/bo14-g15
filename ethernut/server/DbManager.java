@@ -6,46 +6,6 @@ public class DbManager {
     static String mainDatetime;
     static JSONObject json;
     static String jsonString;
-    /*static String jsonString = "{" +
-            "     \"mainDatetime\": \"1991-08-23 22:55:45\"," +
-            "     \"temp\":" +
-            "     {" +
-            "         \"avg\": 1.2," +
-            "         \"now\": 23.2," +
-            "         \"max\": 1.2," +
-            "         \"timeMax\": \"1991-08-23 22:55:45\"," +
-            "         \"min\": 1.2," +
-            "         \"timeMin\": \"1991-08-23 22:55:45\"" +
-            "     }," +
-            "     \"humidity\":" +
-            "     {" +
-            "         \"avg\": 1.2," +
-            "         \"now\": 1.2," +
-            "         \"max\": 1.2," +
-            "         \"timeMax\": \"1991-08-23 22:55:45\"," +
-            "         \"min\": 1.2," +
-            "         \"timeMin\": \"1991-08-23 22:55:45\"" +
-            "     }," +
-            "     \"pressure\":" +
-            "     {" +
-            "         \"avg\": 1.2," +
-            "         \"now\": 1.2," +
-            "         \"max\": 1.2," +
-            "         \"timeMax\": \"1991-08-23 22:55:45\"," +
-            "         \"min\": 1.2," +
-            "         \"timeMin\": \"1991-08-23 22:55:45\"" +
-            "     }," +
-            "     \"wind\":" +
-            "     {" +
-            "         \"avg\": 1.2," +
-            "         \"now\": 1.2," +
-            "         \"max\": 1.2," +
-            "         \"timeMax\": \"1991-08-23 22:55:45\"," +
-            "         \"maxDir\" : 1.2," +
-            "         \"min\": 1.2," +
-            "         \"timeMin\": \"1991-08-23 22:55:45\"" +
-            "     }" +
-            " }";*/
 
     public DbManager(String json){
         jsonString=json;
@@ -64,7 +24,8 @@ public class DbManager {
         return datetime.replaceAll("\\W", "");
     }
     public static void makeMainEntry() {
-        Db mainEntry = new Db("INSERT INTO logId (datetime) VALUES ("+mainDatetime+")");
+        int stationId = json.getInt("stationId");
+        Db mainEntry = new Db("INSERT INTO logId (datetime, stationId) VALUES ("+mainDatetime+","+stationId+")");
         entryKey = mainEntry.getKey();
     }
     public static void makeTempEntry(){
