@@ -13,6 +13,7 @@ public class Server {
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     new DbManager(in.readLine());
                     in.close();
+                    socket.close();
                 } catch (Exception err) {
                     System.err.println("* err" + err);
                 }
