@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 public class Server {
 
     public static void main(String a[]) {
+        System.out.println("Hessdalen Weather Station - Server");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
             ServerSocket server = new ServerSocket(3000);
