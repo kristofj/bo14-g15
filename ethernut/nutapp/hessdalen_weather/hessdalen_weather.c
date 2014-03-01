@@ -15,7 +15,7 @@
 #include <io.h>
 
 //Definisjoner på strenglengder for JSON-strenger.
-#define JSON_MAX_DATETIME_LENGTH	39
+#define JSON_MAX_ROOT_LENGTH	55
 #define JSON_MAX_STRING_LENGTH		146
 #define JSON_MAX_WSTRING_LENGTH		163
 #define JSON_MAX_LENGTH			631
@@ -55,10 +55,10 @@ THREAD(Send_data_thread, arg)
 	for(;;);
 }
 
-char *get_json_string_datetime(const char *date_time)
+char *get_json_string_root(const char *date_time)
 {
-	char *string = (char *)malloc(JSON_MAX_DATETIME_LENGTH);
-	const char json_string[] = "{\"mainDatetime\":\"%s\",";
+	char *string = (char *)malloc(JSON_MAX_ROOT_LENGTH);
+	const char json_string[] = "{\"mainDatetime\":\"%s\",\"stationId\":\"1\",";
 
 	sprintf(string, json_string, date_time);
 
