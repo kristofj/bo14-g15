@@ -55,12 +55,12 @@ THREAD(Send_data_thread, arg)
 	for(;;);
 }
 
-char *get_json_string_root(const char *date_time)
+char *get_json_string_root(const char *date_time, int8_t station_id)
 {
 	char *string = (char *)malloc(JSON_MAX_ROOT_LENGTH);
-	const char json_string[] = "{\"mainDatetime\":\"%s\",\"stationId\":\"1\",";
+	const char json_string[] = "{\"mainDatetime\":\"%s\",\"stationId\":\"%d\",";
 
-	sprintf(string, json_string, date_time);
+	sprintf(string, json_string, date_time, station_id);
 
 	return string;
 }
@@ -89,7 +89,7 @@ char *get_json(char *date_time, char *json_string1, char *json_string2, char *js
 {
 	char *json_data = (char *)malloc(JSON_MAX_LENGTH);
 
-	strncat(json_data, date_time, JSON_MAX_DATETIME_LENGTH);
+	strncat(json_data, date_time, JSON_MAX_ROOT_LENGTH);
 	strncat(json_data, json_string1, JSON_MAX_STRING_LENGTH);
 	strncat(json_data, json_string2, JSON_MAX_STRING_LENGTH);
 	strncat(json_data, json_string3, JSON_MAX_STRING_LENGTH);
