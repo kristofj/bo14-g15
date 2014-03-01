@@ -15,7 +15,7 @@
 #include <io.h>
 
 //Definisjoner på strenglengder for JSON-strenger.
-#define JSON_MAX_ROOT_LENGTH	55
+#define JSON_MAX_ROOT_LENGTH		55
 #define JSON_MAX_STRING_LENGTH		146
 #define JSON_MAX_WSTRING_LENGTH		163
 #define JSON_MAX_LENGTH			631
