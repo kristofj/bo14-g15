@@ -1,4 +1,3 @@
 bo14-g15
 ========
-
-TODO:
+GitHub er egentlig ganske sweet!
