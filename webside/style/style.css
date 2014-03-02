@@ -39,7 +39,7 @@ a.header:active {
 /* Main window */
 
 div.mainWindow {
-	height: 700px;
+	min-height: 700px;
 	padding: 10px;
 }
 

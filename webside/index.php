@@ -4,8 +4,6 @@
 		<title>bo14-g15</title>
 		<link rel="icon" type="image/ico" href="img/favicon.ico">
 		<link rel="stylesheet" type="text/css" href="style/style.css" />
-		<script type="text/javascript" src="src/functions.js"></script>
-		<script type="text/javascript" src="../../lib/Chart.js/Chart.js"></script>
 	</head>
 	<body>
 		<?php 
