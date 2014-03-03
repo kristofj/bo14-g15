@@ -1,0 +1,67 @@
+\select@language {norsk}
+\contentsline {chapter}{Sammendrag}{ii}{chapter*.2}
+\contentsline {chapter}{Takk Til}{iii}{chapter*.3}
+\contentsline {chapter}{Figurliste}{v}{chapter*.5}
+\contentsline {chapter}{Tabelliste}{vi}{chapter*.6}
+\contentsline {chapter}{Kodeliste}{1}{chapter*.7}
+\contentsline {chapter}{\numberline {1}Introduksjon}{2}{chapter.1}
+\contentsline {section}{\numberline {1.1}Prosjektgruppen}{2}{section.1.1}
+\contentsline {section}{\numberline {1.2}Oppdragsgiver}{2}{section.1.2}
+\contentsline {section}{\numberline {1.3}Oppdraget}{2}{section.1.3}
+\contentsline {section}{\numberline {1.4}Hvorfor, hva og hvordan: Form\IeC {\r a}l, leveranser og metode}{3}{section.1.4}
+\contentsline {subsection}{\numberline {1.4.1}Form\IeC {\r a}l}{3}{subsection.1.4.1}
+\contentsline {subsection}{\numberline {1.4.2}Leveranser}{3}{subsection.1.4.2}
+\contentsline {subsection}{\numberline {1.4.3}Metode}{3}{subsection.1.4.3}
+\contentsline {section}{\numberline {1.5}Rapportstruktur}{4}{section.1.5}
+\contentsline {chapter}{\numberline {2}Analyse (Generisk tittel)}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Akademiske og tekniske dokumenter}{5}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Mayfield Handbook of Technical \& Scientific Writing}{5}{subsection.2.1.1}
+\contentsline {subsection}{\numberline {2.1.2}Hi\IeC {\O }/IT}{6}{subsection.2.1.2}
+\contentsline {section}{\numberline {2.2}Skriveverkt\IeC {\o }y for store og komplekse dokumenter}{7}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Forfatter, redakt\IeC {\o }r, typograf, trykkeri}{7}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}The curse of the cursor \\ \relax \fontsize {10.95}{13.6}\selectfont \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \belowdisplayskip \abovedisplayskip \let \leftmargin \leftmargini \parsep 4.5\p@ plus2\p@ minus\p@ \topsep 9\p@ plus3\p@ minus5\p@ \itemsep 4.5\p@ plus2\p@ minus\p@ \leftmargin \leftmargini \parsep 4.5\p@ plus2\p@ minus\p@ \topsep 9\p@ plus3\p@ minus5\p@ \itemsep 4.5\p@ plus2\p@ minus\p@ -eller- \\DTP: DeskTop Publishing eller Dom Tokigas Paradis? }{7}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Programmering av dokumenter}{8}{subsection.2.2.3}
+\contentsline {section}{\numberline {2.3}Digital dokumentproduksjon}{8}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Generelle krav}{8}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}\textlatin {\LaTeX }}{9}{subsection.2.3.2}
+\contentsline {subsection}{\numberline {2.3.3}OpenOffice Writer (med kloner)}{9}{subsection.2.3.3}
+\contentsline {chapter}{\numberline {3}Design / Utforming/ Planlegging (Generisk tittel)}{10}{chapter.3}
+\contentsline {paragraph}{Utredning}{10}{section*.8}
+\contentsline {paragraph}{Mediaproduksjon}{10}{section*.9}
+\contentsline {paragraph}{Utvikling}{10}{section*.10}
+\contentsline {section}{\numberline {3.1}Struktur}{10}{section.3.1}
+\contentsline {section}{\numberline {3.2}Innhold}{10}{section.3.2}
+\contentsline {section}{\numberline {3.3}Utformingen}{11}{section.3.3}
+\contentsline {paragraph}{Marger}{11}{section*.11}
+\contentsline {paragraph}{Topptekst / bunntekst}{11}{section*.12}
+\contentsline {paragraph}{Tittelsiden}{12}{section*.13}
+\contentsline {section}{\numberline {3.4}Leveransene og malen}{12}{section.3.4}
+\contentsline {chapter}{\numberline {4}Implementasjon / Produksjon / Gjennomf\IeC {\o }ring (Generisk tittel)}{13}{chapter.4}
+\contentsline {section}{\numberline {4.1}Utredning}{13}{section.4.1}
+\contentsline {section}{\numberline {4.2}Mediaproduksjon}{13}{section.4.2}
+\contentsline {section}{\numberline {4.3}OpenOffice Writer}{13}{section.4.3}
+\contentsline {section}{\numberline {4.4}\textlatin {\LaTeX }}{13}{section.4.4}
+\contentsline {chapter}{\numberline {5}Testing / Evaluering (Generisk Tittel)}{15}{chapter.5}
+\contentsline {chapter}{\numberline {6}Diskusjon}{17}{chapter.6}
+\contentsline {chapter}{\numberline {7}Konklusjon}{18}{chapter.7}
+\contentsline {chapter}{Bibliografi}{18}{chapter.7}
+\contentsline {chapter}{Register}{18}{chapter.7}
+\contentsline {chapter}{\numberline {A}How to use this template}{19}{appendix.A}
+\contentsline {section}{\numberline {A.1}Compilation}{20}{section.A.1}
+\contentsline {section}{\numberline {A.2}Chapters/sections/paragraphs}{20}{section.A.2}
+\contentsline {section}{\numberline {A.3}Section}{21}{section.A.3}
+\contentsline {subsection}{\numberline {A.3.1}Sub section}{21}{subsection.A.3.1}
+\contentsline {subsubsection}{Sub sub section}{22}{section*.14}
+\contentsline {paragraph}{Paragraph}{22}{section*.15}
+\contentsline {section}{\numberline {A.4}Figures, tables, equations, etc.}{22}{section.A.4}
+\contentsline {section}{\numberline {A.5}Proof of the area of a circle formula $A = \pi r^2$}{24}{section.A.5}
+\contentsline {section}{\numberline {A.6}Listings and other {\em environments}}{25}{section.A.6}
+\contentsline {section}{\numberline {A.7}Source code}{26}{section.A.7}
+\contentsline {section}{\numberline {A.8}Cross-references and bibliography}{26}{section.A.8}
+\contentsline {section}{\numberline {A.9}Index}{27}{section.A.9}
+\contentsline {section}{\numberline {A.10}Fonts}{28}{section.A.10}
+\contentsline {paragraph}{Font size}{28}{section*.16}
+\contentsline {paragraph}{Font weight (Font series)}{28}{section*.17}
+\contentsline {paragraph}{Font style (Font shape)}{28}{section*.18}
+\contentsline {paragraph}{Font family}{29}{section*.19}
+\contentsline {section}{\numberline {A.11}Best practice}{29}{section.A.11}
