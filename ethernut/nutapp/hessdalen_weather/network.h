@@ -13,6 +13,8 @@ typedef struct {
 	uint16_t port;
 } network_thread_args;
 
+THREAD(Send_data_thread, arg);
+THREAD(Ntp_thread, arg);
 char *get_json_string_root(const char *date_time, uint8_t station_id);
 char *get_json_string(const char *value, double avg, double now, double max, const char *time_max, double min, const char *time_min);
 char *get_json_wstring(double avg, double now, double max, const char *time_max, double max_dir, double min, const char *time_min);

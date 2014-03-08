@@ -60,19 +60,14 @@ THREAD(Ntp_thread, arg)
 	for(;;) {
 		if(NutSNTPGetTime(&timeserver, &ntp_time) == 0) {
 			puts("Time set...");
-			//NutSleep(1800000); //Venter i 30 min.
-			
-			break;
+			ntp_datetime = localtime(&ntp_time); //Setter den globale variabelen.
+			printf("NTP time is: %02d:%02d:%02d\n", ntp_datetime->tm_hour, ntp_datetime->tm_min, ntp_datetime->tm_sec);
+			NutSleep(1800000); //Venter i 30 min.
 		} else {
 			puts("Failed retrieving time. Retrying in 10 sec...");
 			NutSleep(10000);
 		}
 	}
-	ntp_datetime = localtime(&ntp_time); //Setter den globale variabelen.
-	
-	printf("NTP time is: %02d:%02d:%02d\n", ntp_datetime->tm_hour, ntp_datetime->tm_min, ntp_datetime->tm_sec);
-	
-	for(;;);
 }
 
 char *get_json_string_root(const char *date_time, uint8_t station_id)
