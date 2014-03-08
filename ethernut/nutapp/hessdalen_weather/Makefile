@@ -2,7 +2,7 @@ PROJ = hessdalen_weather
 
 include ../Makedefs
 
-SRCS =  $(PROJ).c
+SRCS =  hessdalen_weather.c temp_read.c network.c
 OBJS =  $(SRCS:.c=.o)
 LIBS =  $(LIBDIR)/nutinit.o -lnutpro -lnutos -lnutarch -lnutdev -lnutgorp -lnutnet -lnutfs -lnutcrt $(ADDLIBS)
 TARG =  $(PROJ).hex

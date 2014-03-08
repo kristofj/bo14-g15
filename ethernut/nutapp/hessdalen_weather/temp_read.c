@@ -1,14 +1,14 @@
-#include <dev/gpio.h>
+#include "temp_read.h"
 
 #define NOP() asm volatile("nop")
 #define SCK_PORT	NUTGPIO_PORTB
 #define SCK_PIN		0
 #define DATA_PORT	NUTGPIO_PORTB
 #define DATA_PIN	1
-#define SCK_LOW()	GpioPinSetLow(OUT_PORT, OUT_PIN)
-#define SCK_HIGH()	GpioPinSetHigh(OUT_PORT, OUT_PIN)
-#define DATA_LOW()	GpioPinSetLow(IN_PORT, IN_PIN)
-#define DATA_HIGH()	GpioPinSetHigh(IN_PORT, IN_PIN)
+#define SCK_LOW()	GpioPinSetLow(SCK_PORT, SCK_PIN)
+#define SCK_HIGH()	GpioPinSetHigh(SCK_PORT, SCK_PIN)
+#define DATA_LOW()	GpioPinSetLow(DATA_PORT, DATA_PIN)
+#define DATA_HIGH()	GpioPinSetHigh(DATA_PORT, DATA_PIN)
 #define DATA_READ()	GpioPinGet(DATA_PORT, DATA_PIN);
 
                             //adr  command  r/w
@@ -111,7 +111,7 @@ void sht10_transstart(void)
 	SCK_LOW();
 }
 
-u_int32_t read_data(void)
+uint32_t read_data(void)
 {
 	return GpioPinGet(DATA_PORT, DATA_PIN);
 }

@@ -1,140 +1,5 @@
-#include <sys/timer.h>
-#include <sys/socket.h>
-#include <sys/confnet.h>
-#include <sys/thread.h>
-
-#include <arpa/inet.h>
-#include <pro/dhcp.h>
-#include <dev/board.h>
-#include <netinet/tcp.h>
-
-//Standard C-library headers
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <io.h>
-
-//Definisjoner på strenglengder for JSON-strenger.
-#define JSON_MAX_ROOT_LENGTH		60
-#define JSON_MAX_STRING_LENGTH		150
-#define JSON_MAX_WSTRING_LENGTH		170
-#define JSON_MAX_LENGTH			700
-
-//MAC addresse for denne enheten
-#define MAC { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xC2 }
-
-//Representerer argumenter for tråden Send_data_thread
-typedef struct {
-	const char *data;
-	const char *address;
-	uint16_t port;
-} network_thread_args;
-
-//Tråd for å sende data til en server med TCP
-THREAD(Send_data_thread, arg)
-{
-	network_thread_args *args  = (network_thread_args *) arg;
-	TCPSOCKET *sock = NutTcpCreateSocket();
-	uint16_t bytes = strlen(args->data) + 1;
-	uint16_t sent;
-	
-	puts("Sending data...");
-	printf("Data to be sent: %d\n", bytes);
-	
-	NutTcpSetSockOpt(sock, TCP_MAXSEG, &bytes, sizeof(bytes)); //Endrer maksimum segmentstørrelse for denne socketen.
-	
-	while (NutTcpConnect(sock, inet_addr(args->address), args->port)) {
-		puts("Could not connect to server, retrying in 10 seconds...");
-		NutSleep(10000);
-	}
-	
-	if ((sent = NutTcpSend(sock, args->data, bytes)) != bytes) {
-		puts("Error sending data, exiting thread...");
-		printf("Sent %d bytes\n", sent);
-		NutTcpCloseSocket(sock);
-		NutThreadExit();
-	}
-	
-	printf("Sent %d bytes\n", sent);
-	
-	puts("Sending complete...");
-	
-	NutTcpCloseSocket(sock);
-	NutThreadExit();
-	for(;;);
-}
-
-char *get_json_string_root(const char *date_time, uint8_t station_id)
-{
-	char *string = (char *)malloc(JSON_MAX_ROOT_LENGTH);
-	const char json_string[] = "{\"mainDatetime\":\"%s\",\"stationId\":%d,";
-
-	sprintf(string, json_string, date_time, station_id);
-
-	return string;
-}
-
-char *get_json_string(const char *value, double avg, double now, double max, const char *time_max, double min, const char *time_min)
-{
-	char *string = (char *)malloc(JSON_MAX_STRING_LENGTH);
-	const char json_string[] = "\"%s\":{\"avg\":%lf,\"now\":%lf,\"max\":%lf,\"timeMax\":\"%s\",\"min\":%lf,\"timeMin\":\"%s\"},";
-
-	sprintf(string, json_string, value, avg, now, max, time_max, min, time_min);
-	
-	return string;
-}
-
-char *get_json_wstring(double avg, double now, double max, const char *time_max, double max_dir, double min, const char *time_min)
-{
-	char *string = (char *)malloc(JSON_MAX_WSTRING_LENGTH);
-	const char json_string_wind[] = "\"wind\":{\"avg\":%lf,\"now\":%lf,\"max\":%lf,\"timeMax\":\"%s\",\"maxDir\":%lf,\"min\":%lf,\"timeMin\":\"%s\"}}";
-
-	sprintf(string, json_string_wind, avg, now, max, time_max, max_dir, min, time_min);
-
-	return string;
-}
-
-char *get_json(char *date_time, char *json_string1, char *json_string2, char *json_string3, char *json_wstring)
-{
-	char *json_data = (char *)malloc(JSON_MAX_LENGTH);
-
-	strncat(json_data, date_time, JSON_MAX_ROOT_LENGTH);
-	strncat(json_data, json_string1, JSON_MAX_STRING_LENGTH);
-	strncat(json_data, json_string2, JSON_MAX_STRING_LENGTH);
-	strncat(json_data, json_string3, JSON_MAX_STRING_LENGTH);
-	strncat(json_data, json_wstring, JSON_MAX_LENGTH);
-
-	return json_data;
-}
-
-int send_data(const char *data, const char *address, uint16_t port)
-{
-	network_thread_args *arguments = (network_thread_args *)malloc(sizeof(network_thread_args));
-	arguments->data = data;
-	arguments->address = address;
-	arguments->port = port;
-	
-	NutThreadCreate("send_data_thread", Send_data_thread, arguments, 256); //Størrelse på stacken må evt. justeres fra 256 når tråden blir endret
-	
-	return 0;
-}
-
-int configure_network(uint8_t *mac_address)
-{
-	//Registrerer ethernet-kontroller
-	if (NutRegisterDevice(&DEV_ETHER, 0, 0)) {
-		puts("Registering " DEV_ETHER_NAME " failed.");
-		return -1;
-	}
-	//Konfigurerer DHCP.
-	if (NutDhcpIfConfig(DEV_ETHER_NAME, mac_address, 0)) {
-		puts("Configuring " DEV_ETHER_NAME " failed.");
-		return -1;
-	}
-	printf("I'm at %s.\n", inet_ntoa(confnet.cdn_ip_addr)); //Printer IP-adressen til standard output
-	return 0;
-}
+#include "hessdalen_weather.h"
+#include "network.h"
 
 //Registerer output på serieutgang for debug.
 void configure_debug(uint32_t baud)
@@ -147,16 +12,14 @@ void configure_debug(uint32_t baud)
 int main(void)
 {
 	uint32_t baud = 115200;
-	uint8_t mac[6] = MAC;
 	
-	//configure_debug(baud);
-	configure_network(mac);
+	configure_debug(baud);
+	configure_network();
 	
 	puts("Project Hessdalen weather station");
 	
 	for (;;) {
 		NutSleep(1000);
 	}
- 
 	return 0;
 }
