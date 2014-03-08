@@ -10,6 +10,8 @@
 //MAC addresse for denne enheten
 #define MAC { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xC2 }
 
+tm *ntp_datetime; //Global variabel definert i network.h
+
 //Tråd for å sende data til en server med TCP
 THREAD(Send_data_thread, arg)
 {
@@ -41,6 +43,35 @@ THREAD(Send_data_thread, arg)
 	
 	NutTcpCloseSocket(sock);
 	NutThreadExit();
+	for(;;);
+}
+
+//Tråd som setter klokken, og oppdaterer den jevnlig.
+THREAD(Ntp_thread, arg)
+{
+	puts("Updating current time...");
+	
+	time_t ntp_time = 0;
+	uint32_t timeserver = 0;
+	
+	_timezone = -1 * 60 * 60; //Setter tidssonen til UTC+1
+	timeserver = inet_addr("85.252.162.7"); //Benytter pool.ntp.org som ntp-server. http://www.pool.ntp.org/en/
+	
+	for(;;) {
+		if(NutSNTPGetTime(&timeserver, &ntp_time) == 0) {
+			puts("Time set...");
+			//NutSleep(1800000); //Venter i 30 min.
+			
+			break;
+		} else {
+			puts("Failed retrieving time. Retrying in 10 sec...");
+			NutSleep(10000);
+		}
+	}
+	ntp_datetime = localtime(&ntp_time); //Setter den globale variabelen.
+	
+	printf("NTP time is: %02d:%02d:%02d\n", ntp_datetime->tm_hour, ntp_datetime->tm_min, ntp_datetime->tm_sec);
+	
 	for(;;);
 }
 

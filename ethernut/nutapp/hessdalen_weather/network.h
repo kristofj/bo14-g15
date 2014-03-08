@@ -1,7 +1,11 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#include "hessdalen_weather.h"
+#include <pro/dhcp.h>
+#include <pro/sntp.h>
+#include <net/route.h>
+
+extern tm *ntp_datetime;
 
 typedef struct {
 	const char *data;
