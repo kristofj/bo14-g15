@@ -5,8 +5,6 @@
 #include <pro/sntp.h>
 #include <net/route.h>
 
-extern tm *ntp_datetime;
-
 typedef struct {
 	const char *data;
 	const char *address;

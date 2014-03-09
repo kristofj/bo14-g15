@@ -10,8 +10,6 @@
 //MAC addresse for denne enheten
 #define MAC { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xC2 }
 
-tm *ntp_datetime; //Global variabel definert i network.h
-
 //Tråd for å sende data til en server med TCP
 THREAD(Send_data_thread, arg)
 {
