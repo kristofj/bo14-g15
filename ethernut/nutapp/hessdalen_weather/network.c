@@ -49,8 +49,6 @@ THREAD(Send_data_thread, arg)
 //Tråd som setter klokken, og oppdaterer den jevnlig.
 THREAD(Ntp_thread, arg)
 {
-	puts("Updating current time...");
-	
 	time_t ntp_time = 0;
 	uint32_t timeserver = 0;
 	
@@ -59,16 +57,25 @@ THREAD(Ntp_thread, arg)
 
 	for(;;) {
 		if(NutSNTPGetTime(&timeserver, &ntp_time) == 0) {
-			puts("Time set...");
+			puts("Updating current time...");
 			stime(&ntp_time); //Setter klokken til Ethernut.
-			//ntp_datetime = localtime(&ntp_time); //Setter den globale variabelen.
-			//printf("NTP time is: %02d:%02d:%02d\n", ntp_datetime->tm_hour, ntp_datetime->tm_min, ntp_datetime->tm_sec);
 			NutSleep(1800000); //Venter i 30 min.
 		} else {
 			puts("Failed retrieving time. Retrying in 10 sec...");
 			NutSleep(10000);
 		}
 	}
+}
+
+tm *get_current_time(void)
+{
+	time_t t;
+	tm *datetime;
+
+	t = time(NULL);
+	datetime = localtime(&t);
+
+	return datetime;
 }
 
 char *get_json_string_root(const char *date_time, uint8_t station_id)

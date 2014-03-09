@@ -15,6 +15,7 @@ typedef struct {
 
 THREAD(Send_data_thread, arg);
 THREAD(Ntp_thread, arg);
+tm *get_current_time(void);
 char *get_json_string_root(const char *date_time, uint8_t station_id);
 char *get_json_string(const char *value, double avg, double now, double max, const char *time_max, double min, const char *time_min);
 char *get_json_wstring(double avg, double now, double max, const char *time_max, double max_dir, double min, const char *time_min);
