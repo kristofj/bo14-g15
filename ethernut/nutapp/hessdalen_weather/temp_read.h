@@ -2,12 +2,19 @@
 #define TEMP_READ_H
 
 #include "hessdalen_weather.h"
-#include <dev/gpio.h> 
+#include <dev/gpio.h>
+#include <math.h>
 
 uint32_t sht10_write_byte(uint8_t value);
-int8_t sht10_read_byte(uint8_t ack);
+uint8_t sht10_read_byte(uint8_t ack);
 void sht10_connectionreset(void);
 void sht10_transstart(void);
+uint32_t sht10_softreset(void);
+uint32_t sht10_read_statusreg(uint8_t *p_value, uint8_t *p_checksum);
+uint32_t sht10_write_statusreg(uint8_t *p_value);
+uint32_t sht10_measure(uint8_t *p_value, uint8_t *p_checksum, uint8_t mode);
+void calc_sht10(double *p_humidity, double *p_temperature);
+double calc_dewpoint(double h, double t);
 uint32_t read_data(void);
 void set_data_output(void);
 void set_data_input(void);
