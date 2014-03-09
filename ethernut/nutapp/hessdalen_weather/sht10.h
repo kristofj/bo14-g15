@@ -1,5 +1,5 @@
-#ifndef TEMP_READ_H
-#define TEMP_READ_H
+#ifndef SHT10_H
+#define SHT10_H
 
 #include "hessdalen_weather.h"
 #include <dev/gpio.h>
