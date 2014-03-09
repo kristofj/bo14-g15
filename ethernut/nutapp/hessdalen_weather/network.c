@@ -55,13 +55,14 @@ THREAD(Ntp_thread, arg)
 	uint32_t timeserver = 0;
 	
 	_timezone = -1 * 60 * 60; //Setter tidssonen til UTC+1
-	timeserver = inet_addr("85.252.162.7"); //Benytter pool.ntp.org som ntp-server. http://www.pool.ntp.org/en/
-	
+	timeserver = inet_addr("85.252.162.7"); //Benytter pool.ntp.org sin norske server. http://www.pool.ntp.org/en/
+
 	for(;;) {
 		if(NutSNTPGetTime(&timeserver, &ntp_time) == 0) {
 			puts("Time set...");
-			ntp_datetime = localtime(&ntp_time); //Setter den globale variabelen.
-			printf("NTP time is: %02d:%02d:%02d\n", ntp_datetime->tm_hour, ntp_datetime->tm_min, ntp_datetime->tm_sec);
+			stime(&ntp_time); //Setter klokken til Ethernut.
+			//ntp_datetime = localtime(&ntp_time); //Setter den globale variabelen.
+			//printf("NTP time is: %02d:%02d:%02d\n", ntp_datetime->tm_hour, ntp_datetime->tm_min, ntp_datetime->tm_sec);
 			NutSleep(1800000); //Venter i 30 min.
 		} else {
 			puts("Failed retrieving time. Retrying in 10 sec...");
