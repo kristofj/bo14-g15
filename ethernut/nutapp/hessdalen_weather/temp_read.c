@@ -205,6 +205,27 @@ double calc_dewpoint(double h, double t)
 	return dew_point;
 }
 
+uint32_t sht10_get_data(sht10_data *data)
+{
+	uint32_t error = 0;
+	uint8_t checksum;
+	uint8_t a, b;
+	//sht10_data *_data = (sht10_data *) data;
+
+	sht10_connectionreset();
+	
+	error += sht10_measure(&a, &checksum, TEMP);
+	error += sht10_measure(&b, &checksum, HUMI);
+	
+	if(error != 0) {
+		return error; //Det skjedde noe feil, returnerer feilen.
+	}
+
+	calc_sht10(&data->humi, &data->temp);
+	data->dew = calc_dewpoint(data->humi, data->temp);
+	return error;
+}
+
 uint32_t read_data(void)
 {
 	return GpioPinGet(DATA_PORT, DATA_PIN);
