@@ -227,6 +227,7 @@ uint32_t sht10_get_data(sht10_data *data)
 	uint8_t checksum;
 	uint8_t a, b;
 	//sht10_data *_data = (sht10_data *) data;
+	initiate_ports();
 
 	sht10_connectionreset();
 	
