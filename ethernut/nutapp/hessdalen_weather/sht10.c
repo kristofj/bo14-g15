@@ -19,7 +19,7 @@ enum {TEMP, HUMI};
 #define STATUS_REG_R 	0x07	//000   0011    1
 #define MEASURE_TEMP 	0x03	//000   0001    1
 #define MEASURE_HUMI 	0x05	//000   0010    1
-#define RESET        	0x1u	//000   1111    0
+#define RESET        	0x1e	//000   1111    0
 
 uint32_t sht10_write_byte(uint8_t value);
 uint8_t sht10_read_byte(uint8_t ack);
