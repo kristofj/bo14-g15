@@ -23,15 +23,15 @@ enum {TEMP, HUMI};
 #define MEASURE_HUMI 	0x05	//000   0010    1
 #define RESET        	0x1e	//000   1111    0
 
-double read_temperature_c();
-double read_humidity();
-double read_temperature_raw();
+double read_temperature_c(void);
+double read_humidity(void);
+double read_temperature_raw(void);
 int shift_in(int _num_bits);
 void shift_out(unsigned char cmd);
 char send_cmd_sht(unsigned char cmd);
-char wait_for_result();
-int get_data();
-void skip_crc();
+char wait_for_result(void);
+int get_data(void);
+void skip_crc(void);
 void sht10_connectionreset(void);
 void sht10_transstart(void);
 double calc_dewpoint(double h, double t);
@@ -40,7 +40,7 @@ void set_data_output(void);
 void set_data_input(void);
 void initiate_ports(void);
 
-double read_temperature_c()
+double read_temperature_c(void)
 {
 	int _val;
 	double _temp;
@@ -55,7 +55,7 @@ double read_temperature_c()
 	return _temp;
 }
 
-double read_humidity()
+double read_humidity(void)
 {
 	int _val;
 	double _lin_humi;
@@ -82,7 +82,7 @@ double read_humidity()
 	return _true_humi;
 }
 
-double read_temperature_raw()
+double read_temperature_raw(void)
 {
 	int _val;
 
@@ -115,11 +115,13 @@ void shift_out(unsigned char cmd)
 {
 	unsigned char i;
 
-	for(i=0; i<8;i++) {
-		if(cmd & 0x80)
+	for(i=0; i<8; i++) {
+		if(cmd & 0x80) {
 			DATA_HIGH();
-		else
+		}
+		else {
 			DATA_LOW();
+		}
 		SCK_HIGH();
 		NutMicroDelay(10);
 		SCK_LOW();
@@ -134,7 +136,7 @@ char send_cmd_sht(unsigned char cmd)
 
 	sht10_transstart();
 
-	shiftout(cmd);
+	shift_out(cmd);
 
 	SCK_HIGH();
 	set_data_input();
@@ -149,9 +151,10 @@ char send_cmd_sht(unsigned char cmd)
 		puts("Error in send_cmd_sht : -2");
 		return -2;
 	}
+	return 0;
 }
 
-char wait_for_result()
+char wait_for_result(void)
 {
 	int i;
 	int ack;
@@ -170,9 +173,10 @@ char wait_for_result()
 		puts("Error in wait_for_result");
 		return -1;
 	}
+	return 0;
 }
 
-int get_data()
+int get_data(void)
 {
 	int val;
 
@@ -192,7 +196,7 @@ int get_data()
 	return val;
 }
 
-void skip_crc()
+void skip_crc(void)
 {
 	set_data_output();
 
@@ -254,7 +258,12 @@ double calc_dewpoint(double h, double t)
 
 uint32_t read_data(void)
 {
-	return PINB.1;
+	unsigned int byte = inb(PORTB);
+
+	if(byte == 0x02)
+		return 1;
+	else
+		return 0;
 }
 
 void set_data_output(void)

@@ -1,5 +1,5 @@
 #include "hessdalen_weather.h"
-#include "network.h"
+#include "sht10_new.h"
 
 //Registerer output på serieutgang for debug.
 void configure_debug(uint32_t baud)
