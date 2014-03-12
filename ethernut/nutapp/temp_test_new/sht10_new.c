@@ -30,7 +30,7 @@ int shift_in(int _num_bits);
 void shift_out(unsigned char cmd);
 char send_cmd_sht(unsigned char cmd);
 char wait_for_result(void);
-int get_data(void);
+long get_data(void);
 void skip_crc(void);
 void sht10_connectionreset(void);
 void sht10_transstart(void);
@@ -59,7 +59,7 @@ double read_temperature_c(void)
 
 double read_humidity(void)
 {
-	double _val;
+	long _val;
 	double _lin_humi;
 	double _true_humi;
 	double _temp;
@@ -75,20 +75,20 @@ double read_humidity(void)
 	_val = get_data();
 	skip_crc();
 	
-	_lin_humi = C1 + C2 * _val + C3 * _val * _val;
+	_lin_humi = C1 + C2 * _val + C3 * (double)_val * (double)_val;
 
 	_temp = read_temperature_c();
 
 	printf("Temp in read_humi: %lf\n", _temp);
 
-	_true_humi = (_temp - 25.0) * (T1 + T2 * _val) + _lin_humi;
+	_true_humi = (_temp - 25.0) * (T1 + T2 * (double)_val) + _lin_humi;
 
 	return _true_humi;
 }
 
 double read_temperature_raw(void)
 {
-	int _val;
+	long _val;
 
 	send_cmd_sht(MEASURE_TEMP);
 	wait_for_result();
@@ -119,14 +119,16 @@ void shift_out(unsigned char cmd)
 {
 	unsigned char i;
 
+	set_data_output();
+
 	for(i=0; i<8; i++) {
+		SCK_HIGH();
 		if(cmd & 0x80) {
 			DATA_HIGH();
 		}
 		else {
 			DATA_LOW();
 		}
-		SCK_HIGH();
 		NutMicroDelay(10);
 		SCK_LOW();
 
@@ -150,7 +152,9 @@ char send_cmd_sht(unsigned char cmd)
 		puts("Error in send_cmd_sht : -1");
 		return -1;
 	}
+	//NutMicroDelay(10);
 	SCK_LOW();
+	//NutMicroDelay(10);
 	ack = read_data();
 	if(ack == LOW) {
 		puts("Error in send_cmd_sht : -2");
@@ -181,12 +185,15 @@ char wait_for_result(void)
 	return 0;
 }
 
-int get_data(void)
+long get_data(void)
 {
-	int val;
+	long val;
 
 	set_data_input();
 	val = shift_in(8);
+
+	printf("val in get_data: %d\n", val);
+
 	val *= 256;
 
 	set_data_output();
