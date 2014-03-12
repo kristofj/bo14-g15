@@ -42,7 +42,7 @@ void initiate_ports(void);
 
 double read_temperature_c(void)
 {
-	int _val;
+	double _val;
 	double _temp;
 
 	const double D1 = -40.1;
@@ -50,14 +50,16 @@ double read_temperature_c(void)
 
 	_val = read_temperature_raw();
 	
-	_temp = D1 + (D2 * _val);
+	printf("val in read_temp: %lf\n", _val);
+
+	_temp = D1 + (D2 * (double)_val);
 
 	return _temp;
 }
 
 double read_humidity(void)
 {
-	int _val;
+	double _val;
 	double _lin_humi;
 	double _true_humi;
 	double _temp;
@@ -76,6 +78,8 @@ double read_humidity(void)
 	_lin_humi = C1 + C2 * _val + C3 * _val * _val;
 
 	_temp = read_temperature_c();
+
+	printf("Temp in read_humi: %lf\n", _temp);
 
 	_true_humi = (_temp - 25.0) * (T1 + T2 * _val) + _lin_humi;
 
@@ -137,17 +141,18 @@ char send_cmd_sht(unsigned char cmd)
 	sht10_transstart();
 
 	shift_out(cmd);
+	NutSleep(330);
 
 	SCK_HIGH();
 	set_data_input();
 	ack = read_data();
-	if(ack != LOW){
+	if(ack == HIGH){
 		puts("Error in send_cmd_sht : -1");
 		return -1;
 	}
 	SCK_LOW();
 	ack = read_data();
-	if(ack != HIGH) {
+	if(ack == LOW) {
 		puts("Error in send_cmd_sht : -2");
 		return -2;
 	}
@@ -232,7 +237,7 @@ void sht10_transstart(void)
 {
 	set_data_output();
 
-	DATA_HIGH(); SCK_LOW();		//Initial state
+	//DATA_HIGH(); SCK_LOW();		//Initial state
 	NOP();
 	SCK_HIGH();
 	NOP();
@@ -258,12 +263,11 @@ double calc_dewpoint(double h, double t)
 
 uint32_t read_data(void)
 {
-	unsigned int byte = inb(PORTB);
+	set_data_input();
 
-	if(byte == 0x02)
-		return 1;
-	else
-		return 0;
+	unsigned char a;
+	a = GpioPinGet(NUTGPIO_PORTB, 1);
+	return a;
 }
 
 void set_data_output(void)
