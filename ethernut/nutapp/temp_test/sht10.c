@@ -7,10 +7,10 @@ enum {TEMP, HUMI};
 #define SCK_PIN		0
 #define DATA_PORT	NUTGPIO_PORTB
 #define DATA_PIN	1
-#define SCK_LOW()	GpioPinSetLow(SCK_PORT, SCK_PIN)
-#define SCK_HIGH()	GpioPinSetHigh(SCK_PORT, SCK_PIN)
-#define DATA_LOW()	GpioPinSetLow(DATA_PORT, DATA_PIN)
-#define DATA_HIGH()	GpioPinSetHigh(DATA_PORT, DATA_PIN)
+#define SCK_LOW()	cbi(PORTB, 0);
+#define SCK_HIGH()	sbi(PORTB, 0);
+#define DATA_LOW()	cbi(PORTB, 1);
+#define DATA_HIGH()	sbi(PORTB, 1);
 
 #define noACK		0
 #define ACK		1
@@ -19,71 +19,80 @@ enum {TEMP, HUMI};
 #define STATUS_REG_R 	0x07	//000   0011    1
 #define MEASURE_TEMP 	0x03	//000   0001    1
 #define MEASURE_HUMI 	0x05	//000   0010    1
-#define RESET        	0x1u	//000   1111    0
-/*
-uint32_t sht10_write_byte(uint8_t value);
-uint8_t sht10_read_byte(uint8_t ack);
+#define RESET        	0x1e	//000   1111    0
+
+char sht10_write_byte(unsigned char value);
+char sht10_read_byte(unsigned char ack);
 void sht10_connectionreset(void);
 void sht10_transstart(void);
 uint32_t sht10_softreset(void);
 uint32_t sht10_read_statusreg(uint8_t *p_value, uint8_t *p_checksum);
 uint32_t sht10_write_statusreg(uint8_t *p_value);
-uint32_t sht10_measure(uint8_t *p_value, uint8_t *p_checksum, uint8_t mode);
+char sht10_measure(unsigned char *p_value, unsigned char *p_checksum, unsigned char mode);
 void calc_sht10(double *p_humidity, double *p_temperature);
 double calc_dewpoint(double h, double t);
-uint32_t sht10_get_data(sht10_data *data);
-uint32_t read_data(void);
+unsigned char sht10_get_data(sht10_data *data);
+unsigned char read_data(void);
 void set_data_output(void);
 void set_data_input(void);
 void initiate_ports(void);
-*/
-uint32_t sht10_write_byte(uint8_t value) {
+
+char sht10_write_byte(unsigned char value) {
 	set_data_output();
 	
-	uint8_t i;
-	uint32_t error = 0;
+	unsigned char error = 0, i;
 	
 	for(i=0x80; i>0; i/=2) {
-		if(i & value)
+		if(i & value) {
 			DATA_HIGH();
-		else
+		}
+		else {
 			DATA_LOW();
-		NOP();
+		}
+		NutMicroDelay(1);
 		SCK_HIGH();
-		NOP();NOP();NOP();
+		NutMicroDelay(10);
 		SCK_LOW();
-		NOP();
+		NutMicroDelay(1);
 	}
 
-	DATA_HIGH();	
+	DATA_HIGH();
 	set_data_input();
-	NOP();
+
 	SCK_HIGH();
+	NutSleep(330);
 	error = read_data();
 	SCK_LOW();
+
+	if(error == 1)
+		puts("Error in sht10_write_byte");
+
 	return error; //error=1 hvis det ikke kommer ack fra sht10.
 }
 
-uint8_t sht10_read_byte(uint8_t ack)
+char sht10_read_byte(unsigned char ack)
 {
-	uint8_t i, val = 0;
+	unsigned char i, val = 0;
+	set_data_output();
+	DATA_HIGH();
 	set_data_input();
 	
-	for(i=0x80; i>0; i/=2) {
+	for(i=0; i<8; i++) {
 		SCK_HIGH();
-		if(read_data())		//Leser bit.
-			val = (val | i);
+		NutMicroDelay(10);
+		val = val*2 + read_data();
 		SCK_LOW();
 	}
 	set_data_output();
 	if(ack == 1)
 		DATA_LOW();
-	NOP();
+	NutMicroDelay(1);
 	SCK_HIGH();
-	NOP(); NOP(); NOP();
+	NutMicroDelay(10);
 	SCK_LOW();
-	NOP();
+	NutMicroDelay(1);
 	DATA_HIGH();
+	set_data_input();
 	return val;
 }
 
@@ -94,13 +103,13 @@ void sht10_connectionreset(void)
 //          _    _    _    _    _    _    _    _    _        ___     ___
 // SCK : __| |__| |__| |__| |__| |__| |__| |__| |__| |______|   |___|   |______
 {
-	uint8_t i; 
+	unsigned char i; 
 	set_data_output();
 	
 	DATA_HIGH(); SCK_LOW();		//Initial state
 	for(i=0; i<9; i++) { 		//9 SCK cycles
-		SCK_LOW();                  
-		SCK_HIGH();
+		SCK_HIGH();                  
+		SCK_LOW();
 	}
 	sht10_transstart();		//transmission start
 }
@@ -156,9 +165,10 @@ uint32_t sht10_write_statusreg(uint8_t *p_value)
 	return error;
 }
 
-uint32_t sht10_measure(uint8_t *p_value, uint8_t *p_checksum, uint8_t mode)
+char sht10_measure(unsigned char *p_value, unsigned char *p_checksum, unsigned char mode)
 {
-	uint32_t i, error = 0;
+	unsigned char error = 0;
+	unsigned int i;
 	
 	sht10_transstart();
 
@@ -179,9 +189,12 @@ uint32_t sht10_measure(uint8_t *p_value, uint8_t *p_checksum, uint8_t mode)
 			break;
 	if(read_data() == 1) //Timeout
 		error += 1;
-	*(p_value) = sht10_read_byte(ACK); //Leser første byte.
-	*(p_value+1) = sht10_read_byte(ACK); //Leser andre byte.
+	*p_value = sht10_read_byte(ACK); //Leser første byte.
+	*p_value *= 256;
+	*p_value |= sht10_read_byte(ACK); //Leser andre byte.
 	*p_checksum = sht10_read_byte(noACK); //Leser checksum.
+
+	printf("p_value in sht10_measure: %d\n", *p_value);
 	return error;
 }
 
@@ -221,44 +234,46 @@ double calc_dewpoint(double h, double t)
 	return dew_point;
 }
 
-uint32_t sht10_get_data(sht10_data *data)
+unsigned char sht10_get_data(sht10_data *data)
 {
-	uint32_t error = 0;
-	uint8_t checksum;
-	uint8_t a, b;
+	unsigned char error = 0, checksum;
 	//sht10_data *_data = (sht10_data *) data;
+	initiate_ports();
 
-	sht10_connectionreset();
+	//sht10_connectionreset();
 	
-	error += sht10_measure(&a, &checksum, TEMP);
-	error += sht10_measure(&b, &checksum, HUMI);
-	
+	error += sht10_measure((unsigned char *)&data->temp, &checksum, TEMP);
+	error += sht10_measure((unsigned char *)&data->humi, &checksum, HUMI);
+
 	if(error != 0) {
 		return error; //Det skjedde noe feil, returnerer feilen.
 	}
 
-	calc_sht10(&data->humi, &data->temp);
+	calc_sht10((double *)&data->humi, (double *)&data->temp);
 	data->dew = calc_dewpoint(data->humi, data->temp);
 	return error;
 }
 
-uint32_t read_data(void)
+unsigned char read_data(void)
 {
+	set_data_input();
+
 	return GpioPinGet(DATA_PORT, DATA_PIN);
 }
 
 void set_data_output(void)
 {
-	GpioPinConfigSet(DATA_PORT, DATA_PIN, GPIO_CFG_OUTPUT);
+	sbi(DDRB, 1);
 }
 
 void set_data_input(void)
 {
-	GpioPinConfigSet(DATA_PORT, DATA_PIN, GPIO_CFG_PULLUP);
+	cbi(DDRB, 1);
+	cbi(PORTB, 1);
 }
 
 void initiate_ports(void)
 {
-	GpioPinConfigSet(SCK_PORT, SCK_PIN, GPIO_CFG_OUTPUT);	//Konfigurerer PORTB pin 0 for output.
-	GpioPinConfigSet(DATA_PORT, DATA_PIN, GPIO_CFG_OUTPUT); //Konfigurerer PORTB pin 1 for output.
+	sbi(DDRB, 0);
+	sbi(DDRB, 1);
 }
