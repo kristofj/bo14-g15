@@ -50,8 +50,6 @@ double read_temperature_c(void)
 
 	_val = read_temperature_raw();
 	
-	printf("val in read_temp: %lf\n", _val);
-
 	_temp = D1 + (D2 * (double)_val);
 
 	return _temp;
@@ -79,8 +77,6 @@ double read_humidity(void)
 
 	_temp = read_temperature_c();
 
-	printf("Temp in read_humi: %lf\n", _temp);
-
 	_true_humi = (_temp - 25.0) * (T1 + T2 * (double)_val) + _lin_humi;
 
 	return _true_humi;
@@ -105,13 +101,14 @@ int shift_in(int _num_bits)
 	
 	set_data_input();
 	
-	for(i=0; i<_num_bits; i++) {
+	for(i=0x80; i>0; i/=2) {
 		SCK_HIGH();
 		NutMicroDelay(10);
-		ret = ret * 2 + read_data();
+		if(read_data())
+			ret |= i;
 		SCK_LOW();
 	}
-
+	printf("Byte read: %d\n",ret);
 	return ret;
 }
 
@@ -188,11 +185,10 @@ char wait_for_result(void)
 long get_data(void)
 {
 	long val;
+	long a;
 
 	set_data_input();
 	val = shift_in(8);
-
-	printf("val in get_data: %d\n", val);
 
 	val *= 256;
 
@@ -203,8 +199,13 @@ long get_data(void)
 	SCK_LOW();
 
 	set_data_input();
+	/*
+	a = shift_in(8);
+	a *=256;
+	val |= a;
+	*/
 	val |= shift_in(8);
-	
+
 	return val;
 }
 
@@ -285,7 +286,7 @@ void set_data_output(void)
 void set_data_input(void)
 {
 	cbi(DDRB, 1);
-	cbi(PORTB, 1); //Skrur av pull-up resistor.
+	//cbi(PORTB, 1); //Skrur av pull-up resistor.
 }
 
 void initiate_ports(void)

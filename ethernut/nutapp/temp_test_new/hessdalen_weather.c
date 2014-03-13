@@ -20,8 +20,10 @@ int main(void)
 	
 	puts("Project Hessdalen New Temp Read Test");
 	
+	NutSleep(100);
+
 	initiate_ports();
-	//sht10_connectionreset();
+	sht10_connectionreset();
 
 	temp = read_temperature_c();
 	humi = read_humidity();
