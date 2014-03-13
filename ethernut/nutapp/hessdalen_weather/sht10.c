@@ -1,191 +1,242 @@
 #include "sht10.h"
 
-enum {TEMP, HUMI};
+/*
+Grensesnitt mellom ethernut og SHT10.
+Innholder funksjoner som tar seg av kommunikasjon med SHT10.
+Råverdiene konverteres til grader celcius og relativt fuktighet.
+Disse brukes så til å regne ut duggpunkt.
+*/			
+				//adr	cmd	r/w
+#define MODE_TEMP	0x03	//000	0001	1
+#define MODE_HUMI	0x05	//000	0010	1
+#define REG_RESET	0x1e	//000	1111	0
 
-#define NOP() 		asm volatile("nop")
-#define SCK_PORT	NUTGPIO_PORTB
+#define PULSE_LONG	NutMicroDelay(9)
+#define PULSE_SHORT	NutMicroDelay(3)
+
+#define PORT_B		NUTGPIO_PORTB
 #define SCK_PIN		0
-#define DATA_PORT	NUTGPIO_PORTB
 #define DATA_PIN	1
-#define SCK_LOW()	GpioPinSetLow(SCK_PORT, SCK_PIN)
-#define SCK_HIGH()	GpioPinSetHigh(SCK_PORT, SCK_PIN)
-#define DATA_LOW()	GpioPinSetLow(DATA_PORT, DATA_PIN)
-#define DATA_HIGH()	GpioPinSetHigh(DATA_PORT, DATA_PIN)
 
-#define noACK		0
-#define ACK		1
-				//adr  command  r/w
-#define STATUS_REG_W 	0x06	//000   0011    0
-#define STATUS_REG_R 	0x07	//000   0011    1
-#define MEASURE_TEMP 	0x03	//000   0001    1
-#define MEASURE_HUMI 	0x05	//000   0010    1
-#define RESET        	0x1e	//000   1111    0
+#define SCK_LOW		GpioPinSetLow(PORT_B, SCK_PIN)
+#define SCK_HIGH	GpioPinSetHigh(PORT_B, SCK_PIN)
+#define DATA_LOW	GpioPinSetLow(PORT_B, DATA_PIN)
+#define DATA_HIGH	GpioPinSetHigh(PORT_B, DATA_PIN)
 
-uint32_t sht10_write_byte(uint8_t value);
-uint8_t sht10_read_byte(uint8_t ack);
-void sht10_connectionreset(void);
-void sht10_transstart(void);
-uint32_t sht10_softreset(void);
-uint32_t sht10_read_statusreg(uint8_t *p_value, uint8_t *p_checksum);
-uint32_t sht10_write_statusreg(uint8_t *p_value);
-uint32_t sht10_measure(uint8_t *p_value, uint8_t *p_checksum, uint8_t mode);
-void calc_sht10(double *p_humidity, double *p_temperature);
-double calc_dewpoint(double h, double t);
-uint32_t sht10_get_data(sht10_data *data);
-uint32_t read_data(void);
+enum{TEMP, HUMI};
+
+void initiate_pins(void);
+uint8_t read_sensor_raw(uint16_t *p_value, uint8_t mode);
+uint8_t sht10_measure(double *temp, double *humi, double *dew);
+uint8_t put_byte(uint8_t data);
+uint8_t read_byte(uint8_t ack);
+void start_transmission(void);
+void reset_connection(void);
+uint8_t soft_reset(void);
+void extract_values(double *p_humidity, double *p_temperature);
+double get_dew_point(double h, double t);
+uint16_t read_data_pin(void);
 void set_data_output(void);
 void set_data_input(void);
-void initiate_ports(void);
 
-uint32_t sht10_write_byte(uint8_t value) {
-	set_data_output();
+void initiate_pins(void)
+//Setter sck-pin og data-pin til output.
+{
+	GpioPinConfigSet(PORT_B, SCK_PIN, GPIO_CFG_OUTPUT);
+	GpioPinConfigSet(PORT_B, DATA_PIN, GPIO_CFG_OUTPUT);
+}
+
+uint8_t sht10_measure(double *temp, double *humi, double *dew)
+//Leser all nødvendig data fra sht10 og konverterer de til normale verdier.
+{
+	uint8_t error;
+	uint16_t humival_raw, tempval_raw;
+	double humival_d, tempval_d, dew_point_d;
 	
-	uint8_t i;
-	uint32_t error = 0;
+	initiate_pins();
+	reset_connection();
+
+	if((error = read_sensor_raw(&tempval_raw, TEMP)) != 0)
+		return error;
+
+	if((error = read_sensor_raw(&humival_raw, HUMI)) != 0)
+		return error;
+
+	humival_d = (double) humival_raw;
+	tempval_d = (double) tempval_raw;
+
+	extract_values(&humival_d, &tempval_d);
+	dew_point_d = get_dew_point(humival_d, tempval_d);
+
+	*temp = tempval_d;
+	*humi = humival_d;
+	*dew = dew_point_d;
+
+	return 0;
+}
+
+uint8_t read_sensor_raw(uint16_t *p_value, uint8_t mode)
+//Leser rådata ifra sht10.
+{
+	uint8_t i = 0;
+	*p_value = 0;
 	
-	for(i=0x80; i>0; i/=2) {
-		if(i & value)
-			DATA_HIGH();
-		else
-			DATA_LOW();
-		NOP();
-		SCK_HIGH();
-		NOP();NOP();NOP();
-		SCK_LOW();
-		NOP();
-	}
-
-	DATA_HIGH();	
-	set_data_input();
-	NOP();
-	SCK_HIGH();
-	error = read_data();
-	SCK_LOW();
-	return error; //error=1 hvis det ikke kommer ack fra sht10.
-}
-
-uint8_t sht10_read_byte(uint8_t ack)
-{
-	uint8_t i, val = 0;
-	set_data_input();
+	start_transmission();
 	
-	for(i=0x80; i>0; i/=2) {
-		SCK_HIGH();
-		if(read_data())		//Leser bit.
-			val = (val | i);
-		SCK_LOW();
-	}
-	set_data_output();
-	if(ack == 1)
-		DATA_LOW();
-	NOP();
-	SCK_HIGH();
-	NOP(); NOP(); NOP();
-	SCK_LOW();
-	NOP();
-	DATA_HIGH();
-	return val;
-}
-
-void sht10_connectionreset(void)
-// communication reset: DATA-line=1 and at least 9 SCK cycles followed by transstart
-//       _____________________________________________________         ________
-// DATA:                                                      |_______|
-//          _    _    _    _    _    _    _    _    _        ___     ___
-// SCK : __| |__| |__| |__| |__| |__| |__| |__| |__| |______|   |___|   |______
-{
-	uint8_t i; 
-	set_data_output();
-	
-	DATA_HIGH(); SCK_LOW();		//Initial state
-	for(i=0; i<9; i++) { 		//9 SCK cycles
-		SCK_LOW();                  
-		SCK_HIGH();
-	}
-	sht10_transstart();		//transmission start
-}
-
-void sht10_transstart(void)
-// generates a transmission start 
-//       _____         ________
-// DATA:      |_______|
-//           ___     ___
-// SCK : ___|   |___|   |______
-{
-	set_data_output();
-
-	DATA_HIGH(); SCK_LOW();		//Initial state
-	NOP();
-	SCK_HIGH();
-	NOP();
-	DATA_LOW();
-	NOP();
-	SCK_LOW();
-	NOP(); NOP(); NOP();
-	SCK_HIGH();
-	NOP();
-	DATA_HIGH();
-	NOP();
-	SCK_LOW();
-}
-
-uint32_t sht10_softreset(void)
-{
-	uint32_t error = 0;
-	sht10_connectionreset();
-	error += sht10_write_byte(RESET);
-	return error;
-}
-
-uint32_t sht10_read_statusreg(uint8_t *p_value, uint8_t *p_checksum)
-{
-	uint32_t error = 0;
-	sht10_transstart();
-	error = sht10_write_byte(STATUS_REG_R);
-	*p_value = sht10_read_byte(ACK);
-	*p_checksum = sht10_read_byte(noACK);
-	return error;
-}
-
-uint32_t sht10_write_statusreg(uint8_t *p_value)
-{
-	uint32_t error = 0;
-	sht10_transstart();
-	error += sht10_write_byte(STATUS_REG_W);
-	error += sht10_write_byte(*p_value);
-	return error;
-}
-
-uint32_t sht10_measure(uint8_t *p_value, uint8_t *p_checksum, uint8_t mode)
-{
-	uint32_t i, error = 0;
-	
-	sht10_transstart();
-
 	switch(mode) {
 		case TEMP:
-			error += sht10_write_byte(MEASURE_TEMP);
+			mode = MODE_TEMP;
 			break;
 		case HUMI:
-			error += sht10_write_byte(MEASURE_HUMI);
+			mode = MODE_HUMI;
 			break;
 		default:
 			break;
 	}
-	set_data_input();
-
-	for(i = 0; i < 65535; i++)
-		if(read_data() == 0) //Venter på at sensoren er ferdig å måle.
+	
+	if(put_byte(mode)) {
+		return 1;
+	}
+	
+	while(i < 240) { //Venter på at sht10 har målt ferdig data i max 720 ms.
+		PULSE_SHORT;
+		if(read_data_pin() == 0) {
+			i = 0;
 			break;
-	if(read_data() == 1) //Timeout
-		error += 1;
-	*(p_value) = sht10_read_byte(ACK); //Leser første byte.
-	*(p_value+1) = sht10_read_byte(ACK); //Leser andre byte.
-	*p_checksum = sht10_read_byte(noACK); //Leser checksum.
+		}
+		i++;
+	}
+	
+	if(i) {
+		puts("Error 2 read_sensor_raw");
+		return 3;
+	}
+	i = read_byte(1); //Leser første byte. MSB først.
+	*p_value = (i << 8) | read_byte(0); //Leser andre byte. LSB.
+	
+	return 0;
+}
+
+uint8_t read_byte(uint8_t ack)
+//Leser en byte og sender ack til sht10 hvis ack er satt.
+{
+	uint8_t i = 0x80;
+	uint8_t val = 0;
+	
+	set_data_input();
+	
+	while(i) {
+		SCK_HIGH;
+		PULSE_SHORT;
+		if(read_data_pin()) {
+			val = (val | i);
+		}
+		SCK_LOW;
+		PULSE_SHORT;
+		i >>= 1;
+	}
+	set_data_output();
+	
+	if(ack) {
+		DATA_LOW;
+	}
+	else {
+		DATA_HIGH;
+	}
+	SCK_HIGH;
+	PULSE_LONG;
+	SCK_LOW;
+	set_data_input();
+	
+	return val;
+}
+
+uint8_t put_byte(uint8_t data)
+//Sender en byte med data til sht10. Og leser ackownledge fra sensoren.
+{
+	uint8_t i = 0x80; //Bit-maske.
+	uint8_t error = 0;
+
+	set_data_output();
+
+	while(i) {
+		if(i & data) {
+			DATA_HIGH;
+		}
+		else {
+			DATA_LOW;
+		}
+
+		SCK_HIGH;
+		PULSE_LONG;
+		SCK_LOW;
+		PULSE_SHORT;
+		i >>= 1;
+	}
+	set_data_input();
+	SCK_HIGH;
+	PULSE_LONG;
+	
+	if (read_data_pin()) { //Fikk ikke ack fra sensoren.
+		error = 1;
+	}
+	PULSE_SHORT;
+	SCK_LOW;
+	
 	return error;
 }
 
-void calc_sht10(double *p_humidity, double *p_temperature)
+void start_transmission(void)
+//Starten på en overføring.
+{
+	SCK_LOW;
+	set_data_output();
+	DATA_HIGH;
+	PULSE_SHORT;
+	SCK_HIGH;
+	PULSE_SHORT;
+	DATA_LOW;
+	PULSE_SHORT;
+	SCK_LOW;
+	PULSE_SHORT;
+	SCK_HIGH;
+	PULSE_SHORT;
+	DATA_HIGH;
+	PULSE_SHORT;
+	SCK_LOW;
+	PULSE_SHORT;
+
+	set_data_input();
+}
+
+void reset_connection(void)
+//Starter om koblingen mellom ethernut og sensoren, kan kalles hvis man har mistet kontakt med sensoren.
+{
+	uint8_t i;
+
+	SCK_LOW;
+	set_data_output();
+	DATA_HIGH;
+
+	for(i=0; i<9; i++) {
+		SCK_HIGH;
+		PULSE_LONG;
+		SCK_LOW;
+		PULSE_LONG;
+	}
+	start_transmission();
+}
+
+uint8_t soft_reset(void)
+//Kjører en soft-reset av sensoren. Setter registeret til sht10 til standard verdier.
+{
+	reset_connection();
+	
+	return put_byte(REG_RESET);
+}
+
+void extract_values(double *p_humidity, double *p_temperature)
+//Konverterer rådata fra sensoren til relativ fuktighet og temperatur i celsius.
 {
 	const double C1 = -2.0468;
 	const double C2 = +0.0367;
@@ -199,67 +250,43 @@ void calc_sht10(double *p_humidity, double *p_temperature)
 	double rh_true;
 	double t_C;
 
-	t_C = t*0.01-40.1;
-	rh_lin = C3*rh*rh + C2*rh+C1;
-	rh_true = (t_C-25)*(T1+T2*rh)+rh_lin;
-	
-	if(rh_true>100)
+	t_C = t * 0.01 - 40.1; //Temperaturen i celsius
+	rh_lin = C3*rh*rh + C2*rh + C1; //Relativ fuktighet.
+	rh_true = (t_C - 25)*(T1+T2*rh)+rh_lin; //Relavitv fuktighet kompansert med temperatur.
+	if(rh_true > 100)
 		rh_true = 100;
-	if(rh_true<0.1)
+	if(rh_true < 0.1)
 		rh_true = 0.1;
 
 	*p_temperature = t_C;
 	*p_humidity = rh_true;
 }
 
-double calc_dewpoint(double h, double t)
+double get_dew_point(double h, double t)
+//Regner ut duggpunkt baser på den relative fuktigheten og temperatur.
 {
-	double k, dew_point;
-
-	k = (log10(h)-2)/0.4343+(17.62*t)/(243.12+t);
-	dew_point = 243.12*k/(17.62-k);
+	double log_ex, dew_point;
+	
+	log_ex = (log10(h)-2)/0.4343 + (17.62*t)/(243.12*t);
+	dew_point = 243.12*log_ex/(17.62 - log_ex);
+	
 	return dew_point;
 }
 
-uint32_t sht10_get_data(sht10_data *data)
+uint16_t read_data_pin(void)
+//Henter ut status på data-pin.
 {
-	uint32_t error = 0;
-	uint8_t checksum;
-	uint8_t a, b;
-	//sht10_data *_data = (sht10_data *) data;
-	initiate_ports();
-
-	sht10_connectionreset();
-	
-	error += sht10_measure(&a, &checksum, TEMP);
-	error += sht10_measure(&b, &checksum, HUMI);
-	
-	if(error != 0) {
-		return error; //Det skjedde noe feil, returnerer feilen.
-	}
-
-	calc_sht10(&data->humi, &data->temp);
-	data->dew = calc_dewpoint(data->humi, data->temp);
-	return error;
-}
-
-uint32_t read_data(void)
-{
-	return GpioPinGet(DATA_PORT, DATA_PIN);
+	return(GpioPinGet(PORT_B, DATA_PIN));
 }
 
 void set_data_output(void)
+//Setter data-pin til å være utgang.
 {
-	GpioPinConfigSet(DATA_PORT, DATA_PIN, GPIO_CFG_OUTPUT);
+	GpioPinConfigSet(PORT_B, DATA_PIN, GPIO_CFG_OUTPUT);
 }
 
 void set_data_input(void)
+//Setter data-pin til å være inngang, og aktiverer den interne pull-up motstanden.
 {
-	GpioPinConfigSet(DATA_PORT, DATA_PIN, GPIO_CFG_PULLUP);
-}
-
-void initiate_ports(void)
-{
-	GpioPinConfigSet(SCK_PORT, SCK_PIN, GPIO_CFG_OUTPUT);	//Konfigurerer PORTB pin 0 for output.
-	GpioPinConfigSet(DATA_PORT, DATA_PIN, GPIO_CFG_OUTPUT); //Konfigurerer PORTB pin 1 for output.
+	GpioPinConfigSet(PORT_B, DATA_PIN, GPIO_CFG_PULLUP);
 }

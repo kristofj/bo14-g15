@@ -18,7 +18,4 @@
 #include <string.h>
 #include <io.h>
 
-void configure_debug(uint32_t baud);
-int main(void);
-
 #endif

@@ -5,12 +5,6 @@
 #include <dev/gpio.h>
 #include <math.h>
 
-typedef struct {
-	double temp;
-	double humi;
-	double dew;
-} sht10_data;
-
-uint32_t sht10_get_data(sht10_data *data);
+uint8_t sht10_measure(double *temp, double *humi, double *dew);
 
 #endif
