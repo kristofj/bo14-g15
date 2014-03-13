@@ -1,72 +1,12 @@
 %\cleardoublepage
-\chapter{Testing / Evaluering (Generisk Tittel)}
+\chapter{Testing}
 \label{chap:evaluation} 
-\meta{
-De fleste prosjekter avsluttes med en eller annen form for evaluering av resultatene fra prosjektene. I utviklingsprosjekter vil det være naturlig med teknisk testing, fungerer programvaren som den skal? Teknisk testing kan utføres av utviklerne selv, eller en ekstern part, f.eks. oppdragsgiver. En oppdragsgiver ønsker ofte å utføre en akseptansetest, dvs. en test som vil avgjøre om de har "fått det de har betalt for". Ellers vil det i mange tilfeller være nyttig og viktig med en brukertest, dvs. en strukturert test der sluttbrukerne får komme til orde.
 
-Evalueringsmetoden vil altså avhenge sterkt av typen av prosjekt. Likevel vil de samme overordnete prinsippene gjelde for alle typer leveranser. En utredning bør kunne passere en akseptansetest, et mediaprosjekt bør kunne underlegges både akseptanse- og brukertest (jfr. kritikerprosessen rundt nye spillefilmer), og et programvareprosjekt bør i tillegg gjennomgå en teknisk test.
-}
+
+I dette kapittelet vil vi ta for oss hvordan vi har testet produktet vår. Forklare hvordan de ulike delene av produktet vår har blitt testet og hvem som har testet det. For klare kort om hva vi var ute etter med testen og om produktet holdt mål.
 
 
 
-Testingen av de to verktøyene er utført på en uformell og ikke særlig vitenskapelig basert måte, og resultatene baserer seg hovedsakelig på forfatterens egne vurderinger\footnote{I et reelt prosjekt ville denne metoden være litt for tynn \smiley}.
-
-I Tabell \ref{tab:comparison} er det foretatt en summarisk sammenlikning mellom OpenOffice og \LaTeX~ med hensyn på kravene i Kapittel \ref{sec:generelle-krav}.
-
-
-\begin {table}[H]
-
-\begin{center}
-\begin{longtable}{|l|p{0.332\textwidth}|p{0.33\textwidth}|}
-\hline
- {\bf Krav} & {\bf OpenOffice} & {\bf \LaTeX} \\ 
-\hline
-Robusthet & Tildels betapreget. Man har av og til følelsen av å bevege seg på  tynn is. & Bunnsolid, Gigabyte type dokumenter ingen problemer.\\ 
-\hline
-Åpne formater &
-Ja. En ODF fil er en zipfil som inneholder en rekke skjemadefinerte XML filer. &
-Ren, ``lettlest'' ASCII.\\ 
-\hline
-Maler/stiler &
-Ja, men noe rotete, lett å overstyre lokalt uten at du merker det. &
-LaTex ``oppfant'' prinsippet med å skille innhold, struktur og presentasjon. Enormt tilfang av maler og stiler for det meste.\\ 
-\hline
-Oppsplitting &
-Mulig, men ikke trivielt/robust. &
-Trivielt. Modus Operandi for store dokumenter, f.eks. Proceedings som samler ``stand-alone''-artikler fra mange forfattere.\\ 
-\hline
-Kryssreferanser &
-Går greit, men ikke helt intuitivt. &
-Konsistent og enkelt.\\ 
-\hline
-Bibliografi &
-Greit med bruk plugins/extensions, f. eks, Zotero. &
-BibTex innførte prinsippet om å referere til eksterne bibliografisamlinger. En mengde ulike stiler.\\ 
-\hline
-Brukermasse &
-Stadig økende, men med stort innslag av entusiaster og ``pionerer''. &
-Stor og kompetent, særlig innen den naturvitenskapelige og tekniske delen av akademia.\\ 
-\hline
-Dokumentasjon &
-Relativt god, men bærer preg av at produktet er ``ferskt''. &
-Meget omfattende, men godt spredt i ulike fora.\\ 
-\hline
-Versjonering &
-En odf-fil er en binærfil (zippet og komprimert samling XML-dokumenter), og egner seg dårlig for tradisjonell versjonskontroll. Det finnes en innebygget versjonerings-mekanisme, men det er usikkert hvor hensiktsmessig denne er.&
-Kan ikke bli bedre? Egen erfaring med komplekse og store dokumenter fra tidlig 90-tall som problemløst kan  behandles i dagens verktøy.\\ 
-\hline
-Framtidssikker &
-Uklart, siden det er et ``ferskt'' verktøy, men potensialet er der.&
-Filene er ren ASCII, og håndteres derfor trivielt i alle typer versjoneringssystemer.\\ 
-\hline
-Staving/grammatikk &
-Innebygget, mulig å laste inn ulike typer eksterne ordlister etc.&
-Mange vektøy, fordi filene er ren ASCII.\\ 
-\hline
-\end {longtable}
-\caption {Summarisk vurdering av sentrale aspekter i OpenOffice og \LaTeX~\label{tab:comparison} }
-\end{center}
-\end {table}
 
 
 
