@@ -28,7 +28,7 @@ enum{TEMP, HUMI};
 void initiate_pins(void);
 uint8_t read_sensor_raw(uint16_t *p_value, uint8_t mode);
 uint8_t sht10_measure(double *temp, double *humi, double *dew);
-uint8_t put_byte(uint8_t data);
+uint8_t write_byte(uint8_t data);
 uint8_t read_byte(uint8_t ack);
 void start_transmission(void);
 void reset_connection(void);
@@ -94,7 +94,7 @@ uint8_t read_sensor_raw(uint16_t *p_value, uint8_t mode)
 			break;
 	}
 	
-	if(put_byte(mode)) {
+	if(write_byte(mode)) {
 		return 1;
 	}
 	
@@ -151,7 +151,7 @@ uint8_t read_byte(uint8_t ack)
 	return val;
 }
 
-uint8_t put_byte(uint8_t data)
+uint8_t write_byte(uint8_t data)
 //Sender en byte med data til sht10. Og leser ackownledge fra sensoren.
 {
 	uint8_t i = 0x80; //Bit-maske.
@@ -232,7 +232,7 @@ uint8_t soft_reset(void)
 {
 	reset_connection();
 	
-	return put_byte(REG_RESET);
+	return write_byte(REG_RESET);
 }
 
 void extract_values(double *p_humidity, double *p_temperature)
