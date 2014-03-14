@@ -1,0 +1,26 @@
+wind speed:
+
+Power supply 0-10V: 
+	13...30 V DC
+	OR
+	24 V AC, max 50mA
+	
+Power supply 4-20mA:
+	24 V AC, max 50mA
+	OR
+	9...30V DC
+	
+Supply V heating: 
+	24 V AC/DC max 20 W
+	
+############################
+
+Wind direction:
+
+Power Supply:
+	8/15 ... 30 V DC
+	OR 
+	24 V AC
+
+Power supply heating:
+	24 V AC/DC, max 20W
