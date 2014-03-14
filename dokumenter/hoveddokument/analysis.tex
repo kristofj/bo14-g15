@@ -6,9 +6,24 @@
 
 Det har vært mange tidligere prosjekter i forbindelse med Hessdalen, men ingen prosjekter der værdata skal representeres. I dag kan nesten hvem som helst kjøpe et værstasjon-system å koble opp, og programmere værstasjonen på sin måte. Det finnes systemer som er mer brukervennlig enn andre, hvis man ikke er erfarne på det området. \\
 
-Det er mange eksempler på andre som har laget sin egen værstasjson. En av de som har laget sin egen værstasjon er Seth Brown og kaller seg "Dr Bunson"(kilde: http://www.drbunsen.org/building-a-weather-station/). Han lager en liknende værstasjon som det vi har i oppgave i å lage. Bakgrunnen for at han bygde sin værstasjon er fordi at han bor på et område det der er dårlige representative data, så han valgte å ta saken i egne hender. Værstasjonen hans besto av en temperatursensor og en sensor for vindhastighet. Av hardware bruker han en Raspberry Pi model B og en trådløst nettverksadapter. Av software, programerte han hele prosjektet i javascript. For å få alt dette vist visuelt, hadde han også lagd en mobilapplikasjon der han kunne se all værdataen. \\
+\subsubsection{Dr. Bunson\cite{nettside:drbunson}}
+Det er mange eksempler på andre som har laget sin egen værstasjson. En av de  er Seth Brown og kaller seg "Dr Bunson". Han har laget en liknende værstasjon som det vi skal. Bakgrunnen for at han bygde sin værstasjon er at han bor på et område det der er dårlige representative værdata, så han valgte å ta saken i egne hender. \\ \\
+Han vurderte først å lage sin egen værstasjon fra bunnen, basert på enten Arduino\cite{nettside:arduino} eller Tessel\cite{nettside:tessel}, men fant ut at ingen av disse ville tåle påkjenningene av ekstremværet der han bor (Mount Washington). Derfor bestemte han seg for å kjøpe Davis 6250 Vantage Vue\cite{nettside:davis6250}, en ferdigbygd kombinert vind-, regn- og temperaturmåler. Denne værstasjonen sender data trådløst, og serveren som tar i mot dette er en Raspberry Pi model B\cite{nettside:rpi} med en Edimax EW-7811Un trådløs nettverksadapter\cite{nettside:edimax}. \\ \\
+Serveren programmerte han i Node\cite{nettside:nodejs}, et JavaScript-bibliotek for nettverksservere. Han brukte også JavaScript for å få visualisert data på skjermer i huset. Han har også programmert et varslingssystem på serversiden ved bruk av Nodemailer\cite{nettside:nodemailer} som sender SMS-varslinger til telefonen hans når været når ekstreme verdier.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{drbunson}
+  \caption{Skjermdump av Dr. Bunsons JavaScript-presentasjon av værdata.}
+\end{figure}
 
+\subsubsection{Arduino's weather station\cite{nettside:instructables}}
+En annen som har laget sin egen værstasjon skrev en artikkel på hvordan han satt opp hele systemet, steg for steg. Han bruker sensorer for trykk, temperatur, luftfuktighet og bevegelse. Han viser og skriver detaljert hva han bruker av utstyr, kretsskjemaer og hvordan han koblet alt mot en Arduino mikrokontroller\cite{nettside:arduino} og han har tatt med en sender og en mottaker mellom mikrokontrolleren og sensorene.\\ \\
+Værstasjonen ble bygd på en sånn måte at han alltid kunne ha plass til utvidelser. Han viser ved et eksempel at han at koblet opp og programmerte en sensor som måler nedbør. Alt han trengte var en måler for nedbør og en boks for å sikre denne måleren mot vann. Måleren kan bare kobles på en ledig port på mikrokontrolleren.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{arduinos_vaerstasjon}
+  \caption{Den ferdige værstasjonen til bram2202 som viser temperatur, luftfuktighet og trykk}
+\end{figure}
 
 \subsection{Kan vi lære noe av disse prosjektene?}
-
-Vi kan ha mye å lære av med og jobbe med et slikt prosjekt. Det er mye ny informasjon og nye fagområder for alle i prosjektgruppen. Det å bygge en værstasjon fra bunn av er et praktisk prosjekt der vi kommer til å få mange utfordringer gjennom hele prosessen. Vi håper å lære en hel del av dette bachelorprosjektet vi kan ta med oss videre.
+Dr. Bunson mente at mikrokontrollerkort ikke tålte nok til å brukes som værstasjoner der han bodde, men det var hovedsaklig på grunn av ekstrem vind. I Hessdalen er det meste kulde som kan bli problemet, da temperaturen kan krype under 30 minusgrader\cite{nettside:yr150313}. Siden det er påkrevd i oppgaven at vi bruker Ethernut 2.1, er det eneste vi kan gjøre å beskytte kortet godt fra elementene. Med denne informasjonen i bakhodet, vil en prioritet for oss være å bygge vår værstasjon inn i en godt beskyttende boks. Grensesnittet Dr. Bunson har brukt for fremvisning av data kan også være en inspirasjon når vi skal utforme vår side for datapresentasjon.
