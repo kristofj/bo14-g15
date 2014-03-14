@@ -108,7 +108,6 @@ uint8_t read_sensor_raw(uint16_t *p_value, uint8_t mode)
 	}
 	
 	if(i) {
-		puts("Error 2 read_sensor_raw");
 		return 3;
 	}
 	i = read_byte(1); //Leser første byte. MSB først.
