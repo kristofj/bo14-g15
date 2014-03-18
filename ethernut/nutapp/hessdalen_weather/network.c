@@ -8,7 +8,8 @@
 #define JSON_MAX_LENGTH			700
 
 //MAC addresse for denne enheten
-#define MAC { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xC2 }
+#define MAC_ETHERNUT1 { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xC2 }
+#define MAC_ETHERNUT2 { 0x00, 0x06, 0x33, 0x00, 0x00, 0x00 } //TODO: legge til mac-adresse for det andre ethernut-kortet.
 
 //Tråd for å sende data til en server med TCP
 THREAD(Send_data_thread, arg)
@@ -133,7 +134,7 @@ int send_data(const char *data, const char *address, uint16_t port)
 
 int configure_network(void)
 {
-	uint8_t mac[6] = MAC;
+	uint8_t mac[6] = MAC_ETHERNUT1;
 	
 	//Registrerer ethernet-kontroller
 	if (NutRegisterDevice(&DEV_ETHER, 0, 0)) {
