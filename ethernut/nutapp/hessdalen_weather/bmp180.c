@@ -1,6 +1,9 @@
 /*
  * Grensesnitt mellom Ethernut 2.1 og BMP180.
  * Brukes ved å først kalle bmp180_init, deretter bmp180_read_data.
+ * Pins brukt:
+ *	PORT D, pin 0 for SLA. (Klokke)
+ *	PORT D, pin 1 for SLD. (Data)
 */
 
 #include "bmp180.h"
