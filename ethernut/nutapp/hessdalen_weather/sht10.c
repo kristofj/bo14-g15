@@ -1,10 +1,13 @@
 #include "sht10.h"
 
 /*
-Grensesnitt mellom ethernut og SHT10.
-Innholder funksjoner som tar seg av kommunikasjon med SHT10.
-Råverdiene konverteres til grader celcius og relativt fuktighet.
-Disse brukes så til å regne ut duggpunkt.
+ * Grensesnitt mellom ethernut og SHT10.
+ * Innholder funksjoner som tar seg av kommunikasjon med SHT10.
+ * Råverdiene konverteres til grader celcius og relativt fuktighet.
+ * Disse brukes så til å regne ut duggpunkt.
+ * Pins brukt:
+ *	PORTB, pin 0 for SCK.
+ *	PORTB, pin 1 for DATA.
 */			
 				//adr	cmd	r/w
 #define MODE_TEMP	0x03	//000	0001	1
