@@ -1,17 +1,5 @@
-#include "hessdalen_weather.h"
 #include "network.h"
 
-//Definisjoner på strenglengder for JSON-strenger.
-#define JSON_MAX_ROOT_LENGTH		60
-#define JSON_MAX_STRING_LENGTH		150
-#define JSON_MAX_WSTRING_LENGTH		170
-#define JSON_MAX_LENGTH			700
-
-//MAC addresse for denne enheten
-#define MAC_ETHERNUT1 { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xC2 }
-#define MAC_ETHERNUT2 { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xE2 }
-
-//Tråd for å sende data til en server med TCP
 THREAD(Send_data_thread, arg)
 {
 	network_thread_args *args  = (network_thread_args *) arg;
@@ -45,7 +33,6 @@ THREAD(Send_data_thread, arg)
 	for(;;);
 }
 
-//Tråd som setter klokken, og oppdaterer den jevnlig.
 THREAD(Ntp_thread, arg)
 {
 	time_t ntp_time = 0;
@@ -66,58 +53,41 @@ THREAD(Ntp_thread, arg)
 	}
 }
 
-tm *get_current_time(void)
+void get_current_time(tm *datetime)
 {
 	time_t t;
-	tm *datetime;
-
 	t = time(NULL);
 	datetime = localtime(&t);
-
-	return datetime;
 }
 
-char *get_json_string_root(const char *date_time, uint8_t station_id)
+void get_json_string_root(const char *date_time, uint8_t station_id, char *string)
 {
-	char *string = (char *)malloc(JSON_MAX_ROOT_LENGTH);
 	const char json_string[] = "{\"mainDatetime\":\"%s\",\"stationId\":%d,";
 
 	sprintf(string, json_string, date_time, station_id);
-
-	return string;
 }
 
-char *get_json_string(const char *value, double avg, double now, double max, const char *time_max, double min, const char *time_min)
+void get_json_string(const char *value, double avg, double now, double max, const char *time_max, double min, const char *time_min, char *string)
 {
-	char *string = (char *)malloc(JSON_MAX_STRING_LENGTH);
 	const char json_string[] = "\"%s\":{\"avg\":%lf,\"now\":%lf,\"max\":%lf,\"timeMax\":\"%s\",\"min\":%lf,\"timeMin\":\"%s\"},";
 
 	sprintf(string, json_string, value, avg, now, max, time_max, min, time_min);
-	
-	return string;
 }
 
-char *get_json_wstring(double avg, double now, double max, const char *time_max, double max_dir, double min, const char *time_min)
+void get_json_wstring(double avg, double now, double max, const char *time_max, double max_dir, double min, const char *time_min, char *string)
 {
-	char *string = (char *)malloc(JSON_MAX_WSTRING_LENGTH);
 	const char json_string_wind[] = "\"wind\":{\"avg\":%lf,\"now\":%lf,\"max\":%lf,\"timeMax\":\"%s\",\"maxDir\":%lf,\"min\":%lf,\"timeMin\":\"%s\"}}";
 
 	sprintf(string, json_string_wind, avg, now, max, time_max, max_dir, min, time_min);
-
-	return string;
 }
 
-char *get_json(char *date_time, char *json_string1, char *json_string2, char *json_string3, char *json_wstring)
+void get_json(char *date_time, char *json_string1, char *json_string2, char *json_string3, char *json_wstring, char *string)
 {
-	char *json_data = (char *)malloc(JSON_MAX_LENGTH);
-
-	strncat(json_data, date_time, JSON_MAX_ROOT_LENGTH);
-	strncat(json_data, json_string1, JSON_MAX_STRING_LENGTH);
-	strncat(json_data, json_string2, JSON_MAX_STRING_LENGTH);
-	strncat(json_data, json_string3, JSON_MAX_STRING_LENGTH);
-	strncat(json_data, json_wstring, JSON_MAX_LENGTH);
-
-	return json_data;
+	strncat(string, date_time, JSON_MAX_ROOT_LENGTH);
+	strncat(string, json_string1, JSON_MAX_STRING_LENGTH);
+	strncat(string, json_string2, JSON_MAX_STRING_LENGTH);
+	strncat(string, json_string3, JSON_MAX_STRING_LENGTH);
+	strncat(string, json_wstring, JSON_MAX_LENGTH);
 }
 
 int send_data(const char *data, const char *address, uint16_t port)
@@ -135,6 +105,7 @@ int send_data(const char *data, const char *address, uint16_t port)
 int configure_network(void)
 {
 	uint8_t mac[6] = MAC_ETHERNUT1;
+	//uint8_t mac[6] = MAC_ETHERNUT2;
 	
 	//Registrerer ethernet-kontroller
 	if (NutRegisterDevice(&DEV_ETHER, 0, 0)) {

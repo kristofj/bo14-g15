@@ -1,33 +1,4 @@
-/*
- * Grensesnitt mellom Ethernut 2.1 og BMP180.
- * Brukes ved å først kalle bmp180_init, deretter bmp180_read_data.
- * Pins brukt:
- *	PORT D, pin 0 for SLA. (Klokke)
- *	PORT D, pin 1 for SLD. (Data)
-*/
-
 #include "bmp180.h"
-
-#define BMP180_OSS		3	//Bestemmer nøyaktigheten på måling av trykk.
-
-#define BMP180_ADDR		0xee	//Adressen til BMP180.
-#define BMP180_CTRL_ADDR	0xf4	//Adressen for å kontrollere BMP180.
-#define BMP180_DATA_ADDR	0xf6	//Adressen der de ferdige dataene er lagret.
-
-#define BMP180_MEASURE_TEMP	0x2e	//Kommando for å måle temp.
-#define BMP180_MEASURE_PRESSURE	0xf4	//Kommando for å måle trykk med oss=3.
-
-//Statuskoder i Master Transmitter Mode. Ref. s.214 i ATmega128 datablad.
-#define TWI_START		0x08	//Start har blitt sendt.
-#define TWI_RESTART		0x10	//Restart har blitt sendt.
-#define MTM_TDATA_ACK		0x28	//Databyte har blitt sent, ack har blitt mottatt.
-#define MTM_TDATA_NACK		0x30	//Databyte har blitt sendt, nack har blitt mottatt.
-
-//Statuskoder i Master Receiver Mode. Ref s.218 i ATmega128 datablad.
-#define MRM_RDATA_ACK		0x50	//Databyte har blitt mottatt, ack har blitt returnert.
-#define MRM_RDATA_NACK		0x58	//Databyte har blitt mottatt, nack har blitt returnert.
-
-#define TWI_STATUS		TWI_get_status()
 
 //Holder kalibreringsparamterene som leses ifra bmp180.
 struct bmp180_cal_params {
@@ -46,25 +17,6 @@ struct bmp180_cal_params {
 
 static struct bmp180_cal_params params;
 
-uint8_t bmp180_read_data(int32_t *pressure, double *temperature);
-uint8_t bmp180_init(void);
-void TWI_init(void);
-uint8_t TWI_scan(void);
-void TWI_start(void);
-void TWI_stop(void);
-void TWI_write(uint8_t data);
-uint8_t TWI_read_ack(void);
-uint8_t TWI_read_nack(void);
-uint8_t TWI_get_status(void);
-uint8_t bmp180_read_cal_params(void);
-uint8_t bmp180_read16(uint8_t reg_addr, uint16_t *data);
-uint8_t bmp180_read8(uint8_t reg_addr, uint8_t *data);
-uint8_t bmp180_write8(uint8_t reg_addr, uint8_t data);
-uint8_t bmp180_read_ut(uint16_t *data);
-uint8_t bmp180_read_up(uint32_t *data);
-
-//Leser rådata og returnerer ferdig utregnede verdier.
-//Alle formler er ifra databladet til bmp180.
 uint8_t bmp180_read_data(int32_t *pressure, double *temperature)
 {
 	uint8_t error = 0;
@@ -126,8 +78,6 @@ uint8_t bmp180_read_data(int32_t *pressure, double *temperature)
 	return error;
 }
 
-//Initialiserer TWI og henter kalibreringsparametere.
-//Denne må kalles før bmp180_read_data.
 uint8_t bmp180_init(void)
 {
 	uint8_t chip_id, error = 0;
@@ -159,7 +109,6 @@ void TWI_init(void)
 	TWCR = (1<<TWEN); //Aktiverer TWI. 
 }
 
-//Skanner TWI-bussen etter slaver.
 //TODO: Er nødvendig å scanne hele bussen for i det hele tatt å kommunisere med BMP180. FIX ME PLEASE.
 uint8_t TWI_scan(void)
 {
@@ -184,20 +133,17 @@ uint8_t TWI_scan(void)
 	return addr;
 }
 
-//Sender start-signal.
 void TWI_start(void)
 {
 	TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); //Sender start.
 	while((TWCR & (1<<TWINT)) == 0); //Venter på at TWINT er satt. Start har blitt sendt.
 }
 
-//Sender stopp-signal.
 void TWI_stop(void)
 {
 	TWCR = (1<<TWINT) | (1<<TWSTO) | (1<<TWEN); //Sender stop.
 }
 
-//Skriver en byte.
 void TWI_write(uint8_t data)
 {
 	TWDR = data; //Laster byten inn i data-registeret. Klar for sending.
@@ -205,7 +151,6 @@ void TWI_write(uint8_t data)
 	while((TWCR & (1<<TWINT)) == 0); //Venter på at data er sendt.
 }
 
-//Leser en byte og sender ack.
 uint8_t TWI_read_ack(void)
 {
 	uint8_t data;
@@ -216,7 +161,6 @@ uint8_t TWI_read_ack(void)
 	return data;
 }
 
-//Leser en byte og sender nack.
 uint8_t TWI_read_nack(void)
 {
 	uint8_t data;
@@ -227,7 +171,6 @@ uint8_t TWI_read_nack(void)
 	return data;
 }
 
-//Leser status på TWI-bussen.
 uint8_t TWI_get_status(void)
 {
 	uint8_t status;
@@ -235,7 +178,6 @@ uint8_t TWI_get_status(void)
 	return status;
 }
 
-//Leser kalibreringsparametere fra bmp180.
 uint8_t bmp180_read_cal_params(void)
 {
 	uint8_t i, error = 0;
@@ -261,7 +203,6 @@ uint8_t bmp180_read_cal_params(void)
 	return error;
 }
 
-//Leser 16 bit fra gitt registeradresse.
 //TODO: Legge til mer feilsøking ved å sjekke TWI_STATUS.
 uint8_t bmp180_read16(uint8_t reg_addr, uint16_t *data)
 {
@@ -286,7 +227,6 @@ uint8_t bmp180_read16(uint8_t reg_addr, uint16_t *data)
 	return 0;
 }
 
-//Leser 8 bit fra gitt registeradresse.
 //TODO: Legge til mer feilsøking ved å sjekke TWI_STATUS.
 uint8_t bmp180_read8(uint8_t reg_addr, uint8_t *data)
 {
@@ -305,7 +245,6 @@ uint8_t bmp180_read8(uint8_t reg_addr, uint8_t *data)
 	return 0;
 }
 
-//Skriver 8 bit til eeprom.
 //TODO: Legge til mer feilsøking ved å sjekke TWI_STATUS.
 uint8_t bmp180_write8(uint8_t reg_addr, uint8_t data)
 {
@@ -320,7 +259,6 @@ uint8_t bmp180_write8(uint8_t reg_addr, uint8_t data)
 	return 0;
 }
 
-//Leser rådata for temperatur fra bmp180.
 uint8_t bmp180_read_ut(uint16_t *data)
 {
 	uint8_t error = 0;
@@ -337,7 +275,6 @@ uint8_t bmp180_read_ut(uint16_t *data)
 	return error;
 }
 
-//Leser rådata for lufttrykk fra bmp180. 
 uint8_t bmp180_read_up(uint32_t *data)
 {
 	uint16_t a;

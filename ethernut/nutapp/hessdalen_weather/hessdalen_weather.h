@@ -1,5 +1,5 @@
-#ifndef HESSDALEN_WEATHER_H
-#define HESSDALEN_WEATHER_H
+#ifndef HESSDALEN_WEATHER_H_
+#define HESSDALEN_WEATHER_H_
 
 #include <sys/timer.h>
 #include <sys/socket.h>

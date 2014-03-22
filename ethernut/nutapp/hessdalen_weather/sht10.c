@@ -1,56 +1,14 @@
 #include "sht10.h"
 
-/*
- * Grensesnitt mellom ethernut og SHT10.
- * Innholder funksjoner som tar seg av kommunikasjon med SHT10.
- * Råverdiene konverteres til grader celcius og relativt fuktighet.
- * Disse brukes så til å regne ut duggpunkt.
- * Pins brukt:
- *	PORTB, pin 0 for SCK.
- *	PORTB, pin 1 for DATA.
-*/			
-				//adr	cmd	r/w
-#define MODE_TEMP	0x03	//000	0001	1
-#define MODE_HUMI	0x05	//000	0010	1
-#define REG_RESET	0x1e	//000	1111	0
-
-#define PULSE_LONG	NutMicroDelay(9)
-#define PULSE_SHORT	NutMicroDelay(3)
-
-#define PORT_B		NUTGPIO_PORTB
-#define SCK_PIN		0
-#define DATA_PIN	1
-
-#define SCK_LOW		GpioPinSetLow(PORT_B, SCK_PIN)
-#define SCK_HIGH	GpioPinSetHigh(PORT_B, SCK_PIN)
-#define DATA_LOW	GpioPinSetLow(PORT_B, DATA_PIN)
-#define DATA_HIGH	GpioPinSetHigh(PORT_B, DATA_PIN)
-
-enum{TEMP, HUMI};
-
-void initiate_pins(void);
-uint8_t read_sensor_raw(uint16_t *p_value, uint8_t mode);
-uint8_t sht10_measure(double *temp, double *humi, double *dew);
-uint8_t write_byte(uint8_t data);
-uint8_t read_byte(uint8_t ack);
-void start_transmission(void);
-void reset_connection(void);
-uint8_t soft_reset(void);
-void extract_values(double *p_humidity, double *p_temperature);
-double get_dew_point(double h, double t);
-uint16_t read_data_pin(void);
-void set_data_output(void);
-void set_data_input(void);
+enum {TEMP, HUMI};
 
 void initiate_pins(void)
-//Setter sck-pin og data-pin til output.
 {
 	GpioPinConfigSet(PORT_B, SCK_PIN, GPIO_CFG_OUTPUT);
 	GpioPinConfigSet(PORT_B, DATA_PIN, GPIO_CFG_OUTPUT);
 }
 
 uint8_t sht10_measure(double *temp, double *humi, double *dew)
-//Leser all nødvendig data fra sht10 og konverterer de til normale verdier.
 {
 	uint8_t error;
 	uint16_t humival_raw, tempval_raw;
@@ -79,12 +37,11 @@ uint8_t sht10_measure(double *temp, double *humi, double *dew)
 }
 
 uint8_t read_sensor_raw(uint16_t *p_value, uint8_t mode)
-//Leser rådata ifra sht10.
 {
 	uint8_t i = 0;
 	*p_value = 0;
 	
-	start_transmission();
+	start_transmission(); //Starter kommunikasjon.
 	
 	switch(mode) {
 		case TEMP:
@@ -97,7 +54,7 @@ uint8_t read_sensor_raw(uint16_t *p_value, uint8_t mode)
 			break;
 	}
 	
-	if(write_byte(mode)) {
+	if(write_byte(mode)) { //Skriver kommando.
 		return 1;
 	}
 	
@@ -110,17 +67,16 @@ uint8_t read_sensor_raw(uint16_t *p_value, uint8_t mode)
 		i++;
 	}
 	
-	if(i) {
+	if(i) { //Timeout.
 		return 3;
 	}
-	i = read_byte(1); //Leser første byte. MSB først.
-	*p_value = (i << 8) | read_byte(0); //Leser andre byte. LSB.
+	i = read_byte(1); //Leser MSB.
+	*p_value = (i << 8) | read_byte(0); //Leser LSB.
 	
 	return 0;
 }
 
 uint8_t read_byte(uint8_t ack)
-//Leser en byte og sender ack til sht10 hvis ack er satt.
 {
 	uint8_t i = 0x80;
 	uint8_t val = 0;
@@ -154,7 +110,6 @@ uint8_t read_byte(uint8_t ack)
 }
 
 uint8_t write_byte(uint8_t data)
-//Sender en byte med data til sht10. Og leser ackownledge fra sensoren.
 {
 	uint8_t i = 0x80; //Bit-maske.
 	uint8_t error = 0;
@@ -189,7 +144,6 @@ uint8_t write_byte(uint8_t data)
 }
 
 void start_transmission(void)
-//Starten på en overføring.
 {
 	SCK_LOW;
 	set_data_output();
@@ -212,7 +166,6 @@ void start_transmission(void)
 }
 
 void reset_connection(void)
-//Starter om koblingen mellom ethernut og sensoren, kan kalles hvis man har mistet kontakt med sensoren.
 {
 	uint8_t i;
 
@@ -230,7 +183,6 @@ void reset_connection(void)
 }
 
 uint8_t soft_reset(void)
-//Kjører en soft-reset av sensoren. Setter registeret til sht10 til standard verdier.
 {
 	reset_connection();
 	
@@ -238,7 +190,6 @@ uint8_t soft_reset(void)
 }
 
 void extract_values(double *p_humidity, double *p_temperature)
-//Konverterer rådata fra sensoren til relativ fuktighet og temperatur i celsius.
 {
 	const double C1 = -2.0468;
 	const double C2 = +0.0367;
@@ -255,7 +206,8 @@ void extract_values(double *p_humidity, double *p_temperature)
 	t_C = t * 0.01 - 40.1; //Temperaturen i celsius
 	rh_lin = C3*rh*rh + C2*rh + C1; //Relativ fuktighet.
 	rh_true = (t_C - 25)*(T1+T2*rh)+rh_lin; //Relavitv fuktighet kompansert med temperatur.
-	if(rh_true > 100)
+
+	if(rh_true > 100) //Forsikrer at fuktigheten er innenfor fysiske mulige parametere.
 		rh_true = 100;
 	if(rh_true < 0.1)
 		rh_true = 0.1;
@@ -265,7 +217,6 @@ void extract_values(double *p_humidity, double *p_temperature)
 }
 
 double get_dew_point(double h, double t)
-//Regner ut duggpunkt baser på den relative fuktigheten og temperatur.
 {
 	double log_ex, dew_point;
 	
@@ -276,19 +227,17 @@ double get_dew_point(double h, double t)
 }
 
 uint16_t read_data_pin(void)
-//Henter ut status på data-pin.
 {
 	return(GpioPinGet(PORT_B, DATA_PIN));
 }
 
 void set_data_output(void)
-//Setter data-pin til å være utgang.
 {
 	GpioPinConfigSet(PORT_B, DATA_PIN, GPIO_CFG_OUTPUT);
 }
 
 void set_data_input(void)
-//Setter data-pin til å være inngang, og aktiverer den interne pull-up motstanden.
 {
 	GpioPinConfigSet(PORT_B, DATA_PIN, GPIO_CFG_PULLUP);
 }
+
