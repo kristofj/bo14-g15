@@ -4,26 +4,31 @@
     <script src="jquery-2.1.0.min.js"></script>
     <script src="jsapi.js"></script>
     <script>
-        google.load("visualization", "1", {packages: ["corechart"]});
-        google.setOnLoadCallback(drawChart);
-        function drawChart() {
+        function getJson() {
+            var data = new google.visualization.DataTable();
             $.ajax({
-                url: 'dbToJson.php?type='+$('input[name=type]:checked').val(),
+                url: 'dbToJson.php?type=' + $('input[name=type]:checked').val(),
                 type: "post",
+                async: false,
                 dataType: "json",
                 success: function (response) {
-                    var radioSelected=($('input[name=type]:checked').val());
-                    if (radioSelected=="temp"){
-                        var typeData="Temperatur";
-                        var mTypeData="&deg;";
+                    var radioSelected = ($('input[name=type]:checked').val());
+                    if (radioSelected == "temp") {
+                        var typeData = "Temperatur";
+                        var mTypeData = "&deg;";
                     }
-                    else if (radioSelected=="humidity"){
-                        var typeData="Luftfuktighet";
-                        var mTypeData="&#37;";
+                    else if (radioSelected == "humidity") {
+                        var typeData = "Luftfuktighet";
+                        var mTypeData = "&#37;";
                     }
-                    else if (radioSelected=="pressure"){
-                        var typeData="Lufttrykk";
-                        var mTypeData="something?";
+                    else if (radioSelected == "pressure") {
+                        var typeData = "Lufttrykk";
+                        var mTypeData = "something?";
+                    }
+                    else if (radioSelected == "wind") {
+                        var typeData = "Vindhastighet";
+                        var mTypeData = "m/s";
+                        var dirMax = [];
                     }
 
                     var tabEntry = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -41,6 +46,9 @@
                         valMin.push(item.valueMin);
                         valMax.push(item.valueMax);
                         station.push(item.station);
+                        if (radioSelected == "wind") {
+                            dirMax.push(item.dirMax);
+                        }
 
                         var fs = item.time.split(" ");
                         var ss = fs[0].split("-");
@@ -59,25 +67,46 @@
                         var d = new Date(ss[0], ss[1], ss[2], ts[0], ts[1]);
                         timeMax.push(d.getHours() + ':' + d.getMinutes());
                     });
-                    var data = new google.visualization.DataTable();
+
                     data.addColumn('string', 'time');
                     data.addColumn('number', typeData);
                     data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
 
-                    for (i = 0; i < time.length; i++)
-                        data.addRow([time[i], parseFloat(valAvg[i]), "<b>Stasjon " + station[i] + "</b><br/>" + fullTime[i] + "<br/>" +typeData+"<br/>" + tabEntry + "Gjennomsnitt: " + valAvg[i] +mTypeData+"<br/>" + tabEntry + "Maks: " + valMax[i] +mTypeData+" kl " + timeMax[i] + "<br/>" + tabEntry + "Minimum: " + valMin[i] +mTypeData+ " kl " + timeMin[i]]);
-
-                    var options = {
-                        title: 'Trenger dynamisk tittel',
-                        tooltip: { isHtml: true }
-                    };
-
-                    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-                    chart.draw(data, options);
+                    for (i = 0; i < time.length; i++) {
+                        if (radioSelected == "wind") {
+                            var windDirMax = "<br/>" + tabEntry + tabEntry + "Retning: " + dirMax[i];
+                        }
+                        else {
+                            var windDirMax = "";
+                        }
+                        data.addRow([time[i], parseFloat(valAvg[i]), "<b>Stasjon " + station[i] + "</b><br/>" + fullTime[i] + "<br/>" + typeData + "<br/>" + tabEntry + "Gjennomsnitt: " + valAvg[i] + mTypeData + "<br/>" + tabEntry + "Maks: " + valMax[i] + mTypeData + " kl " + timeMax[i] + windDirMax + "<br/>" + tabEntry + "Minimum: " + valMin[i] + mTypeData + " kl " + timeMin[i]]);
+                    }
                 }
             });
-
+            return data;
         }
+
+        function drawChart() {
+            var button = document.getElementById('b1');
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            var options = {
+                title: 'Trenger dynamisk tittel',
+                curveType: 'function',
+                animation: {
+                    duration: 1000,
+                    easing: 'in'
+                },
+                tooltip: { isHtml: true }
+            };
+            var data = getJson();
+            chart.draw(data, options);
+            button.onclick = function () {
+                var data = getJson();
+                chart.draw(data, options);
+            }
+        }
+        google.load("visualization", "1", {packages: ["corechart"]});
+        google.setOnLoadCallback(drawChart);
     </script>
 </head>
 <body>
@@ -85,9 +114,10 @@
 <form action="">
     <input checked type="radio" name="type" value="temp">Temperatur<br/>
     <input type="radio" name="type" value="humidity">Luftfuktighet<br/>
-    <input type="radio" name="type" value="pressure">Lufttrykk
+    <input type="radio" name="type" value="pressure">Lufttrykk<br/>
+    <input type="radio" name="type" value="wind">Vind
 </form>
-<button onclick="drawChart()">Click me</button>
+<button id="b1">Click me</button>
 
 </body>
 </html>
