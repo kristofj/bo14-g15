@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="jquery-2.1.0.min.js"></script>
+    <script src="jquery-2.1.0.min.js" ></script>
     <script src="jsapi.js"></script>
     <script>
-        function getJson() {
-            var data = new google.visualization.DataTable();
+        //bruker ajax i jQuery for å parse JSON fra .php-backend (dbToJson.php) basert på brukervalg
+        function getWeatherJson() {
             $.ajax({
                 url: 'dbToJson.php?type=' + $('input[name=type]:checked').val(),
                 type: "post",
-                async: false,
                 dataType: "json",
+                //fyrer callback-funksjon for å behandle data. kunne evt. vært gjort utenfor dette scope
                 success: function (response) {
                     var radioSelected = ($('input[name=type]:checked').val());
                     if (radioSelected == "temp") {
@@ -35,7 +35,6 @@
                     var time = [];
                     var fullTime = [];
                     var station = [];
-
                     var valAvg = [];
                     var valMin = [];
                     var timeMin = [];
@@ -49,7 +48,6 @@
                         if (radioSelected == "wind") {
                             dirMax.push(item.dirMax);
                         }
-
                         var fs = item.time.split(" ");
                         var ss = fs[0].split("-");
                         var ts = fs[1].split(":");
@@ -67,7 +65,7 @@
                         var d = new Date(ss[0], ss[1], ss[2], ts[0], ts[1]);
                         timeMax.push(d.getHours() + ':' + d.getMinutes());
                     });
-
+                    var data = new google.visualization.DataTable();
                     data.addColumn('string', 'time');
                     data.addColumn('number', typeData);
                     data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
@@ -81,15 +79,17 @@
                         }
                         data.addRow([time[i], parseFloat(valAvg[i]), "<b>Stasjon " + station[i] + "</b><br/>" + fullTime[i] + "<br/>" + typeData + "<br/>" + tabEntry + "Gjennomsnitt: " + valAvg[i] + mTypeData + "<br/>" + tabEntry + "Maks: " + valMax[i] + mTypeData + " kl " + timeMax[i] + windDirMax + "<br/>" + tabEntry + "Minimum: " + valMin[i] + mTypeData + " kl " + timeMin[i]]);
                     }
+                    //starter funksjon som tegner grafer basert på data bygd ovenfor
+                    drawChart(data);
                 }
             });
-            return data;
         }
 
-        function drawChart() {
-            var button = document.getElementById('b1');
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-            var options = {
+        //fyller globalt deklarerte variabler
+        function genChart(){
+            button = document.getElementById('b1');
+            chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            options = {
                 title: 'Trenger dynamisk tittel',
                 curveType: 'function',
                 animation: {
@@ -98,15 +98,23 @@
                 },
                 tooltip: { isHtml: true }
             };
-            var data = getJson();
-            chart.draw(data, options);
-            button.onclick = function () {
-                var data = getJson();
-                chart.draw(data, options);
-            }
+            //starter JSON-laster for å fylle en graf basert på standardverdier i forms
+            getWeatherJson();
         }
+
+        //tegner opp grafer. blir kalt opp med dataobjekt fra JSON-laster.
+        function drawChart(data) {
+            chart.draw(data, options);
+        }
+
+        //deklarer variabler globalt for å ikke måtte generere de på nytt. Dette fører til mulgiheten for å animerte grafer med async ajax.
+        var button;
+        var chart;
+        var options;
+
+        //laster inn grafobjekter asynkront. kjører deretter genChart for å sette opp grafobjektene
         google.load("visualization", "1", {packages: ["corechart"]});
-        google.setOnLoadCallback(drawChart);
+        google.setOnLoadCallback(genChart);
     </script>
 </head>
 <body>
@@ -117,7 +125,7 @@
     <input type="radio" name="type" value="pressure">Lufttrykk<br/>
     <input type="radio" name="type" value="wind">Vind
 </form>
-<button id="b1">Click me</button>
+<button onclick="getWeatherJson()" id="b1">Click me</button>
 
 </body>
 </html>
