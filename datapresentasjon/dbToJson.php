@@ -1,5 +1,5 @@
 <?php
-mysql_connect("j3nsen.com", "hessdalen", "hessdalen123") or die(mysql_error());
+mysql_connect("xxx", "xxx", "xxx") or die(mysql_error());
 mysql_select_db("hessdalen_weather") or die(mysql_error());
 if($_GET["type"]=="temp"){
     $data = mysql_query("SELECT * FROM logId LEFT JOIN temperature ON logId.id=temperature.logId_id;")
