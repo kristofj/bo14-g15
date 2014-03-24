@@ -89,7 +89,7 @@ function genChart() {
 //laget for å unngå å endre kallargumenter på flere steder
 function weatherFetch() {
     var fromDateStr=fromDate.getFullYear()+"-"+(fromDate.getMonth()+1)+"-"+fromDate.getDate()+" 00:00:00";
-    var toDateStr=toDate.getFullYear()+"-"+(toDate.getMonth()+1)+"-"+toDate.getDate()+" 22:59:59";
+    var toDateStr=toDate.getFullYear()+"-"+(toDate.getMonth()+1)+"-"+toDate.getDate()+" 23:59:59";
     getJson('dbToJson.php?type=' + $('input[name=type]:checked').val()+'&from='+fromDateStr+'&to='+toDateStr, "weather");
 }
 
@@ -118,16 +118,14 @@ function drawChart(jsonResponse) {
         alert('Ugyldig valg.');
     }
     var tabEntry = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-    var time1 = [];
-    var fullTime1 = [];
+    var time = [];
+
     var valAvg1 = [];
     var valMin1 = [];
     var timeMin1 = [];
     var valMax1 = [];
     var timeMax1 = [];
 
-    var time2 = [];
-    var fullTime2 = [];
     var valAvg2 = [];
     var valMin2 = [];
     var timeMin2 = [];
@@ -155,9 +153,8 @@ function drawChart(jsonResponse) {
             var fs = item.time.split(" ");
             var ss = fs[0].split("-");
             var ts = fs[1].split(":");
-            var d = new Date(ss[0], ss[1]-1, ss[2], ts[0], ts[1]);
-            time1.push(d);
-            fullTime1.push(getDateFixed(d, "date") + '/' + getDateFixed(d, "month") + '/' + getDateFixed(d, "year") + ' ' + getDateFixed(d, "hour") + ':' + getDateFixed(d, "minute"));
+            var d = new Date(ss[0], ss[1]-1, ss[2], ts[0], ts[1],ts[2]);
+            time.push(d);
         }
         else{
             valAvg2.push(item.valueAvg);
@@ -177,42 +174,46 @@ function drawChart(jsonResponse) {
             var d = new Date(ss[0], ss[1], ss[2], ts[0], ts[1]);
             timeMax2.push(getDateFixed(d, "hour") + ':' + getDateFixed(d, "minute"));
 
+            /*
             var fs = item.time.split(" ");
             var ss = fs[0].split("-");
             var ts = fs[1].split(":");
-            var d = new Date(ss[0], ss[1], ss[2], ts[0], ts[1]);
+            var d = new Date(ss[0], ss[1]-1, ss[2], ts[0], ts[1]);
             time2.push(d);
             fullTime2.push(getDateFixed(d, "date") + '/' + getDateFixed(d, "month") + '/' + getDateFixed(d, "year") + ' ' + getDateFixed(d, "hour") + ':' + getDateFixed(d, "minute"));
+            */
         }
     });
-    var data = new google.visualization.DataTable();
+    data = new google.visualization.DataTable();
     data.addColumn('datetime', 'time');
     data.addColumn('number', 'Stasjon 1');
+    data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
     data.addColumn('number', 'Stasjon 2');
     data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
+    data.addColumn('number', 'Differanse');
+    data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
 
-    for (i = 0; i < time1.length; i++) {
+    for (i = 0; i < time.length; i++) {
         var windDirMax1 = "";
         var windDirMax2 = "";
         if (radioSelected == "wind") {
             windDirMax1 = "<br/>" + tabEntry + tabEntry + "Retning: " + dirMax1[i];
             windDirMax2 = "<br/>" + tabEntry + tabEntry + "Retning: " + dirMax2[i];
         }
-        data.addRow([time1[i], parseFloat(valAvg1[i]),parseFloat(valAvg2[i]),"<b>Stasjon 2</b><br/>" +
-            fullTime2[i] + "<br/>" + typeData + "<br/>" + tabEntry + "Gjennomsnitt: " + valAvg2[i] +
-            mTypeData + "<br/>" + tabEntry + "Maks: " + valMax2[i] + mTypeData + " kl " + timeMax2[i] +
-            windDirMax2 + "<br/>" + tabEntry + "Minimum: " + valMin2[i] + mTypeData + " kl " + timeMin2[i]]);
-        /*data.addRow([time[i], parseFloat(valAvg[i]), "<b>Stasjon " + station[i] + "</b><br/>" +
-            fullTime[i] + "<br/>" + typeData + "<br/>" + tabEntry + "Gjennomsnitt: " + valAvg[i] +
-            mTypeData + "<br/>" + tabEntry + "Maks: " + valMax[i] + mTypeData + " kl " + timeMax[i] +
-            windDirMax + "<br/>" + tabEntry + "Minimum: " + valMin[i] + mTypeData + " kl " + timeMin[i]], '{visibleInLegend:false}');*/
+        data.addRow([time[i], parseFloat(valAvg1[i]),"<br/>" + tabEntry + "<b>Gjennomsnitt:</b> " + valAvg1[i] +
+            mTypeData + "<br/>" + tabEntry + "<b>Maks:</b> " + valMax1[i] + mTypeData + " kl " + timeMax1[i] +
+            windDirMax1 + "<br/>" + tabEntry + "<b>Minimum:</b> " + valMin1[i] + mTypeData + " kl " + timeMin1[i],parseFloat(valAvg2[i]),"<br/>" + tabEntry + "<b>Gjennomsnitt:</b> " + valAvg2[i] +
+            mTypeData + "<br/>" + tabEntry + "<b>Maks:</b> " + valMax2[i] + mTypeData + " kl " + timeMax2[i] +
+            windDirMax2 + "<br/>" + tabEntry + "<b>Minimum:</b> " + valMin2[i] + mTypeData + " kl " + timeMin2[i],
+            0,"hei"]);
     }
-    //var spacing = Math.round(data.getNumberOfRows() / 8);
-    var options = {
+    options = {
         title: typeData,
         curveType: 'function',
         legend: { position: 'bottom'},
         hAxis: {showTextEvery: 1},
+        focusTarget: 'category',
+        series: {2: {lineWidth:1,color:'transparent',areaOpacity: 0.0,visibleInLegend:false}},
         animation: {
             duration: 1000,
             easing: 'in'
@@ -223,7 +224,11 @@ function drawChart(jsonResponse) {
 }
 
 //deklarer graf globalt for å ikke måtte generere på nytt. Dette fører til mulgiheten for å animerte grafer med async ajax.
+var options;
 var chart;
+var data;
+
+//variabler fra kalendere
 var minCalendarDate;
 var maxCalendarDate;
 var fromDate;
