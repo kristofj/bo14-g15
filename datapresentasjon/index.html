@@ -1,93 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="jquery-2.1.0.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <!--laster inn jQuery-->
+    <script src="jquery-2.1.0.min.js" ></script>
+    <!--jQuery UI-lib for kalender-->
+    <script src="jquery-ui-1.10.4.custom.min.js"></script>
+    <!--laster inn Googles JavaScript-bibliotek-->
     <script src="jsapi.js"></script>
-    <script>
-        google.load("visualization", "1", {packages: ["corechart"]});
-        google.setOnLoadCallback(drawChart);
-        function drawChart() {
-            $.ajax({
-                url: 'dbToJson.php?type='+$('input[name=type]:checked').val(),
-                type: "post",
-                dataType: "json",
-                success: function (response) {
-                    var radioSelected=($('input[name=type]:checked').val());
-                    if (radioSelected=="temp"){
-                        var typeData="Temperatur";
-                        var mTypeData="&deg;";
-                    }
-                    else if (radioSelected=="humidity"){
-                        var typeData="Luftfuktighet";
-                        var mTypeData="&#37;";
-                    }
-                    else if (radioSelected=="pressure"){
-                        var typeData="Lufttrykk";
-                        var mTypeData="something?";
-                    }
-
-                    var tabEntry = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                    var time = [];
-                    var fullTime = [];
-                    var station = [];
-
-                    var valAvg = [];
-                    var valMin = [];
-                    var timeMin = [];
-                    var valMax = [];
-                    var timeMax = [];
-                    $.each(response, function (i, item) {
-                        valAvg.push(item.valueAvg);
-                        valMin.push(item.valueMin);
-                        valMax.push(item.valueMax);
-                        station.push(item.station);
-
-                        var fs = item.time.split(" ");
-                        var ss = fs[0].split("-");
-                        var ts = fs[1].split(":");
-                        var d = new Date(ss[0], ss[1], ss[2], ts[0], ts[1]);
-                        time.push(d.getDate() + '/' + d.getMonth() + ' ' + d.getHours() + ':' + d.getMinutes());
-                        fullTime.push(d.getDate() + '/' + d.getMonth() + '/' + d.getYear() + ' ' + d.getHours() + ':' + d.getMinutes());
-                        var fs = item.timeMin.split(" ");
-                        var ss = fs[0].split("-");
-                        var ts = fs[1].split(":");
-                        var d = new Date(ss[0], ss[1], ss[2], ts[0], ts[1]);
-                        timeMin.push(d.getHours() + ':' + d.getMinutes());
-                        var fs = item.timeMax.split(" ");
-                        var ss = fs[0].split("-");
-                        var ts = fs[1].split(":");
-                        var d = new Date(ss[0], ss[1], ss[2], ts[0], ts[1]);
-                        timeMax.push(d.getHours() + ':' + d.getMinutes());
-                    });
-                    var data = new google.visualization.DataTable();
-                    data.addColumn('string', 'time');
-                    data.addColumn('number', typeData);
-                    data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
-
-                    for (i = 0; i < time.length; i++)
-                        data.addRow([time[i], parseFloat(valAvg[i]), "<b>Stasjon " + station[i] + "</b><br/>" + fullTime[i] + "<br/>" +typeData+"<br/>" + tabEntry + "Gjennomsnitt: " + valAvg[i] +mTypeData+"<br/>" + tabEntry + "Maks: " + valMax[i] +mTypeData+" kl " + timeMax[i] + "<br/>" + tabEntry + "Minimum: " + valMin[i] +mTypeData+ " kl " + timeMin[i]]);
-
-                    var options = {
-                        title: 'Trenger dynamisk tittel',
-                        tooltip: { isHtml: true }
-                    };
-
-                    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-                    chart.draw(data, options);
-                }
-            });
-
-        }
-    </script>
+    <!--laster inn egenskrevet kode for datafremvisning-->
+    <script src="weather.js"></script>
 </head>
 <body>
 <div id="chart_div" style="width: 900px; height: 500px;"></div>
 <form action="">
-    <input checked type="radio" name="type" value="temp">Temperatur<br/>
+    <input checked type="radio" name="type" value="temperature">Temperatur<br/>
     <input type="radio" name="type" value="humidity">Luftfuktighet<br/>
-    <input type="radio" name="type" value="pressure">Lufttrykk
+    <input type="radio" name="type" value="pressure">Lufttrykk<br/>
+    <input type="radio" name="type" value="wind">Vind
 </form>
-<button onclick="drawChart()">Click me</button>
-
+<button onclick="weatherFetch()">Click me</button>
+<p>Fra: <input type="text" onchange="changedForms()" id="from" size="10">Til: <input type="text" onchange="changedForms()" id="to" size="10"></p>
 </body>
 </html>
