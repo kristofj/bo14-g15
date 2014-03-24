@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <!--laster inn jQuery-->
     <script src="jquery-2.1.0.min.js" ></script>
+    <!--jQuery UI-lib for kalender-->
+    <script src="jquery-ui-1.10.4.custom.min.js"></script>
     <!--laster inn Googles JavaScript-bibliotek-->
     <script src="jsapi.js"></script>
     <!--laster inn egenskrevet kode for datafremvisning-->
@@ -11,12 +14,12 @@
 <body>
 <div id="chart_div" style="width: 900px; height: 500px;"></div>
 <form action="">
-    <input checked type="radio" name="type" value="temp">Temperatur<br/>
+    <input checked type="radio" name="type" value="temperature">Temperatur<br/>
     <input type="radio" name="type" value="humidity">Luftfuktighet<br/>
     <input type="radio" name="type" value="pressure">Lufttrykk<br/>
     <input type="radio" name="type" value="wind">Vind
 </form>
 <button onclick="weatherFetch()">Click me</button>
-
+<p>Fra: <input type="text" onchange="changedForms()" id="from" size="10">Til: <input type="text" onchange="changedForms()" id="to" size="10"></p>
 </body>
 </html>
