@@ -106,11 +106,11 @@ function drawChart(jsonResponse) {
     }
     else if (radioSelected == "pressure") {
         var typeData = "Lufttrykk";
-        var mTypeData = "something?";
+        var mTypeData = " hPa";
     }
     else if (radioSelected == "wind") {
         var typeData = "Vindhastighet";
-        var mTypeData = "m/s";
+        var mTypeData = " m/s";
         var dirMax1 = [];
         var dirMax2 = [];
     }
@@ -205,7 +205,8 @@ function drawChart(jsonResponse) {
             windDirMax1 + "<br/>" + tabEntry + "<b>Minimum:</b> " + valMin1[i] + mTypeData + " kl " + timeMin1[i],parseFloat(valAvg2[i]),"<br/>" + tabEntry + "<b>Gjennomsnitt:</b> " + valAvg2[i] +
             mTypeData + "<br/>" + tabEntry + "<b>Maks:</b> " + valMax2[i] + mTypeData + " kl " + timeMax2[i] +
             windDirMax2 + "<br/>" + tabEntry + "<b>Minimum:</b> " + valMin2[i] + mTypeData + " kl " + timeMin2[i],
-            0,"hei"]);
+            0,"<br/>"+tabEntry+"<b>Gjennomsnitt: </b><i>"+(valAvg1[i]-valAvg2[i])+mTypeData+"</i><br/>"+tabEntry+"<b>Maks: </b><i>"+(valMax1[i]-valMax2[i])+mTypeData+"</i><br/>"
+                +tabEntry+"<b>Min: </b><i>"+(valMin1[i]-valMin2[i])+mTypeData+"</i>"]);
     }
     options = {
         title: typeData,
