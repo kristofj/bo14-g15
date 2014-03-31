@@ -14,10 +14,10 @@ if ($_GET["type"] == "getRange") {
     $interval = intval($interval->format('%R%a'));
 
     //hvis det er mer enn 10 dager mellom datoene, hent ut måling fra kl 12 hver dag
-    if ($interval >= 10) {
+    if ($interval >= 10 & $_GET["allData"]!="true") {
         $limiter = 'HOUR(datetime) =12 AND';
     } //hvis det er mer enn 3 dager mellom datoene, hent kun ut målinger for kl 6 og 12 hver dag.
-    elseif ($interval >= 3) {
+    elseif ($interval >= 3 & $_GET["allData"]!="true") {
         $limiter = '(HOUR(datetime) =6 OR HOUR(datetime) =12) AND';
     } //hent ut alle målinger
     else {
