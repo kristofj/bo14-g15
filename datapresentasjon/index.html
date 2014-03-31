@@ -13,13 +13,14 @@
 </head>
 <body>
 <div id="chart_div" style="width: 900px; height: 500px;"></div>
-<form action="">
+<form onchange="changedType()" action="">
     <input checked type="radio" name="type" value="temperature">Temperatur<br/>
     <input type="radio" name="type" value="humidity">Luftfuktighet<br/>
     <input type="radio" name="type" value="pressure">Lufttrykk<br/>
     <input type="radio" name="type" value="wind">Vind
 </form>
-<button onclick="weatherFetch()">Click me</button>
+<button onclick="weatherFetch('graph')">Vis graf</button>
+<button onclick="weatherFetch('table')">Vis tabell</button>
 <p>Fra: <input type="text" onchange="changedForms()" id="from" size="10">Til: <input type="text" onchange="changedForms()" id="to" size="10"></p>
 </body>
 </html>

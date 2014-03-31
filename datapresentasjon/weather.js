@@ -6,11 +6,14 @@ function getJson(url, type) {
         dataType: "json",
         //fyrer callback-funksjon for å sende behandlet data videre.
         success: function (response) {
-            if (type == "weather") {
+            if (type == "graph") {
                 drawChart(response);
             }
             else if (type == "formFiller") {
                 fillForms(response);
+            }
+            else if (type == "table") {
+                makeTable(response);
             }
             else {
                 alert('You shall not pass!');
@@ -68,7 +71,7 @@ function fillForms(jsonResponse) {
     $("#to").datepicker({ minDate: fromDate, maxDate: maxCalendarDate });
     $("#to").datepicker("option", "dateFormat", "dd/mm/yy");
     $("#to").datepicker("setDate", maxCalendarDate);
-    weatherFetch();
+    weatherFetch('graph');
 }
 
 function changedForms(){
@@ -78,8 +81,13 @@ function changedForms(){
     $('#to').datepicker('option', 'minDate', fromDate);
 }
 
+function changedType(){
+    radioSelected = ($('input[name=type]:checked').val());
+}
+
 //fyller globalt deklarerte variabler
 function genChart() {
+    radioSelected = ($('input[name=type]:checked').val());
     chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 
     //starter prosess for å fylle forms og en standardgraf
@@ -87,50 +95,54 @@ function genChart() {
 }
 
 //laget for å unngå å endre kallargumenter på flere steder
-function weatherFetch() {
+function weatherFetch(type) {
     var fromDateStr=fromDate.getFullYear()+"-"+(fromDate.getMonth()+1)+"-"+fromDate.getDate()+" 00:00:00";
     var toDateStr=toDate.getFullYear()+"-"+(toDate.getMonth()+1)+"-"+toDate.getDate()+" 23:59:59";
-    getJson('dbToJson.php?type=' + $('input[name=type]:checked').val()+'&from='+fromDateStr+'&to='+toDateStr, "weather");
+
+    if (type=='graph'){
+        getJson('dbToJson.php?type=' + radioSelected+'&from='+fromDateStr+'&to='+toDateStr+'&allData=false', "graph");
+    }
+    else if(type=='table'){
+        getJson('dbToJson.php?type=' + radioSelected+'&from='+fromDateStr+'&to='+toDateStr+'&allData=true', "table");
+    }
 }
 
-//tegner opp grafer. blir kalt opp med JSON.
-function drawChart(jsonResponse) {
-    var radioSelected = ($('input[name=type]:checked').val());
+function makeTable(response){
+    populateArrays(response);
+    var htmlTable='<head><title>'+typeData+'</title><link rel="stylesheet" type="text/css" href="tableStyle.css"></style></head><body><table><tr><th>Dato</th><th>Kl</th><th>Stasjon 1<br/>Gjennomsnitt</th><th>Stasjon 2<br/>Gjennomsnitt</th></tr>';
+    for (i = 0; i < time.length; i++) {
+        var dateFixed=getDateFixed(time[i],"date")+"/"+getDateFixed(time[i],"month")+"/"+getDateFixed(time[i],"year");
+        var clockFixed=getDateFixed(time[i],"hour")+":"+getDateFixed(time[i],"minute");
+        htmlTable+="<tr><td>"+dateFixed+"</td><td>"+clockFixed+"</td><td>"+valAvg1[i]+mTypeData+"</td><td>"+valAvg2[i]+mTypeData+"</td></tr>";
+    }
+    htmlTable+="</body>";
+    clearArrays();
+    var x=window.open('','','toolbars=0,width=400,height=600,left=200,top=200,scrollbars=1,resizable=1');
+    x.document.open();
+    x.document.write(htmlTable);
+    x.document.close();
+}
+
+function populateArrays(jsonResponse){
     if (radioSelected == "temperature") {
-        var typeData = "Temperatur";
-        var mTypeData = "&deg;";
+        typeData = "Temperatur";
+        mTypeData = "&deg;";
     }
     else if (radioSelected == "humidity") {
-        var typeData = "Luftfuktighet";
-        var mTypeData = "&#37;";
+        typeData = "Luftfuktighet";
+        mTypeData = "&#37;";
     }
     else if (radioSelected == "pressure") {
-        var typeData = "Lufttrykk";
-        var mTypeData = " hPa";
+        typeData = "Lufttrykk";
+        mTypeData = " hPa";
     }
     else if (radioSelected == "wind") {
-        var typeData = "Vindhastighet";
-        var mTypeData = " m/s";
-        var dirMax1 = [];
-        var dirMax2 = [];
+        typeData = "Vindhastighet";
+        mTypeData = " m/s";
     }
     else {
         alert('Ugyldig valg.');
     }
-    var tabEntry = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-    var time = [];
-
-    var valAvg1 = [];
-    var valMin1 = [];
-    var timeMin1 = [];
-    var valMax1 = [];
-    var timeMax1 = [];
-
-    var valAvg2 = [];
-    var valMin2 = [];
-    var timeMin2 = [];
-    var valMax2 = [];
-    var timeMax2 = [];
     $.each(jsonResponse, function (i, item) {
         if (item.station==1){
             valAvg1.push(item.valueAvg);
@@ -173,17 +185,30 @@ function drawChart(jsonResponse) {
             var ts = fs[1].split(":");
             var d = new Date(ss[0], ss[1], ss[2], ts[0], ts[1]);
             timeMax2.push(getDateFixed(d, "hour") + ':' + getDateFixed(d, "minute"));
-
-            /*
-            var fs = item.time.split(" ");
-            var ss = fs[0].split("-");
-            var ts = fs[1].split(":");
-            var d = new Date(ss[0], ss[1]-1, ss[2], ts[0], ts[1]);
-            time2.push(d);
-            fullTime2.push(getDateFixed(d, "date") + '/' + getDateFixed(d, "month") + '/' + getDateFixed(d, "year") + ' ' + getDateFixed(d, "hour") + ':' + getDateFixed(d, "minute"));
-            */
         }
     });
+}
+
+function clearArrays(){
+    time = [];
+    valAvg1 = [];
+    valMin1 = [];
+    timeMin1 = [];
+    valMax1 = [];
+    timeMax1 = [];
+    dirMax1 = [];
+    valAvg2 = [];
+    valMin2 = [];
+    timeMin2 = [];
+    valMax2 = [];
+    timeMax2 = [];
+    dirMax2 = [];
+}
+
+//tegner opp grafer. blir kalt opp med JSON.
+function drawChart(jsonResponse) {
+
+    populateArrays(jsonResponse);
     data = new google.visualization.DataTable();
     data.addColumn('datetime', 'time');
     data.addColumn('number', 'Stasjon 1');
@@ -208,6 +233,7 @@ function drawChart(jsonResponse) {
             0,"<br/>"+tabEntry+"<b>Gjennomsnitt: </b><i>"+(valAvg1[i]-valAvg2[i])+mTypeData+"</i><br/>"+tabEntry+"<b>Maks: </b><i>"+(valMax1[i]-valMax2[i])+mTypeData+"</i><br/>"
                 +tabEntry+"<b>Min: </b><i>"+(valMin1[i]-valMin2[i])+mTypeData+"</i>"]);
     }
+    clearArrays();
     options = {
         title: typeData,
         curveType: 'function',
@@ -228,6 +254,27 @@ function drawChart(jsonResponse) {
 var options;
 var chart;
 var data;
+
+var tabEntry = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+var radioSelected;
+
+var time = [];
+var typeData;
+var mTypeData;
+var valAvg1 = [];
+var valMin1 = [];
+var timeMin1 = [];
+var valMax1 = [];
+var timeMax1 = [];
+var dirMax1 = [];
+
+var valAvg2 = [];
+var valMin2 = [];
+var timeMin2 = [];
+var valMax2 = [];
+var timeMax2 = [];
+var dirMax2 = [];
+
 
 //variabler fra kalendere
 var minCalendarDate;
