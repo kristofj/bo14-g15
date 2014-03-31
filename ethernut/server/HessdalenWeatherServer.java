@@ -4,7 +4,7 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class Server {
+public class HessdalenWeatherServer {
 
     public static void main(String a[]) {
         System.out.println("Hessdalen Weather Station - Server");
