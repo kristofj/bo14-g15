@@ -33,7 +33,7 @@ THREAD(Send_data_thread, arg)
 	for(;;);
 }
 
-THREAD(Ntp_thread, arg)
+void set_time_ntp(void)
 {
 	time_t ntp_time = 0;
 	uint32_t timeserver = 0;
@@ -45,7 +45,7 @@ THREAD(Ntp_thread, arg)
 		if(NutSNTPGetTime(&timeserver, &ntp_time) == 0) {
 			puts("Updating current time...");
 			stime(&ntp_time); //Setter klokken til Ethernut.
-			NutSleep(1800000); //Venter i 30 min.
+			return;
 		} else {
 			puts("Failed retrieving time. Retrying in 10 sec...");
 			NutSleep(10000);

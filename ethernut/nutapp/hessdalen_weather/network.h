@@ -25,8 +25,8 @@ typedef struct {
 //Tråd for å sende data til en server med TCP
 THREAD(Send_data_thread, arg);
 
-//Tråd som setter klokken, og oppdaterer den jevnlig.
-THREAD(Ntp_thread, arg);
+//Setter klokken.
+void set_time_ntp(void);
 
 //Henter nåværende tid fra timeren. Bør ikke kalles før Ntp_thread har kjørt.
 void get_current_time(tm *datetime);
