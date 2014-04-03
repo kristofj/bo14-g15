@@ -1,6 +1,6 @@
 #include "hessdalen_weather.h"
 
-void start_watchdog(uint32_t ms) //Sender data hver hele time.
+void start_watchdog(uint32_t ms)
 {
 	NutWatchDogStart(ms, 0);
 }
