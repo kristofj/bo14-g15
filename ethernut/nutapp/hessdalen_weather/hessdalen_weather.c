@@ -1,7 +1,16 @@
 #include "hessdalen_weather.h"
 #include "network.h"
 
-//Registerer output på serieutgang for debug.
+void start_watchdog(uint32_t ms)
+{
+	NutWatchDogStart(ms, 0);
+}
+
+void restart_watchdog(void)
+{
+	NutWatchDogRestart();
+}
+
 void configure_debug(uint32_t baud)
 {
 	NutRegisterDevice(&DEV_DEBUG, 0, 0);
