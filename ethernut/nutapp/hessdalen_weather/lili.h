@@ -5,6 +5,15 @@
 
 #include "hessdalen_weather.h"
 
+//Node for ubehandlet verdi.
+typedef struct m_node {
+	char *datetime;
+	double value;
+
+	struct m_node *next;
+} measure_node_t
+
+//Node for ferdig utregnede verdier klar til sending.
 typedef struct node {
 	char *date_time;
 	uint8_t station_id;
@@ -19,6 +28,12 @@ typedef struct node {
 	
 	struct node *next;
 } node_t;
+
+void m_push(m_node_t *head, m_node_t *next);
+
+uint8_t m_pop(m_node_t *head, m_node_t *popped);
+
+uint16_t m_list_length(m_node_t *head);
 
 //Legger til en node på slutten av listen.
 void push(node_t *head, node_t *next);
