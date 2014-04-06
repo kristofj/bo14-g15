@@ -23,6 +23,7 @@
 #include "adc.h"
 #include "bmp180.h"
 #include "sht10.h"
+#include "lili.h"
 
 //Starter watchdog-telleren, resetter CPU hvis ikke den bli tilbakestilt.
 void start_watchdog(uint32_t ms);

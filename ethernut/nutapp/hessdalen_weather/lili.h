@@ -8,14 +8,15 @@
 //Node for ubehandlet verdi.
 typedef struct m_node {
 	char *datetime;
-	double value;
+	double v1;
+	double v2;
 
 	struct m_node *next;
 } measure_node_t
 
 //Node for ferdig utregnede verdier klar til sending.
 typedef struct node {
-	char *date_time;
+	char *datetime;
 	uint8_t station_id;
 	char *value;
 	double avg;

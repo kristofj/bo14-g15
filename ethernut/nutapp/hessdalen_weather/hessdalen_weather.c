@@ -3,9 +3,9 @@
 #define ETHERNUT_1	1
 #define ETHERNUT_2	2
 
-static m_node *sht10_val;
-static m_node *bmp180_val;
-static m_node *wind_val;
+static m_node_t *sht10_val;
+static m_node_t *bmp180_val;
+static m_node_t *wind_val;
 
 static node_t *fin_values;
 
@@ -84,7 +84,6 @@ void prepare_sht10_data(node_t *ret)
 		temp_sum += temp;
 		humi_sum += humi;
 	}
-
 }
 
 void prepare_data(void)
@@ -108,7 +107,6 @@ void prepare_data(void)
 
 
 	}
-
 }
 
 void send_data(void)
