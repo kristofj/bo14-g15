@@ -89,7 +89,7 @@ void get_json_wstring(double avg, double now, double max, const char *time_max, 
 void get_json(char *date_time, char *json_string1, char *json_string2, char *json_string3, char *json_wstring, char *string);
 
 //Sender av gårde gitt data.
-int send_data(const char *data, const char *address, uint16_t port);
+int send_json(const char *data, const char *address, uint16_t port);
 
 //Konfigurerer netverkskontrolleren til ethernut, setter IP med DHCP.
 int configure_network(void);

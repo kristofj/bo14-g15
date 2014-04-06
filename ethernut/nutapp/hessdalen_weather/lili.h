@@ -8,11 +8,10 @@
 //Node for ubehandlet verdi.
 typedef struct m_node {
 	char *datetime;
-	double v1;
-	double v2;
+	double value;
 
 	struct m_node *next;
-} measure_node_t
+} m_node_t;
 
 //Node for ferdig utregnede verdier klar til sending.
 typedef struct node {
@@ -32,18 +31,22 @@ typedef struct node {
 
 void m_push(m_node_t *head, m_node_t *next);
 
-uint8_t m_pop(m_node_t *head, m_node_t *popped);
+void m_pop(m_node_t **head, m_node_t *popped);
 
 uint16_t m_list_length(m_node_t *head);
+
+void m_get_last(m_node_t *head, m_node_t *last);
 
 //Legger til en node på slutten av listen.
 void push(node_t *head, node_t *next);
 
 //Fjerner første node i listen, returneres i popped. -1 hvis head er null.
-uint8_t pop(node_t *head, node_t *popped);
+void pop(node_t **head, node_t *popped);
 
 //Returnerer lengden på listen.
 uint16_t list_length(node_t *head);
+
+void get_last(node_t *head, node_t *last);
 
 #endif
 

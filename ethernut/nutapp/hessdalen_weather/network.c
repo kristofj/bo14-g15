@@ -90,7 +90,7 @@ void get_json(char *date_time, char *json_string1, char *json_string2, char *jso
 	strncat(string, json_wstring, JSON_MAX_LENGTH);
 }
 
-int send_data(const char *data, const char *address, uint16_t port)
+int send_json(const char *data, const char *address, uint16_t port)
 {
 	network_thread_args *arguments = (network_thread_args *)malloc(sizeof(network_thread_args));
 	arguments->data = data;

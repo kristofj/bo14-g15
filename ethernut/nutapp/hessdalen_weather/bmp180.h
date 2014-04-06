@@ -32,7 +32,7 @@
 
 //Leser rådata og returnerer ferdig utregnede verdier.
 //Alle formler er ifra databladet til bmp180.
-uint8_t bmp180_read_data(int32_t *pressure, double *temperature);
+uint8_t bmp180_read_data(int32_t *pressure);
 
 //Henter kalibreringsparametere.
 //Denne må kalles før bmp180_read_data.

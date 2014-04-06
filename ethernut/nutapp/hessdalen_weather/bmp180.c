@@ -17,7 +17,7 @@ struct bmp180_cal_params {
 
 static struct bmp180_cal_params params;
 
-uint8_t bmp180_read_data(int32_t *pressure, double *temperature)
+uint8_t bmp180_read_data(int32_t *pressure)
 {
 	uint8_t error = 0;
 	uint16_t ut;
@@ -37,9 +37,6 @@ uint8_t bmp180_read_data(int32_t *pressure, double *temperature)
 	X1 = (((int32_t) ut - (int32_t)params.AC6) * (int32_t)params.AC5) >> 15;
 	X2 = ((int32_t) params.MC << 11) / (X1 + params.MD);
 	B5 = X1 + X2;
-
-	*temperature = ((B5 + 8) >> 4); //Temp i 0.1 grader celsius.
-	*temperature = (double)*temperature / (double) 10;
 
 	//Regner ut trykk
 	B6 = B5 - 4000;

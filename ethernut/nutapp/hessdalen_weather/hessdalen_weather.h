@@ -25,6 +25,9 @@
 #include "sht10.h"
 #include "lili.h"
 
+#define ETHERNUT_1	1;
+#define ETHERNUT_2	2;
+
 //Starter watchdog-telleren, resetter CPU hvis ikke den bli tilbakestilt.
 void start_watchdog(uint32_t ms);
 
@@ -32,10 +35,10 @@ void start_watchdog(uint32_t ms);
 void restart_watchdog(void);
 
 //Leser alle sensorer.
-void read_sensors(void);
+void read_sensors(tm *datetime);
 
 //Regner ut gjennomsnitt og finner ut max/min for de siste 5 min.
-void prepare_data(void);
+void prepare_data(tm *datetime);
 
 //Sender data til server.
 void send_data(void);
