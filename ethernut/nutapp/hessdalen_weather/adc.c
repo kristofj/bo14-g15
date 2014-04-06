@@ -2,28 +2,21 @@
 
 enum {WSPEED, WDIR};
 
-void wspeed_read(double *speed)
+void wind_data_read(double *speed, double *dir)
 {
 	double voltage;
 
 	adc_read(&voltage, WSPEED);
-
-	*speed = (voltage * 50) / 5; //Konverterer til hastighet i m/s.
-}
-
-void wdirection_read(double *direction)
-{
-	double voltage;
+	*speed = (voltage * 50) / 2.5;
 
 	adc_read(&voltage, WDIR);
-
-	*direction = (voltage * 360) / 5; //Konverterer til retning i grader.
+	*dir = (voltage * 360) / 2.5;
 }
 
 void adc_init(void)
 {
-	ADCSRA |= (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); //Aktiverer ADC. Setter inputfrekvens til ~115kHz. Må være mellom 50-200kHz ifølge datablad.
-	ADMUX |= (1 << REFS0); //Setter refereansespenning til AVCC.
+	ADCInit();
+	ADCSetRef(AVCC);
 }
 
 void adc_read(double *data, uint8_t mode)
@@ -32,19 +25,20 @@ void adc_read(double *data, uint8_t mode)
 
 	switch(mode) {
 		case WSPEED: //Vindhastighet er på ADC0.
-			ADMUX |= (0 << MUX0);
+			ADCSetChannel(ADC0);
 			break;
 		case WDIR: //Vindretning er på ADC1.
-			ADMUX |= (1 << MUX0);
+			ADCSetChannel(ADC1);
 			break;
 		default:
 			break;
 	}
 
-	ADCSRA |= (1 << ADSC); //Starter konverting.
-	while(ADCSRA & (1 << ADSC)); //Venter på at konverting er ferdig.
+	ADCStartConversion();
 
-	raw = ADCH | ADCL; //Leser rådata fra dataregister.
-	*data = ((double)raw * 5) / 1023; //Gjør om til spenning.
+	while(ADCRead(&raw))
+		NutThreadYield;
+
+	*data = ((double)raw * 2.5) / 511.5; //Gjør om til spenning.
 }
 

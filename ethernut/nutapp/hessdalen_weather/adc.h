@@ -3,13 +3,10 @@
 
 #include "hessdalen_weather.h"
 
-//Måler vindhastighet i m/s.
-void wspeed_read(double *speed);
+//Leser vindhastighet og vindretning.
+void  wind_data_read(double *speed, double *dir);
 
-//Måler vindretning i grader.
-void wdirection_read(double *direction);
-
-//Initialiserer ADC-en.
+//Initialiserer ADC-en. Må kalles før wind_data_read
 void adc_init(void);
 
 //Måler av spenningen på ADC-en.
