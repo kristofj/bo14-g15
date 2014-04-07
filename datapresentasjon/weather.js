@@ -74,6 +74,7 @@ function fillForms(jsonResponse) {
     weatherFetch('graph');
 }
 
+//kalles av onChange på form
 function changedForms(){
     fromDate = $("#from").datepicker('getDate');
     toDate = $("#to").datepicker('getDate');
@@ -81,6 +82,7 @@ function changedForms(){
     $('#to').datepicker('option', 'minDate', fromDate);
 }
 
+//kalles av onChange på form
 function changedType(){
     radioSelected = ($('input[name=type]:checked').val());
 }
@@ -109,18 +111,22 @@ function weatherFetch(type) {
 
 function makeTable(response){
     populateArrays(response);
-    var htmlTable='<head><title>'+typeData+'</title><link rel="stylesheet" type="text/css" href="tableStyle.css"></style></head><body><table><tr><th>Dato</th><th>Kl</th><th>Stasjon 1<br/>Gjennomsnitt</th><th>Stasjon 2<br/>Gjennomsnitt</th></tr>';
+    var htmlTable='<head><title>'+typeData+'</title><link rel="stylesheet" type="text/css" href="weather_style.css"></head><body><table><tr><th>Dato</th><th>Kl</th><th>Stasjon 1<br/>Gjennomsnitt</th><th>Stasjon 2<br/>Gjennomsnitt</th><th>Stasjon 1<br/>Maks</th><th>Stasjon 2<br/>Maks</th><th>Stasjon 1<br/>Min</th><th>Stasjon 2<br/>Min</th></tr>';
     for (i = 0; i < time.length; i++) {
         var dateFixed=getDateFixed(time[i],"date")+"/"+getDateFixed(time[i],"month")+"/"+getDateFixed(time[i],"year");
         var clockFixed=getDateFixed(time[i],"hour")+":"+getDateFixed(time[i],"minute");
-        htmlTable+="<tr><td>"+dateFixed+"</td><td>"+clockFixed+"</td><td>"+valAvg1[i]+mTypeData+"</td><td>"+valAvg2[i]+mTypeData+"</td></tr>";
+        htmlTable+="<tr><td>"+dateFixed+"</td><td>"+clockFixed+"</td><td>"+valAvg1[i]+mTypeData+"</td><td>"+valAvg2[i]+mTypeData+"</td><td>"+valMax1[i]+mTypeData+" "+dirMax1[i]+"</td><td>"+valMax2[i]+mTypeData+"</td><td>"+valMin1[i]+mTypeData+"</td><td>"+valMin2[i]+mTypeData+"</td></tr>";
     }
     htmlTable+="</body>";
+    document.getElementById("chart_div").style.overflow="auto";
+    document.getElementById("chart_div").style.width="750px";
+    document.getElementById("chart_div").innerHTML = htmlTable;
     clearArrays();
-    var x=window.open('','','toolbars=0,width=400,height=600,left=200,top=200,scrollbars=1,resizable=1');
+    /*var x=window.open('','','toolbars=0,width=750,height=600,left=200,top=200,scrollbars=1,resizable=1');
     x.document.open();
     x.document.write(htmlTable);
-    x.document.close();
+    x.document.close();*/
+    chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 }
 
 function populateArrays(jsonResponse){
@@ -151,6 +157,9 @@ function populateArrays(jsonResponse){
             if (radioSelected == "wind") {
                 dirMax1.push(item.dirMax);
             }
+            else{
+                dirMax1.push("");
+            }
             var fs = item.timeMin.split(" ");
             var ss = fs[0].split("-");
             var ts = fs[1].split(":");
@@ -175,6 +184,9 @@ function populateArrays(jsonResponse){
             if (radioSelected == "wind") {
                 dirMax2.push(item.dirMax);
             }
+            else{
+                dirMax2.push("");
+            }
             var fs = item.timeMin.split(" ");
             var ss = fs[0].split("-");
             var ts = fs[1].split(":");
@@ -189,6 +201,7 @@ function populateArrays(jsonResponse){
     });
 }
 
+//tømmer dataarrays
 function clearArrays(){
     time = [];
     valAvg1 = [];
@@ -247,6 +260,8 @@ function drawChart(jsonResponse) {
         },
         tooltip: { isHtml: true }
     };
+    document.getElementById("chart_div").style.width="900px";
+    document.getElementById("chart_div").style.overflow="hidden";
     chart.draw(data, options);
 }
 
