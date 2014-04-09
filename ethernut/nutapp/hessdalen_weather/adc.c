@@ -15,30 +15,49 @@ void wind_data_read(double *speed, double *dir)
 
 void adc_init(void)
 {
-	ADCInit();
-	ADCSetRef(AVCC);
+	ADMUX = (1 << REFS0); //Setter Vref til AVCC = 5V.
+	ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) //Skrur på ADC og setter ADC-klokken til 115.2kHz. Må være mellom 50-200kHz for 10-bits konvertering.
+}
+
+void adc_set_channel(uint8_t channel)
+{
+	switch(channel) {
+		case ADC0:
+			ADMUX = (1 << REFS0) | (1 << MUX0); //Endrer til kanal ADC0.
+			break;
+		case ADC1:
+			ADMUX = (1 << REFS0) | (1 << MUX1); //Endrer til kanal ACD1.
+			break;
+		default:
+			break;
+	}
 }
 
 void adc_read(double *data, uint8_t mode)
 {
 	uint16_t raw;
+	uint8_t msb, lsb;
 
 	switch(mode) {
 		case WSPEED: //Vindhastighet er på ADC0.
-			ADCSetChannel(ADC0);
+			adc_set_channel(ADC0);
 			break;
 		case WDIR: //Vindretning er på ADC1.
-			ADCSetChannel(ADC1);
+			adc_set_channel(ADC1);
 			break;
 		default:
 			break;
 	}
 
-	ADCStartConversion();
+	ADCSRA |= (1 << ADSC); //Starter konvertering.
 
-	while(ADCRead(&raw))
-		NutThreadYield;
+	while (ADCSRA & (1 << ADSC)); //Venter på at konverteringen er ferdig.
 
-	*data = ((double)raw * 2.5) / 511.5; //Gjør om til spenning.
+	lsb = ADCL; //Leser verdien på ADC-en.
+	msb = ADCH;
+
+	raw = (ADCH << 8) | (ADCL);
+
+	*data = ((double)raw * 5) / 1023; //Gjør om til spenning.
 }
 
