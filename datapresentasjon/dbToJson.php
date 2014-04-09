@@ -13,17 +13,52 @@ if ($_GET["type"] == "getRange") {
     $interval = (new DateTime($_GET["from"]))->diff((new DateTime($_GET["to"])));
     $interval = intval($interval->format('%R%a'));
 
-    //hvis det er mer enn 10 dager mellom datoene, hent ut måling fra kl 12 hver dag
-    if ($interval >= 10 & $_GET["allData"]!="true") {
-        $limiter = 'HOUR(datetime) =12 AND';
-    } //hvis det er mer enn 3 dager mellom datoene, hent kun ut målinger for kl 6 og 12 hver dag.
-    elseif ($interval >= 3 & $_GET["allData"]!="true") {
-        $limiter = '(HOUR(datetime) =6 OR HOUR(datetime) =12) AND';
-    } //hent ut alle målinger
-    else {
+    if ($_GET["hoursOverride"] == "true") {
         $limiter = '';
+        if ($_GET["hours00"] == "true") {
+            $limiter = '(HOUR(datetime) =00 ';
+        }
+        if ($_GET["hours06"] == "true") {
+            if ($limiter==''){
+                $limiter = '(HOUR(datetime) =06 ';
+            }
+            else{
+                $limiter .= 'OR HOUR(datetime) =06 ';
+            }
+        }
+        if ($_GET["hours12"] == "true") {
+            if ($limiter==''){
+                $limiter = '(HOUR(datetime) =12 ';
+            }
+            else{
+                $limiter .= 'OR HOUR(datetime) =12 ';
+            }
+        }
+        if ($_GET["hours18"] == "true") {
+            if ($limiter==''){
+                $limiter = '(HOUR(datetime) =18 ';
+            }
+            else{
+                $limiter .= 'OR HOUR(datetime) =18 ';
+            }
+        }
+        $limiter.=')AND';
+
+    } else {
+        //hvis det er mer enn 10 dager mellom datoene, hent ut måling fra kl 12 hver dag
+        if ($interval >= 10 & $_GET["allData"] != "true") {
+            $limiter = 'HOUR(datetime) =12 AND';
+        } //hvis det er mer enn 3 dager mellom datoene, hent kun ut målinger for kl 6 og 12 hver dag.
+        elseif ($interval >= 3 & $_GET["allData"] != "true") {
+            $limiter = '(HOUR(datetime) =6 OR HOUR(datetime) =12) AND';
+        } //hent ut alle målinger
+        else {
+            $limiter = '';
+        }
     }
-    $data = mysql_query('SELECT * FROM logId LEFT JOIN ' . $_GET["type"] . ' ON logId.id=' . $_GET["type"] . '.logId_id WHERE ' . $limiter . ' datetime < "' . $_GET["to"] . '" AND datetime > "' . $_GET["from"] . '";')
+    $sql='SELECT * FROM logId LEFT JOIN ' . $_GET["type"] . ' ON logId.id=' . $_GET["type"] . '.logId_id WHERE ' . $limiter . ' datetime < "' . $_GET["to"] . '" AND datetime > "' . $_GET["from"] . '";';
+
+    $data = mysql_query($sql)
     or die(mysql_error());
     $weatherData = array();
     while ($row = mysql_fetch_array($data)) {

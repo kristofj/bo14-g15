@@ -82,16 +82,55 @@ function changedForms(){
     $('#to').datepicker('option', 'minDate', fromDate);
 }
 
-//kalles av onChange på form
+//kalles av onChange på værtype
 function changedType(){
     radioSelected = ($('input[name=type]:checked').val());
+}
+
+//kalles av onChange på timer
+function changedHours(){
+    if ((document.getElementById("hours00").checked)==true||(document.getElementById("hours06").checked)==true||(document.getElementById("hours12").checked)==true||(document.getElementById("hours18").checked)==true){
+        if((document.getElementById("hours00").checked)==true){
+            hours00=true;
+        }
+        else{
+            hours00=false;
+        }
+        if((document.getElementById("hours06").checked)==true){
+            hours06=true;
+        }
+        else{
+            hours06=false;
+        }
+        if((document.getElementById("hours12").checked)==true){
+            hours12=true;
+        }
+        else{
+            hours12=false;
+        }
+        if((document.getElementById("hours18").checked)==true){
+            hours18=true;
+        }
+        else{
+            hours18=false;
+        }
+        document.getElementById("hoursStandard").disabled = true;
+        document.getElementById("hoursStandard").checked = false;
+        hoursOverride=true;
+    }
+    else{
+        hoursOverride=false;
+        document.getElementById("hoursStandard").checked = true;
+        document.getElementById("hoursStandard").disabled = false;
+    }
 }
 
 //fyller globalt deklarerte variabler
 function genChart() {
     radioSelected = ($('input[name=type]:checked').val());
     chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-
+    var coffee = document.forms[0].hours;
+    document.getElementById("hoursStandard").checked = true;
     //starter prosess for å fylle forms og en standardgraf
     getJson('dbToJson.php?type=getRange','formFiller');
 }
@@ -100,12 +139,21 @@ function genChart() {
 function weatherFetch(type) {
     var fromDateStr=fromDate.getFullYear()+"-"+(fromDate.getMonth()+1)+"-"+fromDate.getDate()+" 00:00:00";
     var toDateStr=toDate.getFullYear()+"-"+(toDate.getMonth()+1)+"-"+toDate.getDate()+" 23:59:59";
-
-    if (type=='graph'){
-        getJson('dbToJson.php?type=' + radioSelected+'&from='+fromDateStr+'&to='+toDateStr+'&allData=false', "graph");
+    if (hoursOverride==true){
+        if (type=='graph'){
+            getJson('dbToJson.php?type=' + radioSelected+'&from='+fromDateStr+'&to='+toDateStr+'&hoursOverride=true&hours00='+hours00+'&hours06='+hours06+'&hours12='+hours12+'&hours18='+hours18, "graph");
+        }
+        else if(type=='table'){
+            getJson('dbToJson.php?type=' + radioSelected+'&from='+fromDateStr+'&to='+toDateStr+'&hoursOverride=true&hours00='+hours00+'&hours06='+hours06+'&hours12='+hours12+'&hours18='+hours18, "table");
+        }
     }
-    else if(type=='table'){
-        getJson('dbToJson.php?type=' + radioSelected+'&from='+fromDateStr+'&to='+toDateStr+'&allData=true', "table");
+    else{
+        if (type=='graph'){
+            getJson('dbToJson.php?type=' + radioSelected+'&from='+fromDateStr+'&to='+toDateStr+'&allData=false&hoursOverride=false', "graph");
+        }
+        else if(type=='table'){
+            getJson('dbToJson.php?type=' + radioSelected+'&from='+fromDateStr+'&to='+toDateStr+'&allData=true&hoursOverride=false', "table");
+        }
     }
 }
 
@@ -122,10 +170,6 @@ function makeTable(response){
     document.getElementById("chart_div").style.width="750px";
     document.getElementById("chart_div").innerHTML = htmlTable;
     clearArrays();
-    /*var x=window.open('','','toolbars=0,width=750,height=600,left=200,top=200,scrollbars=1,resizable=1');
-    x.document.open();
-    x.document.write(htmlTable);
-    x.document.close();*/
     chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 }
 
@@ -272,6 +316,11 @@ var data;
 
 var tabEntry = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 var radioSelected;
+var hoursOverride=false;
+var hours00=false;
+var hours06=false;
+var hours12=false;
+var hours18=false;
 
 var time = [];
 var typeData;
