@@ -56,7 +56,7 @@ void adc_read(double *data, uint8_t mode)
 	lsb = ADCL; //Leser verdien på ADC-en.
 	msb = ADCH;
 
-	raw = (ADCH << 8) | (ADCL);
+	raw = (msb << 8) | (lsb);
 
 	*data = ((double)raw * 5) / 1023; //Gjør om til spenning.
 }
