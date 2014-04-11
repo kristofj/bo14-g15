@@ -28,16 +28,26 @@ Til: <input type="text" onchange="changedForms()" id="to" size="10">
 <br/>
 
 <form onchange="changedHours()">
-    00.00<input id="hours00" type="checkbox" name="hours" value="00">
+    00.00<input id="hours00" type="checkbox">
     <br/>
-    06.00<input id="hours06" type="checkbox" name="hours" value="06">
+    06.00<input id="hours06" type="checkbox">
     <br/>
-    12.00<input id="hours12" type="checkbox" name="hours" value="12">
+    12.00<input id="hours12" type="checkbox">
     <br/>
-    18.00<input id="hours18" type="checkbox" name="hours" value="18">
+    18.00<input id="hours18" type="checkbox">
     <br/>
-    Standard<input id="hoursStandard" type="checkbox" name="hours" value="all">
 </form>
+<form onchange="changedHours(true)">
+    Standard<input  id="hoursStandard" type="checkbox">
+</form>
+<br/>
+
+<form onchange="drawChart()">
+    Stasjon 1<input id="station1" checked="true" type="checkbox">
+    <br/>
+    Stasjon 2<input id="station2" checked="true" type="checkbox">
+</form>
+
 
 </body>
 </html>
