@@ -16,17 +16,17 @@ void wind_data_read(double *speed, double *dir)
 void adc_init(void)
 {
 	ADMUX = (1 << REFS0); //Setter Vref til AVCC = 5V.
-	ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) //Skrur på ADC og setter ADC-klokken til 115.2kHz. Må være mellom 50-200kHz for 10-bits konvertering.
+	ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); //Skrur på ADC og setter ADC-klokkehastighet til 115.2kHz. Må være mellom 50-200kHz for 10-bits konvertering.
 }
 
 void adc_set_channel(uint8_t channel)
 {
 	switch(channel) {
 		case ADC0:
-			ADMUX = (1 << REFS0) | (1 << MUX0); //Endrer til kanal ADC0.
+			ADMUX = (1 << REFS0); //Endrer til kanal ADC0.
 			break;
 		case ADC1:
-			ADMUX = (1 << REFS0) | (1 << MUX1); //Endrer til kanal ACD1.
+			ADMUX = (1 << REFS0) | (1 << MUX0); //Endrer til kanal ACD1.
 			break;
 		default:
 			break;
