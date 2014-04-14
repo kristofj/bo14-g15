@@ -23,22 +23,22 @@
 <button onclick="weatherFetch('graph')">Vis graf</button>
 <button onclick="weatherFetch('table')">Vis tabell</button>
 <br/>
-Fra: <input type="text" onchange="changedForms()" id="from" size="10">
-Til: <input type="text" onchange="changedForms()" id="to" size="10">
+Fra: <input type="text" onchange="changedDates()" id="from" size="10">
+Til: <input type="text" onchange="changedDates()" id="to" size="10">
 <br/>
 
 <form onchange="changedHours()">
-    00.00<input id="hours00" type="checkbox">
+    00.00<input name="hours" id="hours00" type="checkbox">
     <br/>
-    06.00<input id="hours06" type="checkbox">
+    06.00<input name="hours" id="hours06" type="checkbox">
     <br/>
-    12.00<input id="hours12" type="checkbox">
+    12.00<input name="hours" id="hours12" type="checkbox">
     <br/>
-    18.00<input id="hours18" type="checkbox">
+    18.00<input name="hours" id="hours18" type="checkbox">
     <br/>
 </form>
 <form onchange="changedHours(true)">
-    Standard<input  id="hoursStandard" type="checkbox">
+    Standard<input name="hours" id="hoursStandard" type="checkbox">
 </form>
 <br/>
 

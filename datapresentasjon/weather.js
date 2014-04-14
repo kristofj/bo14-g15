@@ -75,11 +75,40 @@ function fillForms(jsonResponse) {
 }
 
 //kalles av onChange på form
-function changedForms() {
+function changedDates() {
     fromDate = $("#from").datepicker('getDate');
     toDate = $("#to").datepicker('getDate');
+    var diff = Math.floor(( Date.parse(toDate) - Date.parse(fromDate) ) / 86400000);
+    var hours00form = $("#hours00");
+    var hours06form = $("#hours06");
+    var hours12form = $("#hours12");
+    var hours18form = $("#hours18");
+    var hoursStandardForm = $("#hoursStandard");
+    if (diff >= 10) {
+        if (hours00form.is(":checkbox")) {
+            hours00form.replaceWith('<input name="hours" type="radio" id="' + hours00form.attr('id') + '" />');
+            hours06form.replaceWith('<input name="hours" type="radio" id="' + hours06form.attr('id') + '" />');
+            hours12form.replaceWith('<input name="hours" type="radio" id="' + hours12form.attr('id') + '" />');
+            hours18form.replaceWith('<input name="hours" type="radio" id="' + hours18form.attr('id') + '" />');
+            hoursStandardForm.replaceWith('<input name="hours" type="radio" id="' + hoursStandardForm.attr('id') + '"checked/>');
+        }
+    }
+    else {
+        if (hours00form.is(":radio")) {
+            hours00form.replaceWith('<input name="hours" type="checkbox" id="' + hours00form.attr('id') + '" />');
+            hours00form.checked = hours00;
+            hours06form.replaceWith('<input name="hours" type="checkbox" id="' + hours06form.attr('id') + '" />');
+            hours06form.checked = hours06;
+            hours12form.replaceWith('<input name="hours" type="checkbox" id="' + hours12form.attr('id') + '" />');
+            hours12form.checked = hours12;
+            hours18form.replaceWith('<input name="hours" type="checkbox" id="' + hours18form.attr('id') + '" />');
+            hours18form.checked = hours18;
+            hoursStandardForm.replaceWith('<input name="hours" type="checkbox" id="' + hoursStandardForm.attr('id') + '" checked />');
+        }
+    }
     $('#from').datepicker('option', 'maxDate', toDate);
     $('#to').datepicker('option', 'minDate', fromDate);
+    changedType();
 }
 
 //kalles av onChange på værtype
