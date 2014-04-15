@@ -4,18 +4,49 @@
 
 I dette kapittelet tar vi for oss planleggingsfasen av proskjetet og hvordan vi har tenkt til å utforme produktet. Det skal også være en komplett beskrivelse av hele systemet og hvordan det fungerer. 
 
-\section{Oppstartsfasen}
+\section{Planlegging}
 
 Hele bachelorprosjektet ble innledet ved at gruppen hadde et møte med veileder og oppdragsgiver. Da fikk vi vite litt mer detaljert hva vi skulle gjøre på selve oppdraget og litt om hva veilederens rolle er, gjennom prosjektperioden.
 
 
-\subsection{Planlegging}
+\subsection{Oppstartsfasen}
 
-Etter jul startet vi opp med ukentlige møter med oppdragsgiver og møte med veileder hver 14. dag. Vi hadde også internmøter i gruppa 1-2 ganger i uka etter behov.\\
+Etter jul startet vi opp med ukentlige møter med oppdragsgiver og møte med veileder hver 14. dag. Vi hadde også internmøter i gruppa, en til to ganger i uka, etter behov.\\
 
 Etter vi hadde skrevet forprosjektrapporten, delte vi hverandre inn i forskjellige arbeidsoppgaver. Det blir mer effektivt arbeid hvis vi jobber med hver våres del, enn at alle sitter over en PC og prøver å samarbeide.
 
+\section {Hardware}
+I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen av hardware.
 
+\subsection{Sensorer}
+Når det kommer til valg av sensorer vi vil benytte så er det to viktige ting vi må ta hensyn til: 
+\begin{enumerate}
+\item Må være kompatibel med $\mu$P-kortet, Ethernut 2.1
+\item Tåle temperaturer helt ned til $-40\,^{\circ}\mathrm{C}$
+\end{enumerate}
+Vi har satt $-40\,^{\circ}\mathrm{C}$ som den laveste temperaturen sensorene må tåle da den laveste tempteraturen i løpet av 2013 var $-34,8\,^{\circ}\mathrm{C}$ \cite{nettside:yr150313}. 
+
+
+\subsection{Kretser}
+\meta {Skrive om hva vi burde ha med i kretsen mellom sensoren og $\mu$P-kortet }
+
+\subsection{Kabinettet til værstasjonen}
+\meta{Forklare hva som er tatt hensyn til under planleggingen}
+
+\section{Software}
+I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen av software.
+
+\subsection{Databasen}
+\meta {Forklare hvordan databasen burde settes opp.}
+
+\subsection{Visualisering av værdata}
+\meta{Forklare hvordan værdataene er tenkt å bli visualisert.}
+
+\subsection{Serversiden som tar i mot data}
+\meta{Forklare hvordan dette skal gjøres}
+
+\subsection{Programvare til Ethernut 2.1}
+\meta{Forklare hva ethenrut skal gjøre og hvordan dette kan løses}
 
 \section{Hvordan utforme produktet}
 
@@ -27,15 +58,15 @@ Skriv hvordan vi skal utforme produktet
 Målet er å lage to komplette værstasjoner som er identiske. \\
 
 
-Legge til et par bilder av hele systemet her.\\
+\meta{Legge til et par bilder av hele systemet her.} \\
 
-Alle målerne er koblet til ethernut- kortet. Vi bruker porter på kortet som er koblet til hver sin måler. Videre er portene på kortet programmert slik at vi omgjør rådataene som sensorene måler til reelle verdier som vi kan lese av. De reelle verdiene blir lagret i en database på prosject hessdalens hjemmesider, der man kan søke på diverse data som er tidligere målt.\\
+Alle målerne er koblet til $\mu$P-kortet. Vi bruker porter på $\mu$P-kortet som er koblet til hver sin måler. Videre er portene på kortet programmert slik at vi omgjør rådataene som sensorene måler til reelle verdier som vi kan lese av. De reelle verdiene blir lagret i en database på prosject hessdalens hjemmesider, der man kan søke på diverse data som er tidligere målt.\\
 
 
 
 \subsubsection{Full utstyrsliste:}
 \begin{itemize}
-\item Ethernut mikroprosessor
+\item Ethernut $\mu$Prosessor
 \item Temperatursensor
 \item Lufttrykksensor
 \item Vindretningsensor

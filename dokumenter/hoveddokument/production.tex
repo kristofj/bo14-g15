@@ -21,7 +21,57 @@ Litt om datalagringen på frigg
 
 \section{Hardware delen}
 
-\subsection{Sensorene}
 
-Ting å nevne: jobbet på verkstedet på skolen.. etc.. loddet sammen komponenter, bygd deksel og beskyttelse til sensorene.
+\meta{Ting å nevne: jobbet på verkstedet på skolen.. etc.. loddet sammen komponenter, bygd deksel og beskyttelse til sensorene.} \\
 
+
+Vi endte opp med å kjøpe inn følgende målere: lufttrykk\cite{nettside:lufttrykk}, temperatur\cite{nettside:temperatur}, vindretning\cite{nettside:vindretning} og vindhastighet\cite{nettside:vindhastighet}. Vi kjøpte også inn monteringsstang der vindhastighet og vindretningsmåleren skal være montert.\cite{nettside:monteringsstang}
+
+\subsection{SHT10}
+
+Denne sensoren måler temperatur og luftfuktighet. Vi baserte valget på pris og hvor godt den egner seg til vårt forbruk. Måleren skal etter planen være montert i Hessdalen, og da trengte vi en måler som måler for et stort temperaturområdet. Den skal fungere i området minus 40 celsius grader til 120 celsius grader. Denne kjøpte vi inn flere av enn det vi trengte i tilfelle noe skulle gå galt under oppkoblingen. Det var svært liten prisforskjell.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.60\textwidth]{sht10}
+  \caption{Måler for temperatur og luftfuktighet}
+\end{figure}
+
+\subsection{BMP180}
+
+Lufttrykk og temperatur, men velger bare å bruke den som lufttrykk. SHT10 egnet seg bedre enn denne måleren til temperatur og begge målerne var billige, så vi tok en måler til hver måling. Vi fikk tilsendt kun kretskortet, så vi måtte lage en slags beskyttelse til kretskortet. BMP180 måler lufttrykk i området 300hPa til 1100hPa. Dette tilsvarer alt fra 9000 meters høyde til 500 meter under havnivået. Denne kjøpte vi inn også flere av.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.60\textwidth]{bmp180}
+  \caption{Måler for lufttrykk}
+\end{figure}
+
+\subsection{WG2/O-50}
+
+WG2 måler vindhastighet. Den måler i området 0m/s til 50m/s, med en feilmargin på 0,5m/s. Den kan også overleve vindkast opp mot 80m/s i 30 minutter. Denne måleren var relativt dyrt i forhold til de andre sensorene så vi kjøpte bare det vi trengte, to målere for to værstasjoner.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.60\textwidth]{wg2o50}
+  \caption{Måler for vindhastighet}
+\end{figure}
+
+\subsection{WRG2/O-50}
+
+WRG2 måler vindretningen. Denne måleren var også relativt dyr så vi kjøpte inn bare det vi trengte. Den kan også tåle store vindkast slik som WG2, og tåler opp til 80m/s i 30 minutter.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.60\textwidth]{wrg2o50}
+  \caption{Måler for vindretning}
+\end{figure}
+
+\subsection{ZM/O-40}
+
+Monteringstang for vindsensorene. Vindretning og vindhastighet er to forskjellige målere men skal monteres sammen. De er også fra samme fabrikant, så dette var tilbehør til de målerne.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.60\textwidth]{zmo40}
+  \caption{Monteringsstang der vindretning og vindhastighet skal monteres}
+\end{figure}

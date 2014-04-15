@@ -38,7 +38,7 @@ I begynnelsen bygde forutsigelsene bare på observasjoner og tilfeldige målinge
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.75\textwidth]{himmel}
-  \caption{Uvær der det kan være gunstig å måle forskjellige parametere som lufttrykk}
+  \caption{Uvær der det kan være gunstig å måle forskjellige parametere som for eksempel lufttrykk}
 \end{figure}
 
 \subsection{Måling av lufttrykk}
@@ -78,7 +78,7 @@ De meteorologiske målingene tar sikte på å finne den romlige fordelingen av d
 \subsection{Måling av vind}
 
 Den øyeblikkelige vind vil alltid variere\cite{nettside:snl2}. I forbindelse med meteorologiske observasjoner og varsler gis, etter internasjonal overenskomst, vindens middelverdi for 10 minutter, som også ligger til grunn ved bruk av Beauforts vindskala.\\
-Vindens fart øker med høyden. Nede på selve bakken er farten null, mens økningen skjer raskt de første metrene. Videre oppover øker farten, men ikke like raskt. Det er internasjonalt bestemt at vindmålinger for værvarslings- og klimaformål skal gjøres 10 m over bakken. I noen hundre meters høyde dreier vindretningen etter hvert til høyre (på den nordlige halvkule), men i nærheten av åser, fjell og fjellkjeder er vinden i stor grad styrt av terrenget og høyde-endringen kan arte seg annerledes.\\
+Vindens fart øker med høyden. Nede på selve bakken er farten null, mens økningen skjer raskt de første metrene. Videre oppover øker farten, men ikke like raskt. Det er internasjonalt bestemt at vindmålinger for værvarslings- og klimaformål skal gjøres 10 m over bakken. I noen hundre meters høyde dreier vindretningen etter hvert til høyre (på den nordlige halvkule), men i nærheten av åser, fjell og fjellkjeder er vinden i stor grad styrt av terrenget og høyde-endringen kan arte seg annerledes.
 
 \subsubsection{Vindfarten}
 
@@ -112,7 +112,7 @@ Både i forbindelse med observasjoner og varsler har en internasjonal vindskala 
  \begin{tabular}{ | p{2cm} | p{2cm} | p{2cm} | p{2cm} | p{2cm} | p{2,2cm} | } \hline
      10 & Full storm & 48 - 55 & 24,5 - 28,4 & Sjelden inne i landet, trær rykkes opp med rot, store skader på hus & Meget høye bølger med lange overhengende kammer. Skummet, som dannes i store flak, driver med vinden i tette hvite strimer, så sjøen får et hvitaktig utseende. Synsvidden nedsettes \\ \hline
      11 & Sterk storm & 56 - 63 & 28,5 - 32,6 & Meget sjeldent, følges av store ødeleggelser & Ualminnelig høye bølger. Sjøen er fullstendig dekket av lange, hvite skumflak som ligger i vindens retning. Overalt blåser bølgekammene til frådelignende skum. Sjørokket nedsetter synsvidden \\ \hline
-     12 & Orkan & Over 63 & Over 32,6 & Sjeldent. Store ødeleggelser & Luften er fylt av skum og sjørokk som nedsetter synsvidden betydelig. Sjøen er fullstendig hvit av drivende skum \\ \hline
+12 & Orkan & Over 63 & Over 32,6 & Sjeldent. Store ødeleggelser & Luften er fylt av skum og sjørokk som nedsetter synsvidden betydelig. Sjøen er fullstendig hvit av drivende skum \\ \hline
 \end{tabular}
 \end{center}
 
@@ -157,58 +157,7 @@ I tillegg for helikopterplasser:
 \item den største åpningen skal ikke være mindre enn 0,6 m, og den minste åpningen ikke mindre enn 0,3 m,
 \end{itemize}
 
-\section{Utstyr} 
 
-Vi endte opp med å kjøpe inn følgende målere: lufttrykk\cite{nettside:lufttrykk}, temperatur\cite{nettside:temperatur}, vindretning\cite{nettside:vindretning} og vindhastighet\cite{nettside:vindhastighet}. Vi kjøpte også inn monteringsstang der vindhastighet og vindretningsmåleren skal være montert.\cite{nettside:monteringsstang}
-
-\subsection{SHT10}
-
-Denne sensoren måler temperatur og luftfuktighet. Vi baserte valget på pris og hvor godt den egner seg til vårt forbruk. Måleren skal etter planen være montert i Hessdalen, og da trengte vi en måler som måler for et stort temperaturområdet. Den skal fungere i området minus 40 celsius grader til 120 celsius grader. Denne kjøpte vi inn flere av enn det vi trengte i tilfelle noe skulle gå galt under oppkoblingen. Det var svært liten prisforskjell.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.60\textwidth]{sht10}
-  \caption{Måler for temperatur og luftfuktighet}
-\end{figure}
-
-\subsection{BMP180}
-
-Lufttrykk og temperatur, men velger bare å bruke den som lufttrykk. SHT10 egnet seg bedre enn denne måleren til temperatur og begge målerne var billige, så vi tok en måler til hver måling. Vi fikk tilsendt kun kretskortet, så vi måtte lage en slags beskyttelse til kretskortet. BMP180 måler lufttrykk i området 300hPa til 1100hPa. Dette tilsvarer alt fra 9000 meters høyde til 500 meter under havnivået. Denne kjøpte vi inn også flere av.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.60\textwidth]{bmp180}
-  \caption{Måler for lufttrykk}
-\end{figure}
-
-\subsection{WG2/O-50}
-
-WG2 måler vindhastighet. Den måler i området 0m/s til 50m/s, med en feilmargin på 0,5m/s. Den kan også overleve vindkast opp mot 80m/s i 30 minutter. Denne måleren var relativt dyrt i forhold til de andre sensorene så vi kjøpte bare det vi trengte, to målere for to værstasjoner.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.60\textwidth]{wg2o50}
-  \caption{Måler for vindhastighet}
-\end{figure}
-
-\subsection{WRG2/O-50}
-
-WRG2 måler vindretningen. Denne måleren var også relativt dyr så vi kjøpte inn bare det vi trengte. Den kan også tåle store vindkast slik som WG2, og tåler opp til 80m/s i 30 minutter.
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.60\textwidth]{wrg2o50}
-  \caption{Måler for vindretning}
-\end{figure}
-
-\subsection{ZM/O-40}
-
-Monteringstang for vindsensorene. Vindretning og vindhastighet er to forskjellige målere men skal monteres sammen. De er også fra samme fabrikant, så dette var tilbehør til de målerne.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.60\textwidth]{zmo40}
-  \caption{Monteringsstang der vindretning og vindhastighet skal monteres}
-\end{figure}
 
 
 
