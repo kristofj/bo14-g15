@@ -343,13 +343,19 @@ function fillChart(jsonResponse) {
             windDirMax1 = "<br/>" + tabEntry + tabEntry + "Retning: " + dirMax1[i];
             windDirMax2 = "<br/>" + tabEntry + tabEntry + "Retning: " + dirMax2[i];
         }
-        data.addRow([time[i], parseFloat(valAvg1[i]), "<br/>" + tabEntry + "<b>Gjennomsnitt:</b> " + valAvg1[i] +
+        var tooltip1="<br/>" + tabEntry + "<b>Gjennomsnitt:</b> " + valAvg1[i] +
             mTypeData + "<br/>" + tabEntry + "<b>Maks:</b> " + valMax1[i] + mTypeData + " kl " + timeMax1[i] +
-            windDirMax1 + "<br/>" + tabEntry + "<b>Minimum:</b> " + valMin1[i] + mTypeData + " kl " + timeMin1[i], parseFloat(valAvg2[i]), "<br/>" + tabEntry + "<b>Gjennomsnitt:</b> " + valAvg2[i] +
+            windDirMax1 + "<br/>" + tabEntry + "<b>Minimum:</b> " + valMin1[i] + mTypeData + " kl " + timeMin1[i];
+
+        var tooltip2="<br/>" + tabEntry + "<b>Gjennomsnitt:</b> " + valAvg2[i] +
             mTypeData + "<br/>" + tabEntry + "<b>Maks:</b> " + valMax2[i] + mTypeData + " kl " + timeMax2[i] +
-            windDirMax2 + "<br/>" + tabEntry + "<b>Minimum:</b> " + valMin2[i] + mTypeData + " kl " + timeMin2[i],
-            0, "<br/>" + tabEntry + "<b>Gjennomsnitt: </b><i>" + (valAvg1[i] - valAvg2[i]) + mTypeData + "</i><br/>" + tabEntry + "<b>Maks: </b><i>" + (valMax1[i] - valMax2[i]) + mTypeData + "</i><br/>"
-                + tabEntry + "<b>Min: </b><i>" + (valMin1[i] - valMin2[i]) + mTypeData + "</i>"]);
+            windDirMax2 + "<br/>" + tabEntry + "<b>Minimum:</b> " + valMin2[i] + mTypeData + " kl " + timeMin2[i];
+
+        var tooltipDif="<br/>" + tabEntry + "<b>Gjennomsnitt: </b><i>" + (valAvg1[i] - valAvg2[i]) + mTypeData + "</i><br/>" + tabEntry + "<b>Maks: </b><i>" + (valMax1[i] - valMax2[i]) + mTypeData + "</i><br/>"
+            + tabEntry + "<b>Min: </b><i>" + (valMin1[i] - valMin2[i]) + mTypeData + "</i>";
+
+        data.addRow([time[i], parseFloat(valAvg1[i]),tooltip1, parseFloat(valAvg2[i]),tooltip2,0, tooltipDif]);
+
     }
 
     clearArrays();
