@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <!--stilark-->
+    <link rel="stylesheet" type="text/css" href="weather_style.css">
+    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <!--laster inn jQuery-->
     <script src="jquery-2.1.0.min.js"></script>
     <!--jQuery UI-lib for kalender-->
@@ -10,44 +12,51 @@
     <script src="jsapi.js"></script>
     <!--laster inn egenskrevet kode for datafremvisning-->
     <script src="weather.js"></script>
-    <link rel="stylesheet" type="text/css" href="weather_style.css">
 </head>
 <body>
-<div id="chart_div" style="width: 900px; height: 500px;"></div>
-<form onchange="changedType()" action="">
-    <input checked type="radio" name="type" value="temperature">Temperatur<br/>
-    <input type="radio" name="type" value="humidity">Luftfuktighet<br/>
-    <input type="radio" name="type" value="pressure">Lufttrykk<br/>
-    <input type="radio" name="type" value="wind">Vind
-</form>
-<button onclick="weatherFetch('graph')">Vis graf</button>
-<button onclick="weatherFetch('table')">Vis tabell</button>
-<br/>
-Fra: <input type="text" onchange="changedDates()" id="from" size="10">
-Til: <input type="text" onchange="changedDates()" id="to" size="10">
-<br/>
+<div id="main">
+    <div id="chart_div"></div>
+    <div id="description">Fancy beskrivelse</div>
+    <div id="lowerWrapper">
+        <div id="typeData">
+            <form onchange="changedType()" action="">
+                <input checked type="radio" name="type" value="temperature">Temperatur<br/>
+                <input type="radio" name="type" value="humidity">Luftfuktighet<br/>
+                <input type="radio" name="type" value="pressure">Lufttrykk<br/>
+                <input type="radio" name="type" value="wind">Vind
+            </form>
+        </div>
+        <div id="dateAndHours">
+            Fra: <input type="text" onchange="changedDates()" id="from" size="10">
+            <br/>
+            Til: <input type="text" onchange="changedDates()" id="to" size="10">
+            <br/>
 
-<form onchange="changedHours()">
-    00.00<input name="hours" id="hours00" type="checkbox">
-    <br/>
-    06.00<input name="hours" id="hours06" type="checkbox">
-    <br/>
-    12.00<input name="hours" id="hours12" type="checkbox">
-    <br/>
-    18.00<input name="hours" id="hours18" type="checkbox">
-    <br/>
-</form>
-<form onchange="changedHours(true)">
-    Standard<input name="hours" id="hoursStandard" type="checkbox">
-</form>
-<br/>
-
-<form onchange="drawChart()">
-    Stasjon 1<input id="station1" checked="true" type="checkbox">
-    <br/>
-    Stasjon 2<input id="station2" checked="true" type="checkbox">
-</form>
-
-
+            <form onchange="changedHours()">
+                00.00<input name="hours" id="hours00" type="checkbox">
+                12.00<input name="hours" id="hours12" type="checkbox">
+                <br/>
+                06.00<input name="hours" id="hours06" type="checkbox">
+                18.00<input name="hours" id="hours18" type="checkbox">
+                <br/>
+            </form>
+            <form onchange="changedHours(true)">
+                Standard<input name="hours" id="hoursStandard" type="checkbox">
+            </form>
+        </div>
+        <div id="stationPick">
+            <form onchange="changedStations()">
+                Stasjon 1<input id="station1" checked="true" type="checkbox">
+                <br/>
+                Stasjon 2<input id="station2" checked="true" type="checkbox">
+            </form>
+        </div>
+        <div id="buttons">
+            <button onclick="weatherFetch('graph')">Vis graf</button>
+            <br/>
+            <button onclick="weatherFetch('table')">Vis tabell</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

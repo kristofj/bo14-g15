@@ -7,13 +7,15 @@ function getJson(url, type) {
         //fyrer callback-funksjon for å sende behandlet data videre.
         success: function (response) {
             if (type == "graph") {
-                fillChart(response);
+                populateArrays(response);
+                fillChart();
             }
             else if (type == "formFiller") {
                 fillForms(response);
             }
             else if (type == "table") {
-                makeTable(response);
+                populateArrays(response);
+                makeTable();
             }
             else {
                 alert('You shall not pass!');
@@ -111,6 +113,31 @@ function changedDates() {
     changedType();
 }
 
+function changedStations(){
+    if (((document.getElementById("station1").checked) == true) && ((document.getElementById("station2").checked) == true)) {
+        document.getElementById("station1").disabled = false;
+        document.getElementById("station2").disabled = false;
+        station1=true;
+        station2=true;
+    }
+    else if ((document.getElementById("station1").checked) == true) {
+        document.getElementById("station1").disabled = true;
+        station2=false;
+        station1=true;
+    }
+    else {
+        document.getElementById("station2").disabled = true;
+        station1=false;
+        station2=true;
+    }
+    if (stateOfDiv=="graph"){
+        drawChart();
+    }
+    else{
+        makeTable();
+    }
+}
+
 //kalles av onChange på værtype
 function changedType() {
     radioSelected = ($('input[name=type]:checked').val());
@@ -172,6 +199,7 @@ function genChart() {
 
 //laget for å unngå å endre kallargumenter på flere steder
 function weatherFetch(type) {
+    clearArrays();
     var fromDateStr = fromDate.getFullYear() + "-" + (fromDate.getMonth() + 1) + "-" + fromDate.getDate() + " 00:00:00";
     var toDateStr = toDate.getFullYear() + "-" + (toDate.getMonth() + 1) + "-" + toDate.getDate() + " 23:59:59";
     if (hoursOverride == true) {
@@ -192,19 +220,43 @@ function weatherFetch(type) {
     }
 }
 
-function makeTable(response) {
-    populateArrays(response);
-    var htmlTable = '<head><title>' + typeData + '</title><link rel="stylesheet" type="text/css" href="weather_style.css"></head><body><table><tr><th>Dato</th><th>Kl</th><th>Stasjon 1<br/>Gjennomsnitt</th><th>Stasjon 2<br/>Gjennomsnitt</th><th>Stasjon 1<br/>Maks</th><th>Stasjon 2<br/>Maks</th><th>Stasjon 1<br/>Min</th><th>Stasjon 2<br/>Min</th></tr>';
-    for (i = 0; i < time.length; i++) {
+function makeTable() {
+    stateOfDiv="table";
+    if (station1==true && station2==true){
+        var htmlTable = '<table><tr><th>Dato</th><th>Kl</th><th>Stasjon 1<br/>Gjennomsnitt</th><th>Stasjon 2<br/>Gjennomsnitt</th><th>Stasjon 1<br/>Maks</th><th>Stasjon 2<br/>Maks</th><th>Stasjon 1<br/>Min</th><th>Stasjon 2<br/>Min</th></tr>';
+        document.getElementById("chart_div").style.width = "750px";
+        document.getElementById("chart_div").style.marginRight = "10px";
+    }
+    else if(station1==true){
+        var htmlTable = '<table><tr><th>Dato</th><th>Kl</th><th>Stasjon 1<br/>Gjennomsnitt</th><th>Stasjon 1<br/>Maks</th><th>Stasjon 1<br/>Min</th></tr>';
+        document.getElementById("chart_div").style.width = "460px";
+        document.getElementById("chart_div").style.marginRight = "300px";
+    }
+    else{
+        var htmlTable = '<table><tr><th>Dato</th><th>Kl</th><th>Stasjon 2<br/>Gjennomsnitt</th><th>Stasjon 2<br/>Maks</th><th>Stasjon 2<br/>Min</th></tr>';
+        document.getElementById("chart_div").style.width = "460px";
+        document.getElementById("chart_div").style.marginRight = "300px";
+    }
+
+    for (var i = 0; i < time.length; i++) {
         var dateFixed = getDateFixed(time[i], "date") + "/" + getDateFixed(time[i], "month") + "/" + getDateFixed(time[i], "year");
         var clockFixed = getDateFixed(time[i], "hour") + ":" + getDateFixed(time[i], "minute");
-        htmlTable += "<tr><td>" + dateFixed + "</td><td>" + clockFixed + "</td><td>" + valAvg1[i] + mTypeData + "</td><td>" + valAvg2[i] + mTypeData + "</td><td>" + valMax1[i] + mTypeData + " " + dirMax1[i] + "</td><td>" + valMax2[i] + mTypeData + "</td><td>" + valMin1[i] + mTypeData + "</td><td>" + valMin2[i] + mTypeData + "</td></tr>";
+        if (station1==true && station2==true){
+            htmlTable += "<tr><td>" + dateFixed + "</td><td>" + clockFixed + "</td><td>" + valAvg1[i] + mTypeData + "</td><td>" + valAvg2[i] + mTypeData + "</td><td>" + valMax1[i] + mTypeData + " " + dirMax1[i] + "</td><td>" + valMax2[i] + mTypeData + " "+ dirMax2[i]+ "</td><td>" + valMin1[i] + mTypeData + "</td><td>" + valMin2[i] + mTypeData + "</td></tr>";
+        }
+        else if(station1==true){
+            htmlTable += "<tr><td>" + dateFixed + "</td><td>" + clockFixed + "</td><td>" + valAvg1[i] + mTypeData + "</td><td>" + valMax1[i] + mTypeData + " " + dirMax1[i] + "</td><td>" + valMin1[i] + mTypeData + "</td></tr>";
+        }
+        else{
+            htmlTable += "<tr><td>" + dateFixed + "</td><td>" + clockFixed + "</td><td>" + valAvg2[i] + mTypeData + "</td><td>" + valMax2[i] + mTypeData + " " + dirMax2[i] + "</td><td>" + valMin2[i] + mTypeData + "</td></tr>";
+        }
+
     }
-    htmlTable += "</body>";
+    htmlTable += "</table>";
     document.getElementById("chart_div").style.overflow = "auto";
-    document.getElementById("chart_div").style.width = "750px";
+    document.getElementById("chart_div").style.marginLeft = "0px";
     document.getElementById("chart_div").innerHTML = htmlTable;
-    clearArrays();
+
     chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 }
 
@@ -324,9 +376,7 @@ function clearArrays() {
 }
 
 //fyller opp grafdata. blir kalt opp med JSON.
-function fillChart(jsonResponse) {
-
-    populateArrays(jsonResponse);
+function fillChart() {
     data = new google.visualization.DataTable();
     data.addColumn('datetime', 'time');
     data.addColumn('number', 'Stasjon 1');
@@ -358,7 +408,7 @@ function fillChart(jsonResponse) {
 
     }
 
-    clearArrays();
+
     options = {
         title: typeData,
         curveType: 'function',
@@ -373,19 +423,18 @@ function fillChart(jsonResponse) {
         tooltip: { isHtml: true }
     };
     document.getElementById("chart_div").style.width = "900px";
+    document.getElementById("chart_div").style.marginRight = "-40px";
+    document.getElementById("chart_div").style.marginLeft = "-100px";
     document.getElementById("chart_div").style.overflow = "hidden";
     drawChart();
 }
 
 //egen funksjon for å kunne kalles med onChange på checkboxer
 function drawChart() {
-    if (((document.getElementById("station1").checked) == true) && ((document.getElementById("station2").checked) == true)) {
+    if (station1==true && station2==true) {
         chart.draw(data, options);
-        document.getElementById("station1").disabled = false;
-        document.getElementById("station2").disabled = false;
     }
-    else if ((document.getElementById("station1").checked) == true) {
-        document.getElementById("station1").disabled = true;
+    else if (station1==true) {
         view = new google.visualization.DataView(data);
         view.hideColumns([3]);
         view.hideColumns([4]);
@@ -394,7 +443,6 @@ function drawChart() {
         chart.draw(view, options);
     }
     else {
-        document.getElementById("station2").disabled = true;
         view = new google.visualization.DataView(data);
         view.hideColumns([1]);
         view.hideColumns([2]);
@@ -402,12 +450,16 @@ function drawChart() {
         view.hideColumns([6]);
         chart.draw(view, options);
     }
+    stateOfDiv="graph";
 }
 
 //deklarer graf globalt for å ikke måtte generere på nytt. Dette fører til mulgiheten for å animerte grafer med async ajax.
 var options;
 var chart;
 var data;
+var stateOfDiv;
+var station1=true;
+var station2=true;
 
 var tabEntry = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 var radioSelected;

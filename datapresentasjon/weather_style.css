@@ -10,3 +10,37 @@ td, th {
     text-align: center;
     padding: 10px;
 }
+#upperWrapper{
+
+}
+#chart_div {
+    width: 900px;
+    margin-left:-100px;
+    margin-right:-40px;
+    height: 500px;
+    float: left;
+}
+#description {
+    width: 250px;
+    border: 1px dashed black;
+    background-color: #f0eee9;
+    height:500px;
+    float: left;
+    position: relative
+}
+#lowerWrapper{
+    clear:both;
+    padding-left:50px;
+}
+#typeData, #buttons, #dateAndHours, #stationPick{
+    padding:10px;
+    float:left;
+    margin-left:20px;
+}
+#typeData, #dateAndHours, #stationPick{
+    border: 1px solid black;
+    background-color: #f0eee9;
+}
+#main{
+    margin-left:200px;
+}
