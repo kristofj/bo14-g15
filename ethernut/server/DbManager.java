@@ -25,7 +25,9 @@ public class DbManager {
     }
     public static void makeMainEntry() {
         int stationId = json.getInt("stationId");
-        Db mainEntry = new Db("INSERT INTO logId (datetime, stationId) VALUES ("+mainDatetime+","+stationId+")");
+        String sql="INSERT INTO logId (datetime, stationId) VALUES ("+mainDatetime+","+stationId+")";
+        System.out.println(sql);
+        Db mainEntry = new Db(sql);
         entryKey = mainEntry.getKey();
     }
     public static void makeTempEntry(){
@@ -36,7 +38,9 @@ public class DbManager {
         Double min = temp.getDouble("min");
         String timeMax = convD(temp.getString("timeMax"));
         String timeMin = convD(temp.getString("timeMin"));
-        new Db("INSERT INTO temperature (`logId_id`, `temperatureAvg`, `temperatureNow`, `temperatureMax`, `timeMax`, `temperatureMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+", "+timeMax+", "+min+", "+timeMin+");");
+        String sql="INSERT INTO temperature (`logId_id`, `temperatureAvg`, `temperatureNow`, `temperatureMax`, `timeMax`, `temperatureMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+", "+timeMax+", "+min+", "+timeMin+");";
+        System.out.println(sql);
+        new Db(sql);
     }
     public static void makeHumidityEntry(){
         JSONObject humidity = json.getJSONObject("humidity");
@@ -46,7 +50,9 @@ public class DbManager {
         Double min = humidity.getDouble("min");
         String timeMax = convD(humidity.getString("timeMax"));
         String timeMin = convD(humidity.getString("timeMin"));
-        new Db("INSERT INTO humidity (`logId_id`, `humidityAvg`, `humidityNow`, `humidityMax`, `timeMax`, `humidityMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+", "+timeMax+", "+min+", "+timeMin+");");
+        String sql="INSERT INTO humidity (`logId_id`, `humidityAvg`, `humidityNow`, `humidityMax`, `timeMax`, `humidityMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+", "+timeMax+", "+min+", "+timeMin+");";
+        System.out.println(sql);
+        new Db(sql);
     }
     public static void makePressureEntry(){
         JSONObject pressure = json.getJSONObject("pressure");
@@ -56,7 +62,9 @@ public class DbManager {
         Double min = pressure.getDouble("min");
         String timeMax = convD(pressure.getString("timeMax"));
         String timeMin = convD(pressure.getString("timeMin"));
-        new Db("INSERT INTO pressure (`logId_id`, `pressureAvg`, `pressureNow`, `pressureMax`, `timeMax`, `pressureMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+", "+timeMax+", "+min+", "+timeMin+");");
+        String sql="INSERT INTO pressure (`logId_id`, `pressureAvg`, `pressureNow`, `pressureMax`, `timeMax`, `pressureMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+", "+timeMax+", "+min+", "+timeMin+");";
+        System.out.println(sql);
+        new Db(sql);
     }
     public static void makeWindEntry(){
         JSONObject wind = json.getJSONObject("wind");
@@ -67,6 +75,8 @@ public class DbManager {
         Double maxDir = wind.getDouble("maxDir");
         String timeMax = convD(wind.getString("timeMax"));
         String timeMin = convD(wind.getString("timeMin"));
-        new Db("INSERT INTO wind (`logId_id`, `windspeedAvg`, `windspeedNow`, `windspeedMax`, `winddirectionMax`, `timeMax`, `windspeedMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+","+maxDir+", "+timeMax+", "+min+", "+timeMin+");");
+        String sql="INSERT INTO wind (`logId_id`, `windspeedAvg`, `windspeedNow`, `windspeedMax`, `winddirectionMax`, `timeMax`, `windspeedMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+","+maxDir+", "+timeMax+", "+min+", "+timeMin+");";
+        System.out.println(sql);
+        new Db(sql);
     }
 }
