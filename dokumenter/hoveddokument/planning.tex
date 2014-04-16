@@ -19,19 +19,93 @@ Etter vi hadde skrevet forprosjektrapporten, delte vi hverandre inn i forskjelli
 I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen av hardware.
 
 \subsection{Sensorer}
-Når det kommer til valg av sensorer vi vil benytte så er det to viktige ting vi må ta hensyn til: 
+Når det kommer til valg av sensorer vi vil benytte så er det noen kriterier å ta hensyn til: 
 \begin{enumerate}
 \item Må være kompatibel med $\mu$P-kortet, Ethernut 2.1
 \item Tåle temperaturer helt ned til $-40\,^{\circ}\mathrm{C}$
+\item Helst være ferdig utrustet for utemontering.
 \end{enumerate}
-Vi har satt $-40\,^{\circ}\mathrm{C}$ som den laveste temperaturen sensorene må tåle da den laveste tempteraturen i løpet av 2013 var $-34,8\,^{\circ}\mathrm{C}$ \cite{nettside:yr150313}. 
+
+Vi har satt $-40\,^{\circ}\mathrm{C}$ som den laveste temperaturen sensorene må tåle da den laveste tempteraturen i løpet av 2013 var $-34,8\,^{\circ}\mathrm{C}$ \cite{nettside:yr150313}. \\
+
+Ut i fra disse kriteriene, nevnt ovenfor, har vi bestemt oss for disse sensorene:
+
+\begin{figure}
+        \centering
+        \begin{subfigure}[H]{0.3\textwidth}
+                \includegraphics[width=\textwidth]{sht10}
+                \caption{SHT10 - temperatur}
+                \label{fig:sht10}
+                \quad
+        \end{subfigure}%
+        \begin{subfigure}[H]{0.25\textwidth}
+                \includegraphics[width=\textwidth]{bmp180}
+                \caption{BMP180 - lufttrykk}
+                \label{fig:bmp180}
+                \quad
+        \end{subfigure}
+        \\
+        \begin{subfigure}[H]{0.3\textwidth}
+                \includegraphics[width=\textwidth]{wg2o50}
+                \caption{WG2/O50 - vindhastighet}
+                \label{fig:wg2o50}
+        \end{subfigure}
+        \begin{subfigure}[H]{0.3\textwidth}
+                \includegraphics[width=\textwidth]{wrg2o50}
+                \caption{WRG2/O50 - vindretning}
+                \label{fig:wrg2o50}
+        \end{subfigure}
+        \caption{Sensorene vi skal bruke}\label{fig:Sensorer}
+\end{figure}
+
+Disse sensorene tilfredsstiller alle kravene bortsett fra BMP180 som ikke har beskyttelse. Til denne må få tak i en innkapslingsboks som er vanntett og har tette kabelgjennomføringer. Det må også være en form for luftgjennomstrøming slik at lufttrykket blir riktig målt. Mer informasjon om disse sensorene står i delkapittel \ref{sec:HardwareDelen}.
 
 
-\subsection{Kretser}
-\meta {Skrive om hva vi burde ha med i kretsen mellom sensoren og $\mu$P-kortet }
+\subsection{Kretsskjema}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.60\textwidth]{SHT10}
+  \caption{Kretsskjema for SHT10}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.60\textwidth]{BMP180}
+  \caption{Kretsskjema for BMP180}
+\end{figure}
+
+BMP180 og SHT10 er digitale sensorer og disse krever en spenningstilførsel på 5V. $\mu$P-kortet, Ethernut 2.1, som vi skal bruke har egne utganger for tilførsler på 5V. Det vi trengte å vite for å koble opp kretsene mellom disse sensorene og $\mu$P-kortet stod godt beskrevet i databladet til hver sensor.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.60\textwidth]{vindhastighet}
+  \caption{Kretsskjema for WG2/O50}
+  \label{fig:vindhastighet}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.60\textwidth]{vindretning}
+  \caption{Kretsskjema for WRG2/O50}
+  \label{fig:vindretning}
+\end{figure}
+
+I figur \ref{fig:vindhastighet} og \ref{fig:vindretning} ovenfor ser du kretskjema for de analoge vindsensorene vi har valgt ut. Disse krever en strømforsyning fra 15-30V AC/DC. Vi har valgt å bruke en strømforsyning på 24V DC da denne også kan brukes på varmefunksjonen disse sensorene også har. Disse sensorene sender ut en analog spenning på 0-10V og denne spenningen må vi strupe ned til å matche $\mu$P-kortet som ikke tåler mer enn 5V. Dette har vi løst ved å bruke en spenningsdeler som gjør at spenningen inn på $\mu$P-kortet kun varierer mellom 0-5V. 
 
 \subsection{Kabinettet til værstasjonen}
-\meta{Forklare hva som er tatt hensyn til under planleggingen}
+Det er behov for et kabinett som kan beskytte $\mu$P-kortet, strømforsyningene og kretsene mellom sensorene og $\mu$P-kortet. \\ 
+
+Viktige kriterier for valg av kabinett:
+\begin{itemize}
+\item Vanntett
+\item Isolert mot kulde
+\item Beregnet for veggmontering 
+\item Må ha varmeelement og termostat
+\item Tett kabelgjennomføring
+\item Monteringsplate for å skru fast komponenter
+\item Så liten som mulig
+\end{itemize}  
 
 \section{Software}
 I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen av software.
@@ -75,7 +149,7 @@ Alle målerne er koblet til $\mu$P-kortet. Vi bruker porter på $\mu$P-kortet so
 \item Diverse kobberkabler
 \item Strømforsynere
 \item Tilgang på frigg for datalagring
-\item Småting som for eksempel en boks der vi har koblet sammen alt
+\item Kabinett for ubeskyttede komponenter
 
 \end{itemize}
 
@@ -83,7 +157,7 @@ Alle målerne er koblet til $\mu$P-kortet. Vi bruker porter på $\mu$P-kortet so
 ////////////////////Bilde av hele systemet\\
 
 
-Hele systemet skal være tilgjenglig for alle som er på project hessdalens hjemmesider. 
+Hele systemet skal være tilgjenglig for alle som er på project Hessdalens hjemmesider. 
 
 
 
