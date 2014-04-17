@@ -114,7 +114,48 @@ I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen 
 \meta {Forklare hvordan databasen burde settes opp.}
 
 \subsection{Visualisering av værdata}
-\meta{Forklare hvordan værdataene er tenkt å bli visualisert.}
+\meta {Må legge inn kilder}
+I vårt valg av hvilke teknologier vi skulle bruke for å presentere værdata på hessdalen.org, har vi tatt utangspunkt i de webprogrammeringsspråkene vi har grei kunskap om fra før. Det vil si JavaScript, PHP, og CGI-basert Python.\\
+
+For å best kunne vurdere hva vi skulle velge, satte vi opp en liste med fordeler og ulemper ved de forskjellige metodene.
+\subsubsection{CGI-basert Python}
+Fordeler
+\begin{itemize}
+\item Den fulle kraften av Python implementert i nettsiden. 
+\item Mange muligheter, og en stort menge biblioteker tilgjengelig.
+\end{itemize}
+Ulemper
+\begin{itemize}
+\item Hvis man ikke bruker alternative måter å kjøre CGI på, kan det fort bli treg utførelsetid på serveren. 
+\item All kode kjøres også på serveren, noe som fører til større belastning.
+\end{itemize}
+
+\subsubsection{JavaScript}
+Fordeler
+\begin{itemize}
+\item Laget for webprogrammering! 
+\item Stor mengde relevante bilioteker for presentering av data (Grafer, diagrammer, osv.) 
+\item God samhandling med AJAX-teknologi for sømløs lasting av innhold. 
+\item Veldig utbredt språk, så det er mye god dokumentasjon. Kode kjøres av nettleser, noe som fører til lavere belastning på server.
+\end{itemize}
+Ulemper 
+\begin{itemize}
+\item Krever litt mer å debugge, men Firebug (utvidelse til Firefox og Chrome) ordner dette relativt greit.
+\end{itemize}
+
+\subsubsection{PHP}
+Fordeler
+\begin{itemize}
+\item Veldig lett syntaks og debugging. 
+\item Tilgivende språk (det meste fortsetter å kjøre selv om man har kodefeil).
+\end{itemize}
+Ulemper 
+\begin{itemize}
+\item Hatt mange problemer med sikkerhet i sin levetid. 
+\item All kode kjøres også på serveren, noe som fører til større belastning.\\
+\end{itemize}
+
+På bakgrunn av dette har vi bestemt oss for å presentere data ved å hovedsaklig bruke JavaScript med AJAX-teknologi og 'Google Visualization' for tegning av grafer. Som backend for å hente værdata fra databasen og konvertere til JSON trenger vi et språk der kildekode blir kompilert på serveren, og ikke er synlig for bruker. Til dette har vi valgt PHP ettersom det er et utbredt og relativt raskt språk til å være på serversiden.
 
 \subsection{Serversiden som tar i mot data}
 \meta{Forklare hvordan dette skal gjøres}
