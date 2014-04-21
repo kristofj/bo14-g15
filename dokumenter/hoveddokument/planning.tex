@@ -15,7 +15,13 @@ Etter jul startet vi opp med ukentlige møter med oppdragsgiver og møte med vei
 
 Etter vi hadde skrevet forprosjektrapporten, delte vi hverandre inn i forskjellige arbeidsoppgaver. Det blir mer effektivt arbeid hvis vi jobber med hver våres del, enn at alle sitter over en PC og prøver å samarbeide.
 
-\section {Hardware}
+\section{Hvordan utforme produktet}
+
+Vi tenker å fordele arbeidsoppgavene slik at noen holder på med programmeringen mens noen andre kobler opp maskinvare. Vi kommer til å benytte oss av skolens verksted for å koble opp og montere værstasjonen.\\
+
+Vi vil først lage et par prototyper før vi bestemmer oss for det endelige produktet. Vi vil gjerne få hele systemet til å gå før vi tenker på hva slags design og fysisk beskyttelse vi skal ha til de forskjellige komponentene.
+
+\section {Maskinvare}
 I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen av hardware.
 
 \subsection{Sensorer}
@@ -105,20 +111,26 @@ Viktige kriterier for valg av kabinett:
 \item Tett kabelgjennomføring
 \item Monteringsplate for å skru fast komponenter
 \item Så liten som mulig
-\end{itemize}  
+\end{itemize}
 
-\section{Software}
-I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen av software.
+Med dette tatt i betrakning har vi valgt å gå for 
+
+\section{Programvare}
+I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen av programvare.
 
 \subsection{Databasen}
-\meta {Forklare hvordan databasen burde settes opp.}
+Databasen som skal ta vare på værdata skal være lokalisert på en av skolens servere (Freja). Vi har valgt å bruke den populære MySQL databasen med InnoDB-motoren. Denne beslutningen er tatt på bakgrunn av at vi har god kjennskap til MySQL og InnoDB fra tidligere kurs og at det er en av verdens meste brukte åpen kildekode database(trenger kilde). Vi kommer til å overholde minst første, andre og tredje normalform fra normaliseringsreglene\cite{nettside:normalisering} i databasemodellen vår.
+\begin{figure}[H]
+  \centering
+  \includegraphics[height=0.15\textwidth]{mysql}
+  \caption{MySQL-logo}
+\end{figure}
 
 \subsection{Visualisering av værdata}
-\meta {Må legge inn kilder}
 I vårt valg av hvilke teknologier vi skulle bruke for å presentere værdata på hessdalen.org, har vi tatt utangspunkt i de webprogrammeringsspråkene vi har grei kunskap om fra før. Det vil si JavaScript, PHP, og CGI-basert Python.\\
 
 For å best kunne vurdere hva vi skulle velge, satte vi opp en liste med fordeler og ulemper ved de forskjellige metodene.
-\subsubsection{CGI-basert Python}
+\subsubsection{CGI-basert Python\cite{nettside:python} \cite{nettside:cgi}}
 Fordeler
 \begin{itemize}
 \item Den fulle kraften av Python implementert i nettsiden. 
@@ -126,52 +138,68 @@ Fordeler
 \end{itemize}
 Ulemper
 \begin{itemize}
-\item Hvis man ikke bruker alternative måter å kjøre CGI på, kan det fort bli treg utførelsetid på serveren. 
-\item All kode kjøres også på serveren, noe som fører til større belastning.
+\item Hvis man ikke bruker alternative måter å kjøre CGI på, kan det fort bli treg utførelsetid på serveren. \cite{nettside:cgislow}
+\item All kode kjøres også på serveren, noe som fører til høyere belastning.
 \end{itemize}
+\begin{figure}[H]
+  \centering
+  \includegraphics[height=0.15\textwidth]{python}
+  \caption{Python-logo}
+\end{figure}
 
-\subsubsection{JavaScript}
+\subsubsection{JavaScript\cite{nettside:javascript}}
 Fordeler
 \begin{itemize}
-\item Laget for webprogrammering! 
+\item Laget for webprogrammering.
 \item Stor mengde relevante bilioteker for presentering av data (Grafer, diagrammer, osv.) 
 \item God samhandling med AJAX-teknologi for sømløs lasting av innhold. 
-\item Veldig utbredt språk, så det er mye god dokumentasjon. Kode kjøres av nettleser, noe som fører til lavere belastning på server.
+\item Utbredt språk, så det er mye god dokumentasjon. Kode kjøres av nettleser, noe som fører til mindre belastning på server.
 \end{itemize}
 Ulemper 
 \begin{itemize}
-\item Krever litt mer å debugge, men Firebug (utvidelse til Firefox og Chrome) ordner dette relativt greit.
+\item All kildekode er tilgjengelig for alle som leser nettsiden. Man kan altså ikke bruke JavaScript til sensitiv informasjon.
+\item Krever litt mer å debugge, men Firebug\cite{nettside:firebug} (utvidelse til Firefox og Chrome) ordner dette relativt greit.
 \end{itemize}
+\begin{figure}[H]
+  \centering
+  \includegraphics[height=0.15\textwidth]{javascript}
+  \caption{JavaScript-logo}
+\end{figure}
 
-\subsubsection{PHP}
+\subsubsection{PHP: Hypertext Preprocessor\cite{nettside:php}}
 Fordeler
 \begin{itemize}
-\item Veldig lett syntaks og debugging. 
+\item Enkel syntaks og debugging.
 \item Tilgivende språk (det meste fortsetter å kjøre selv om man har kodefeil).
 \end{itemize}
 Ulemper 
 \begin{itemize}
-\item Hatt mange problemer med sikkerhet i sin levetid. 
-\item All kode kjøres også på serveren, noe som fører til større belastning.\\
+\item Hatt mange problemer med sikkerhet i sin levetid.\cite{nettside:phpbad}
+\item All kode kjøres også på serveren, noe som fører til høyere belastning.\\
 \end{itemize}
+\begin{figure}[H]
+  \centering
+  \includegraphics[height=0.15\textwidth]{php}
+  \caption{PHP-logo}
+\end{figure}
 
-På bakgrunn av dette har vi bestemt oss for å presentere data ved å hovedsaklig bruke JavaScript med AJAX-teknologi og 'Google Visualization' for tegning av grafer. Som backend for å hente værdata fra databasen og konvertere til JSON trenger vi et språk der kildekode blir kompilert på serveren, og ikke er synlig for bruker. Til dette har vi valgt PHP ettersom det er et utbredt og relativt raskt språk til å være på serversiden.
+På bakgrunn av dette har vi bestemt oss for å presentere data ved å hovedsaklig bruke JavaScript med AJAX-teknologi og 'Google Chart'\cite{nettside:googlevis} for tegning av grafer. Som backend for å hente værdata fra databasen og konvertere til JSON\cite{nettside:json} trenger vi et språk der kildekode blir kompilert på serveren, og ikke er synlig for bruker. Til dette har vi valgt PHP ettersom det er et utbredt og relativt raskt språk til å være på serversiden.
 
 \subsection{Serversiden som tar i mot data}
-\meta{Forklare hvordan dette skal gjøres}
+Værstasjonen vil sende data som TCP-pakker ment for en bestemt IP og port på skolens server. For å ta imot disse pakkene og sørge for at data blir lagt inn i databasen riktig, må vi lage et program som håndterer dette. Her sto vi ganske åpent på hva slags platform vi skulle bruke, men vi valgte å bygge dette på det populære språket Java av to grunner. Java versjon 1.6\cite{nettside:java} er allerede installert på skolens server der dette programmet skal kjøre. Den andre grunnen er at Java er blitt veldig populært\cite{nettside:javapopular}, og god mengde dokumentasjon er tilgjengelig på internett.\\
+\begin{figure}[H]
+  \centering
+  \includegraphics[height=0.15\textwidth]{java}
+  \caption{Java-logo}
+\end{figure}
+Serverprogramvaren vi skal bygge vil døgnet rundt ligge å vente på datapakker fra værstasjonen. Når den mottar en pakke med værdata vil denne informasjonen bli lagt inn i databasen med en gang. vi planlegger å bygge dette med Sockets\cite{nettside:sockets} og en objektorientert løsning der andre klasser vil konvertere data fra JSON\cite{nettside:json} til setninger som kan kjøres inn i databasen. 
 
 \subsection{Programvare til Ethernut 2.1}
 \meta{Forklare hva ethenrut skal gjøre og hvordan dette kan løses}
 
-\section{Hvordan utforme produktet}
-
-Skriv hvordan vi skal utforme produktet
-
-
 \section{Beskrivelse av hele systemet}
 
 Målet er å lage to komplette værstasjoner som er identiske. \\
-
 
 \meta{Legge til et par bilder av hele systemet her.} \\
 
