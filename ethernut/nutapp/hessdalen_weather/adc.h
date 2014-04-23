@@ -3,9 +3,6 @@
 
 #include "hessdalen_weather.h"
 
-#define ADC0	0
-#define ADC1	1
-
 //Leser vindhastighet og vindretning.
 void  wind_data_read(double *speed, double *dir);
 

@@ -28,23 +28,28 @@
 #define ETHERNUT_1	1;
 #define ETHERNUT_2	2;
 
-//Starter watchdog-telleren, resetter CPU hvis ikke den bli tilbakestilt.
+#define STATION_ID	ETHERNUT_1 //Endres avhengig av ethernut.
+
+//Starter watchdog-telleren, resetter CPU hvis ikke den blir tilbakestilt med restart_watchdog.
 void start_watchdog(uint32_t ms);
 
 //Tilbakestiller watchdog-telleren.
 void restart_watchdog(void);
 
 //Leser alle sensorer.
-void read_sensors(tm *datetime);
+void read_sensors(void);
 
-//Regner ut gjennomsnitt og finner ut max/min for de siste 5 min.
-void prepare_data(tm *datetime);
+//Samler data og gjør de klar for sending.
+void prepare_data(void);
 
 //Sender data til server.
 void send_data(void);
 
 //Venter på helt minutt.
-void wait_for_whole_min(tm *datetime);
+void wait_for_whole_min(void);
+
+//Venter i 30 sekunder.
+void wait_30_sec(void);
 
 //Registerer output på serieutgang, brukes ved debug.
 void configure_debug(uint32_t baud);
