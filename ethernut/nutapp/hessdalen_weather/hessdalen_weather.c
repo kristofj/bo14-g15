@@ -359,8 +359,8 @@ void wait_30_sec(void) {
 		if((datetime->tm_sec % 30) == 0)
 			break;
 		NutSleep(100);
+		restart_watchdog();
 	} 
-	puts("30 SEC");
 }
 
 void configure_debug(uint32_t baud)
@@ -372,6 +372,7 @@ void configure_debug(uint32_t baud)
 
 int main(void)
 {
+	start_watchdog(5000); //Starter watchdog med nedtelling på 5 sec.
 	uint32_t baud = 115200;
 	datetime = malloc(sizeof(tm));
 
@@ -396,12 +397,16 @@ int main(void)
 
 	for (;;) { //Hovedløkke.
 		read_sensors();
+		restart_watchdog();
 		measured = 1;
+
 		if(((datetime->tm_min % 5) == 0) && (datetime->tm_sec == 0)) { //Regner ut gjennomsnitt og max/min hvert 5. min.
 			prepare_data();
+			restart_watchdog();
 
 			if((datetime->tm_min == 0) && (datetime->tm_sec == 0)) { //Sender data hver hele time.
 				send_data();
+				restart_watchdog();
 			}
 		}
 		wait_30_sec(); //Gjør ny måling hvert 30. sekund.
