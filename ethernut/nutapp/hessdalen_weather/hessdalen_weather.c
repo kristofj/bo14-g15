@@ -340,8 +340,8 @@ void wait_for_whole_min(void) {
 			break;
 
 		NutSleep(100);
+		restart_watchdog();
 	}
-	puts("WHOLE MIN");
 }
 
 void wait_30_sec(void) {
