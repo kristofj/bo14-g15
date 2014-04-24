@@ -32,7 +32,7 @@ THREAD(Send_data_thread, arg);
 void set_time_ntp(void);
 
 //Henter nåværende tid fra timeren. Bør ikke kalles før Ntp_thread har kjørt.
-void get_current_time(tm *datetime);
+tm *get_current_time(void);
 
 /*
 Lager JSON-strengen:
@@ -86,10 +86,10 @@ Returnerer strengen i *string.
 void get_json_wstring(double avg, double now, double max, const char *time_max, double max_dir, double min, const char *time_min, char *string);
 
 //Samler sammen delene av JSON-strengen. Returnerer den i *string.
-void get_json(char *date_time, char *json_string1, char *json_string2, char *json_string3, char *json_wstring, char *string);
+void get_json(char *json_root, char *json_string1, char *json_string2, char *json_string3, char *json_wstring, char *string);
 
 //Sender av gårde gitt data.
-int send_json(const char *data, const char *address, uint16_t port);
+int send_json(const char *data);
 
 //Konfigurerer netverkskontrolleren til ethernut, setter IP med DHCP.
 int configure_network(void);

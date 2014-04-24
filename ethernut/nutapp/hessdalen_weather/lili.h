@@ -2,7 +2,6 @@
 #define LILI_H_
 
 //Enkel implementasjon av lenket liste.
-
 #include "hessdalen_weather.h"
 
 //Node for ubehandlet verdi.
@@ -17,6 +16,15 @@ typedef struct m_node {
 typedef struct node {
 	char *datetime;
 	uint8_t station_id;
+	struct values *temp;
+	struct values *humi;
+	struct values *pressure;
+	struct values *wind;
+	struct node *next;
+} node_t;
+
+//Holder verdiene for en utregner periode.
+typedef struct values {
 	char *value;
 	double avg;
 	double now;
@@ -25,9 +33,7 @@ typedef struct node {
 	double min;
 	char *time_min;
 	double max_dir;
-	
-	struct node *next;
-} node_t;
+} values_t;
 
 void m_push(m_node_t *head, m_node_t *next);
 

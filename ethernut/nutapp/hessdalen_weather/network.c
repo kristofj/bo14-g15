@@ -43,7 +43,7 @@ void set_time_ntp(void)
 
 	for(;;) {
 		if(NutSNTPGetTime(&timeserver, &ntp_time) == 0) {
-			puts("Updating current time...");
+			puts("Time set");
 			stime(&ntp_time); //Setter klokken til Ethernut.
 			return;
 		} else {
@@ -53,11 +53,11 @@ void set_time_ntp(void)
 	}
 }
 
-void get_current_time(tm *datetime)
+tm *get_current_time(void)
 {
 	time_t t;
 	t = time(NULL);
-	datetime = localtime(&t);
+	return localtime(&t);
 }
 
 void get_json_string_root(const char *date_time, uint8_t station_id, char *string)
@@ -81,23 +81,23 @@ void get_json_wstring(double avg, double now, double max, const char *time_max, 
 	sprintf(string, json_string_wind, avg, now, max, time_max, max_dir, min, time_min);
 }
 
-void get_json(char *date_time, char *json_string1, char *json_string2, char *json_string3, char *json_wstring, char *string)
+void get_json(char *json_root, char *json_string1, char *json_string2, char *json_string3, char *json_wstring, char *string)
 {
-	strncat(string, date_time, JSON_MAX_ROOT_LENGTH);
+	strncat(string, json_root, JSON_MAX_ROOT_LENGTH);
 	strncat(string, json_string1, JSON_MAX_STRING_LENGTH);
 	strncat(string, json_string2, JSON_MAX_STRING_LENGTH);
 	strncat(string, json_string3, JSON_MAX_STRING_LENGTH);
-	strncat(string, json_wstring, JSON_MAX_LENGTH);
+	strncat(string, json_wstring, JSON_MAX_WSTRING_LENGTH);
 }
 
-int send_json(const char *data, const char *address, uint16_t port)
+int send_json(const char *data)
 {
 	network_thread_args *arguments = (network_thread_args *)malloc(sizeof(network_thread_args));
 	arguments->data = data;
-	arguments->address = address;
-	arguments->port = port;
+	arguments->address = FREJA_IP;
+	arguments->port = FREJA_PORT;
 	
-	NutThreadCreate("send_data_thread", Send_data_thread, arguments, 256); //Størrelse på stacken må evt. justeres fra 256 hvis tråden blir endret
+	NutThreadCreate("send_data_thread", Send_data_thread, arguments, 1024); //Størrelse på stacken må evt. justeres fra 1024 hvis tråden blir endret
 	
 	return 0;
 }
@@ -110,12 +110,12 @@ int configure_network(void)
 	//Registrerer ethernet-kontroller
 	if (NutRegisterDevice(&DEV_ETHER, 0, 0)) {
 		puts("Registering " DEV_ETHER_NAME " failed.");
-		return -1;
+		return 1;
 	}
 	//Konfigurerer DHCP.
 	if (NutDhcpIfConfig(DEV_ETHER_NAME, mac, 0)) {
 		puts("Configuring " DEV_ETHER_NAME " failed.");
-		return -1;
+		return 1;
 	}
 	printf("I'm at %s.\n", inet_ntoa(confnet.cdn_ip_addr)); //Printer IP-adressen til standard output
 	return 0;
