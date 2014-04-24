@@ -63,8 +63,8 @@ void prepare_sht10_data(node_t *ret_temp, node_t *ret_humi)
 	m_node_t *temp_current = NULL;
 	m_node_t *humi_current = NULL;
 	uint16_t temp_num = 0, humi_num = 0;
-	double temp_sum = 0.0, humi_sum = 0.0, 
-		temp_max, temp_min, humi_max, humi_min, temp, humi;
+	double temp_sum = 0.0, humi_sum = 0.0, temp_max, temp_min, humi_max, humi_min, temp, humi;
+
 	char *temp_max_dt, *humi_max_dt, *temp_min_dt, *humi_min_dt;
 	node_t *new_temp = malloc(sizeof(node_t)), *new_humi = malloc(sizeof(node_t));
 	m_node_t *last_temp = malloc(sizeof(m_node_t)), *last_humi = malloc(sizeof(m_node_t));
@@ -158,13 +158,15 @@ void send_data(void)
 void wait_for_whole_min(tm *datetime) {
 	do {
 		get_current_time(datetime);
+		NutSleep(100);
 	} while (datetime->tm_sec == 0);
 }
 
-void wait_ten_sec(tm *datetime) {
+void wait_30_sec(tm *datetime) {
 	do {
 		get_current_time(datetime);
-	} while((datetime->tm_sec % 10) == 0);
+		NutSleep(100);
+	} while((datetime->tm_sec % 30) == 0);
 }
 
 void configure_debug(uint32_t baud)
@@ -179,22 +181,24 @@ int main(void)
 	uint32_t baud = 115200;
 	tm *datetime;
 
-	temp_list = malloc(sizeof(m_node_t));
+	temp_list = malloc(sizeof(m_node_t)); // Gjør klar lister for midlertidig lagring av målinger.
 	humi_list = malloc(sizeof(m_node_t));
 	pressure_list = malloc(sizeof(m_node_t));
 	wind_speed_list = malloc(sizeof(m_node_t));
 	wind_dir_list = malloc(sizeof(m_node_t));
 	
-	final_values = malloc(sizeof(node_t));
+	final_values = malloc(sizeof(node_t)); // Liste for lagring av ferdig utregnede verdier.
 
-	configure_debug(baud);
-	configure_network();
+	configure_debug(baud); // Setter output til serieutgang.
+	configure_network(); // Initialiserer ethernet.
 	
-	set_time_ntp();
+	set_time_ntp(); // Setter klokken.
+	adc_init(); // Initialiserer ADC.
+	bmp180_init(); // Initialiserer BMP180.
 
 	puts("Project Hessdalen weather station");
 	
-	wait_for_whole_min(datetime);
+	wait_for_whole_min(datetime); // Venter på helt minutt før vi begynner å måle.
 
 	for (;;) { //Hovedløkke.
 		read_sensors(datetime);
@@ -206,7 +210,7 @@ int main(void)
 				send_data();
 			}
 		}
-		wait_ten_sec(&datetime); //Gjør ny måling hvert tiende sekund.
+		wait_30_sec(&datetime); //Gjør ny måling hvert 30. sekund.
 	}
 	return 0;
 }

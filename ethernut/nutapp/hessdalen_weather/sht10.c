@@ -207,7 +207,7 @@ void extract_values(double *p_humidity, double *p_temperature)
 	rh_lin = C3*rh*rh + C2*rh + C1; //Relativ fuktighet.
 	rh_true = (t_C - 25)*(T1+T2*rh)+rh_lin; //Relavitv fuktighet kompansert med temperatur.
 
-	if(rh_true > 100) //Forsikrer at fuktigheten er innenfor fysiske mulige parametere.
+	if(rh_true > 100) //Forsikrer at fuktigheten er innenfor fysisk mulige parametere.
 		rh_true = 100;
 	if(rh_true < 0.1)
 		rh_true = 0.1;

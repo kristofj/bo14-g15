@@ -46,6 +46,9 @@ void send_data(void);
 //Venter på helt minutt.
 void wait_for_whole_min(tm *datetime);
 
+//Venter i 30 sekunder.
+void wait_30_sec(tm *datetime);
+
 //Registerer output på serieutgang, brukes ved debug.
 void configure_debug(uint32_t baud);
 

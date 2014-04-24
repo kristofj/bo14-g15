@@ -1,6 +1,7 @@
 #include "adc.h"
 
-enum {WSPEED, WDIR};
+enum { WSPEED, WDIR };
+enum { ADC0, ADC1 };
 
 void wind_data_read(double *speed, double *dir)
 {
