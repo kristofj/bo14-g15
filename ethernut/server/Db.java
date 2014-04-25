@@ -2,8 +2,8 @@ import java.sql.*;
 
 public class Db {
     static final String DB_URL = "jdbc:mysql://j3nsen.com/hessdalen_weather";
-    static final String USER = "xxxxxxxxxxxx";
-    static final String PASS = "xxxxxxxxxxxx";
+    static final String USER = "hessdalen";
+    static final String PASS = "hessdalen123";
     int key = 0;
 
     public Db(String sql) {
