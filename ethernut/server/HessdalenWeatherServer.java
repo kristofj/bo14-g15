@@ -10,8 +10,9 @@ public class HessdalenWeatherServer {
         System.out.println("Hessdalen Weather Station - Server");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
-            ServerSocket server = new ServerSocket(3000);
-            System.out.println("Server started at " + ((server.getInetAddress()).getLocalHost()).getHostAddress() + ":3000");
+            ServerSocket server = new ServerSocket(3123);
+            server.setSoTimeout(30000);
+            System.out.println("Server started at " + ((server.getInetAddress()).getLocalHost()).getHostAddress() + ":3123");
             while (true) {
                 System.out.println("Ready to receive data.");
                 Socket socket = server.accept();
@@ -20,10 +21,10 @@ public class HessdalenWeatherServer {
 
                 Date date = new Date();
                 System.out.println("Caught data at "+dateFormat.format(date)+".");
-                System.out.println(in.readLine());
+                String rec=in.readLine();
+                System.out.println(rec);
 
-
-                new DbManager(in.readLine());
+                new DbManager(rec);
 
                 out.print("Done");
                 in.close();
