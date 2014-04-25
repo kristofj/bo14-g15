@@ -8,10 +8,10 @@ void wind_data_read(double *speed, double *dir)
 	double voltage;
 
 	adc_read(&voltage, WSPEED);
-	*speed = (voltage * 50) / 2.5;
+	*speed = (voltage * 50) / 5;
 
 	adc_read(&voltage, WDIR);
-	*dir = (voltage * 360) / 2.5;
+	*dir = (voltage * 360) / 5;
 }
 
 void adc_init(void)

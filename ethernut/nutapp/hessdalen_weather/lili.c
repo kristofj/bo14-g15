@@ -19,7 +19,8 @@ void m_pop(m_node_t **head, m_node_t *popped)
 	}
 
 	next_node = (*head)->next;
-	popped = (*head);
+	popped = *head;
+	printf("HEAD: DT: %s, VAL: %lf\n", (*head)->datetime, (*head)->value);
 	*head = next_node;
 }
 

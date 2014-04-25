@@ -8,8 +8,10 @@ THREAD(Send_data_thread, arg)
 	uint16_t sent;
 	
 	puts("Sending data...");
-	printf("Data to be sent: %d\n", bytes);
-	
+
+	printf("Data to be sent: %s \n Bytes to be sent: %d\n", args->data, bytes);
+
+	/*
 	NutTcpSetSockOpt(sock, TCP_MAXSEG, &bytes, sizeof(bytes)); //Endrer maksimal segmentstørrelse for denne socketen.
 	
 	while (NutTcpConnect(sock, inet_addr(args->address), args->port)) {
@@ -29,6 +31,8 @@ THREAD(Send_data_thread, arg)
 	puts("Sending complete...");
 	
 	NutTcpCloseSocket(sock);
+	free(args);
+	*/
 	NutThreadExit();
 	for(;;);
 }
@@ -92,6 +96,8 @@ void get_json(char *json_root, char *json_string1, char *json_string2, char *jso
 
 int send_json(const char *data)
 {
+	printf("Data to send: %s \n", data);	
+
 	network_thread_args *arguments = (network_thread_args *)malloc(sizeof(network_thread_args));
 	arguments->data = data;
 	arguments->address = FREJA_IP;

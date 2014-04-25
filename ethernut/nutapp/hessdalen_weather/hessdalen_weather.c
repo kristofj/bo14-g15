@@ -1,12 +1,22 @@
 #include "hessdalen_weather.h"
 
+static m_node_t measured_temp[120];
+static m_node_t measured_humi[120];
+static m_node_t measured_pressure[120];
+static m_node_t measured_wspeed[120];
+static m_node_t measured_wdir[120];
+
+static node_t final_values[12];
+
+static int measure_num = 0;
+
 static m_node_t *temp_list;
 static m_node_t *humi_list;
 static m_node_t *pressure_list;
 static m_node_t *wind_speed_list;
 static m_node_t *wind_dir_list;
 
-static node_t *final_values;
+//static node_t *final_values;
 
 static tm *datetime;
 static uint8_t measured;
@@ -31,10 +41,12 @@ void read_sensors(void)
 	char dt[20];
 
 	sprintf(dt, "%d-%d-%d %d:%d:%d", (datetime->tm_year + 1900), (datetime->tm_mon + 1), datetime->tm_mday, datetime->tm_hour, datetime->tm_min, datetime->tm_sec);
-
+	
 	sht10_measure(&temp, &humi, &dew);
 	bmp180_read_data(&pressure);
 	wind_data_read(&wspeed, &wdirection);
+	
+	printf("Read sensors: Temp: %lf, Humi: %lf, Pressure: %ld, WSpeed: %lf, WDir: %lf\n", temp, humi, pressure, wspeed, wdirection);
 
 	sht10_temp = malloc(sizeof(m_node_t));
 	sht10_temp->datetime = dt;
@@ -56,11 +68,13 @@ void read_sensors(void)
 	wind_dir->datetime = dt;
 	wind_dir->value = wdirection;
 
-	m_push(temp_list, sht10_temp);
-	m_push(humi_list, sht10_humi);
-	m_push(pressure_list, bmp180_pressure);
-	m_push(wind_speed_list, wind_speed);
-	m_push(wind_dir_list, wind_dir);
+	measured_temp[measure_num] = *sht10_temp;
+	measured_humi[measure_num] = *sht10_humi;
+	measured_pressure[measure_num] = *bmp180_pressure;
+	measured_wspeed[measure_num] = *wind_speed;
+	measured_wdir[measure_num] = *wind_dir;
+
+	measure_num++;
 }
 
 void prepare_wind_data(values_t *ret_wind)
@@ -186,8 +200,7 @@ void prepare_bmp180_data(values_t *ret_pressure)
 
 void prepare_sht10_data(values_t *ret_temp, values_t *ret_humi)
 {
-	m_node_t *temp_current = NULL; 
-	m_node_t *humi_current = NULL;
+	m_node_t *temp_current = malloc(sizeof(m_node_t)), *humi_current = malloc(sizeof(m_node_t)); 
 	uint16_t temp_num = 0, humi_num = 0;
 	double temp_sum = 0.0, humi_sum = 0.0, temp_max, temp_min, humi_max, humi_min, temp, humi;
 
@@ -200,6 +213,7 @@ void prepare_sht10_data(values_t *ret_temp, values_t *ret_humi)
 
 	new_temp->value = "temp";
 	new_temp->now = last_temp->value;
+	printf("VALUE: %s, NOW: %lf\n", new_temp->value, new_temp->now);
 
 	new_humi->value = "humidity";
 	new_humi->now = last_humi->value;
@@ -209,6 +223,9 @@ void prepare_sht10_data(values_t *ret_temp, values_t *ret_humi)
 
 	m_pop(&temp_list, temp_current);
 	m_pop(&humi_list, humi_current);
+
+	if(temp_current == NULL)
+		puts("NULL TEMP_Current");
 
 	temp_max = temp_min = temp_current->value;
 	temp_max_dt = temp_min_dt = temp_current->datetime;
@@ -280,7 +297,8 @@ void prepare_data(void)
 	values_t *temp = NULL, *humi = NULL, *pressure = NULL, *wind = NULL;
 	node_t *final = malloc(sizeof(node_t));
 	final->datetime = malloc(sizeof(char) * 20);
-	
+	final->next = NULL;	
+
 	sprintf(final->datetime, "%d-%d-%d %d:%d:%d", (datetime->tm_year + 1900), (datetime->tm_mon + 1), datetime->tm_mday, datetime->tm_hour, datetime->tm_min, datetime->tm_sec);
 	
 	final->station_id = STATION_ID;
@@ -290,16 +308,20 @@ void prepare_data(void)
 	prepare_wind_data(wind);
 	
 	final->temp = temp;
+	printf("Prepared temp-data: value: %s, avg: %lf, now: %lf, max: %lf, time_max: %lf, min: %lf, time_min: %s\n", temp->value, temp->avg, temp->now, temp->max, temp->time_max, temp->min, temp->time_min);
+
 	final->humi = humi;
 	final->pressure = pressure;
 	final->wind = wind;
 
 	push(final_values, final);
+
+	puts("Prepare data");
 }
 
 void send_data(void)
 {
-	node_t *current = NULL;
+	node_t *current;
 	values_t *temp, *humi, *pressure, *wind;
 
 	char *json_root, *json_temp, *json_humi, *json_pressure, *json_wind, *json;
@@ -330,7 +352,9 @@ void send_data(void)
 		free(current);
 
 		pop(&final_values, current);
+
 	}
+	puts("send data");
 }
 
 void wait_for_whole_min(void) {
@@ -340,8 +364,9 @@ void wait_for_whole_min(void) {
 			break;
 
 		NutSleep(100);
-		restart_watchdog();
+		//restart_watchdog();
 	}
+	puts("Whole min");
 }
 
 void wait_30_sec(void) {
@@ -359,8 +384,9 @@ void wait_30_sec(void) {
 		if((datetime->tm_sec % 30) == 0)
 			break;
 		NutSleep(100);
-		restart_watchdog();
+		//restart_watchdog();
 	} 
+	puts("30 sec");
 }
 
 void configure_debug(uint32_t baud)
@@ -372,8 +398,11 @@ void configure_debug(uint32_t baud)
 
 int main(void)
 {
-	start_watchdog(5000); //Starter watchdog med nedtelling på 5 sec.
+	//start_watchdog(5000); //Starter watchdog med nedtelling på 5 sec.
 	uint32_t baud = 115200;
+	
+	int i;
+
 	datetime = malloc(sizeof(tm));
 
 	temp_list = malloc(sizeof(m_node_t)); // Gjør klar lister for midlertidig lagring av målinger.
@@ -382,7 +411,14 @@ int main(void)
 	wind_speed_list = malloc(sizeof(m_node_t));
 	wind_dir_list = malloc(sizeof(m_node_t));
 	
+	temp_list->next = NULL;
+	humi_list->next = NULL;
+	pressure_list->next = NULL;
+	wind_speed_list->next = NULL;
+	wind_dir_list->next = NULL;
+
 	final_values = malloc(sizeof(node_t)); // Liste for lagring av ferdig utregnede verdier.
+	final_values->next = NULL;
 
 	configure_debug(baud); // Setter output til serieutgang.
 	configure_network(); // Initialiserer ethernet.
@@ -393,24 +429,50 @@ int main(void)
 
 	puts("Project Hessdalen weather station");
 
-	wait_for_whole_min(); // Venter på helt minutt før vi begynner å måle.
+//	wait_for_whole_min(); // Venter på helt minutt før vi begynner å måle.
 
 	for (;;) { //Hovedløkke.
+		m_node_t *test = malloc(sizeof(m_node_t));
+		m_node_t *a = malloc(sizeof(m_node_t));
+		test->datetime = "Hei";
+		test->value = 20.2;
+		test->next = NULL;
+		m_push(temp_list, test);
+		
+		m_pop(&temp_list, a);
+		printf("Datetime: %s, Value: %lf \n", a->datetime, a->value);
+
+		for(;;);
+		
+		/*
+		for(i = 0; i < 5; i++) {
+			datetime= get_current_time();
+			read_sensors();
+			NutSleep(1000);
+		}
+		prepare_data();
+		NutSleep(5000);
+		*/
+		
+
+/*
 		read_sensors();
-		restart_watchdog();
+		//restart_watchdog();
 		measured = 1;
 
 		if(((datetime->tm_min % 5) == 0) && (datetime->tm_sec == 0)) { //Regner ut gjennomsnitt og max/min hvert 5. min.
 			prepare_data();
-			restart_watchdog();
+			//restart_watchdog();
 
 			if((datetime->tm_min == 0) && (datetime->tm_sec == 0)) { //Sender data hver hele time.
 				send_data();
-				restart_watchdog();
+				//restart_watchdog();
 			}
 		}
 		wait_30_sec(); //Gjør ny måling hvert 30. sekund.
+*/
 	}
 
 	return 0;
 }
+

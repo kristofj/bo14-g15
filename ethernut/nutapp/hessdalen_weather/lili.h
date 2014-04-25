@@ -8,8 +8,6 @@
 typedef struct m_node {
 	char *datetime;
 	double value;
-
-	struct m_node *next;
 } m_node_t;
 
 //Node for ferdig utregnede verdier klar til sending.
@@ -20,7 +18,6 @@ typedef struct node {
 	struct values *humi;
 	struct values *pressure;
 	struct values *wind;
-	struct node *next;
 } node_t;
 
 //Holder verdiene for en utregner periode.

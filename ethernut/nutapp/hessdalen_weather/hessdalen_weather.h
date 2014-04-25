@@ -51,12 +51,10 @@ void wait_for_whole_min(void);
 //Venter i 30 sekunder.
 void wait_30_sec(void);
 
-//Venter i 30 sekunder.
-void wait_30_sec(tm *datetime);
-
 //Registerer output på serieutgang, brukes ved debug.
 void configure_debug(uint32_t baud);
 
 int main(void);
 
 #endif
+
