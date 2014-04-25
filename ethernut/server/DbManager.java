@@ -26,7 +26,6 @@ public class DbManager {
     public static void makeMainEntry() {
         int stationId = json.getInt("stationId");
         String sql="INSERT INTO logId (datetime, stationId) VALUES ("+mainDatetime+","+stationId+")";
-        System.out.println(sql);
         Db mainEntry = new Db(sql);
         entryKey = mainEntry.getKey();
     }
@@ -39,7 +38,6 @@ public class DbManager {
         String timeMax = convD(temp.getString("timeMax"));
         String timeMin = convD(temp.getString("timeMin"));
         String sql="INSERT INTO temperature (`logId_id`, `temperatureAvg`, `temperatureNow`, `temperatureMax`, `timeMax`, `temperatureMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+", "+timeMax+", "+min+", "+timeMin+");";
-        System.out.println(sql);
         new Db(sql);
     }
     public static void makeHumidityEntry(){
@@ -51,7 +49,6 @@ public class DbManager {
         String timeMax = convD(humidity.getString("timeMax"));
         String timeMin = convD(humidity.getString("timeMin"));
         String sql="INSERT INTO humidity (`logId_id`, `humidityAvg`, `humidityNow`, `humidityMax`, `timeMax`, `humidityMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+", "+timeMax+", "+min+", "+timeMin+");";
-        System.out.println(sql);
         new Db(sql);
     }
     public static void makePressureEntry(){
@@ -63,7 +60,6 @@ public class DbManager {
         String timeMax = convD(pressure.getString("timeMax"));
         String timeMin = convD(pressure.getString("timeMin"));
         String sql="INSERT INTO pressure (`logId_id`, `pressureAvg`, `pressureNow`, `pressureMax`, `timeMax`, `pressureMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+", "+timeMax+", "+min+", "+timeMin+");";
-        System.out.println(sql);
         new Db(sql);
     }
     public static void makeWindEntry(){
@@ -76,7 +72,6 @@ public class DbManager {
         String timeMax = convD(wind.getString("timeMax"));
         String timeMin = convD(wind.getString("timeMin"));
         String sql="INSERT INTO wind (`logId_id`, `windspeedAvg`, `windspeedNow`, `windspeedMax`, `winddirectionMax`, `timeMax`, `windspeedMin`, `timeMin`) VALUES ("+entryKey+", "+avg+", "+now+", "+max+","+maxDir+", "+timeMax+", "+min+", "+timeMin+");";
-        System.out.println(sql);
         new Db(sql);
     }
 }
