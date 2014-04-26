@@ -1,25 +1,20 @@
 #include "hessdalen_weather.h"
 
-static m_node_t measured_temp[120];
-static m_node_t measured_humi[120];
-static m_node_t measured_pressure[120];
-static m_node_t measured_wspeed[120];
-static m_node_t measured_wdir[120];
+#define M_NODE_MAX	11
 
-static node_t final_values[12];
+static m_node_t temp_list[];
+static m_node_t humi_list[];
+static m_node_t pressure_list[];
+static m_node_t wind_speed_list[];
+static m_node_t wind_dir_list[];
 
-static int measure_num = 0;
-
-static m_node_t *temp_list;
-static m_node_t *humi_list;
-static m_node_t *pressure_list;
-static m_node_t *wind_speed_list;
-static m_node_t *wind_dir_list;
-
-//static node_t *final_values;
+static node_t final_values[];
 
 static tm *datetime;
 static uint8_t measured;
+
+static int m_node_index;
+static int node_t_index;
 
 void start_watchdog(uint32_t ms)
 {
@@ -37,7 +32,11 @@ void read_sensors(void)
 
 	double temp, humi, dew, wspeed, wdirection;
 	int32_t pressure;
-	m_node_t *sht10_temp, *sht10_humi, *bmp180_pressure, *wind_speed, *wind_dir;
+	m_node_t *sht10_temp = temp_list[m_node_index],
+		*sht10_humi = humi_list[m_node_index],
+		*bmp180_pressure = pressure_list[m_node_index],
+		*wind_speed = wind_speed_list[m_node_index],
+		*wind_dir = wind_dir_list[m_node_index];
 	char dt[20];
 
 	sprintf(dt, "%d-%d-%d %d:%d:%d", (datetime->tm_year + 1900), (datetime->tm_mon + 1), datetime->tm_mday, datetime->tm_hour, datetime->tm_min, datetime->tm_sec);
@@ -48,23 +47,18 @@ void read_sensors(void)
 	
 	printf("Read sensors: Temp: %lf, Humi: %lf, Pressure: %ld, WSpeed: %lf, WDir: %lf\n", temp, humi, pressure, wspeed, wdirection);
 
-	sht10_temp = malloc(sizeof(m_node_t));
 	sht10_temp->datetime = dt;
 	sht10_temp->value = temp;
 
-	sht10_humi = malloc(sizeof(m_node_t));
 	sht10_humi->datetime = dt;
 	sht10_humi->value = humi;
 
-	bmp180_pressure = malloc(sizeof(m_node_t));
 	bmp180_pressure->datetime = dt;
 	bmp180_pressure->value = (double) pressure;
 
-	wind_speed = malloc(sizeof(m_node_t));
 	wind_speed->datetime = dt;
 	wind_speed->value = wspeed;
 
-	wind_dir = malloc(sizeof(m_node_t));
 	wind_dir->datetime = dt;
 	wind_dir->value = wdirection;
 
@@ -321,7 +315,7 @@ void prepare_data(void)
 
 void send_data(void)
 {
-	node_t *current;
+	node_t *current = malloc(sizeof(node_t));
 	values_t *temp, *humi, *pressure, *wind;
 
 	char *json_root, *json_temp, *json_humi, *json_pressure, *json_wind, *json;
@@ -354,6 +348,8 @@ void send_data(void)
 		pop(&final_values, current);
 
 	}
+	free(current);
+
 	puts("send data");
 }
 
@@ -387,6 +383,18 @@ void wait_30_sec(void) {
 		//restart_watchdog();
 	} 
 	puts("30 sec");
+}
+
+void init_arrays(void) {
+	int i;
+
+	for(i = 0; i < M_NODE_MAX; i++) {
+		temp_list[i] = malloc(sizeof(m_node_t));
+		humi_list[i] = malloc(sizeof(m_node_t));
+		pressure_list[i] = malloc(sizeof(m_node_t));
+		wind_speed_list[i] = malloc(sizeof(m_node_t));
+		wind_dir_list[i] = malloc(sizeof(m_node_t));
+	}
 }
 
 void configure_debug(uint32_t baud)
@@ -429,33 +437,9 @@ int main(void)
 
 	puts("Project Hessdalen weather station");
 
-//	wait_for_whole_min(); // Venter på helt minutt før vi begynner å måle.
+	wait_for_whole_min(); // Venter på helt minutt før vi begynner å måle.
 
 	for (;;) { //Hovedløkke.
-		m_node_t *test = malloc(sizeof(m_node_t));
-		m_node_t *a = malloc(sizeof(m_node_t));
-		test->datetime = "Hei";
-		test->value = 20.2;
-		test->next = NULL;
-		m_push(temp_list, test);
-		
-		m_pop(&temp_list, a);
-		printf("Datetime: %s, Value: %lf \n", a->datetime, a->value);
-
-		for(;;);
-		
-		/*
-		for(i = 0; i < 5; i++) {
-			datetime= get_current_time();
-			read_sensors();
-			NutSleep(1000);
-		}
-		prepare_data();
-		NutSleep(5000);
-		*/
-		
-
-/*
 		read_sensors();
 		//restart_watchdog();
 		measured = 1;
@@ -470,7 +454,6 @@ int main(void)
 			}
 		}
 		wait_30_sec(); //Gjør ny måling hvert 30. sekund.
-*/
 	}
 
 	return 0;
