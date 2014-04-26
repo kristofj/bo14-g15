@@ -96,7 +96,7 @@ void get_json(char *json_root, char *json_string1, char *json_string2, char *jso
 
 int send_json(const char *data)
 {
-	printf("Data to send: %s \n", data);	
+	printf("Data to send:\n %s \n", data);	
 
 	network_thread_args *arguments = (network_thread_args *)malloc(sizeof(network_thread_args));
 	arguments->data = data;
