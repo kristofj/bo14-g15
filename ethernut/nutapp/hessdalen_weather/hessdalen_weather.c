@@ -28,12 +28,12 @@ void read_sensors(void)
 {
 	double temp, humi, dew, wspeed, wdirection;
 	int32_t pressure;
+	char dt[20];
 	measure_t *sht10_temp = &temp_list[measure_index],
 		*sht10_humi = &humi_list[measure_index],
 		*bmp180_pressure = &pressure_list[measure_index],
 		*wind_speed = &wind_speed_list[measure_index],
 		*wind_dir = &wind_dir_list[measure_index];
-	char dt[20];
 
 	sprintf(dt, "%d-%d-%d %d:%d:%d", (datetime->tm_year + 1900), (datetime->tm_mon + 1), datetime->tm_mday, datetime->tm_hour, datetime->tm_min, datetime->tm_sec);
 	
@@ -252,7 +252,7 @@ void prepare_data(void)
 		*pressure = malloc(sizeof(range_t)),
 		*wind = malloc(sizeof(range_t));
 	final_value_t *final = &final_values[final_value_index];
-	final->datetime = malloc(sizeof(char) * 20);
+	//final->datetime = malloc(sizeof(char) * 20);
 
 	sprintf(final->datetime, "%d-%d-%d %d:%d:%d", (datetime->tm_year + 1900), (datetime->tm_mon + 1), datetime->tm_mday, datetime->tm_hour, datetime->tm_min, datetime->tm_sec);
 	
@@ -404,7 +404,24 @@ int main(void)
 	configure_debug(baud); // Setter output til serieutgang.
 	configure_network(); // Initialiserer ethernet.
 
+	start_watchdog(2000);
+	puts("Starting watchdog test");
+	for(i = 0; i < 10; i++) {
+		if((i % 2) == 0) {
+			NutSleep(1000);
+		}
+		else {
+			NutSleep(3000);
+		}
+		restart_watchdog();
+		puts("Watchdog restarted");
+	}
+	
+
+/*TEST AV UTREGNING
+
 	set_time_ntp();
+	datetime = get_current_time();
 
 	measure_t *a = temp_list;
 	measure_t *b = humi_list;
@@ -432,10 +449,8 @@ int main(void)
 	NutSleep(1000);
 
 	send_data();
-	
-	for(;;);
-	
-/*
+*/	
+/* HOVEDPROGRAM
 	set_time_ntp(); // Setter klokken.
 	adc_init(); // Initialiserer ADC.
 	bmp180_init(); // Initialiserer BMP180.
@@ -461,6 +476,8 @@ int main(void)
 		wait_30_sec(); //Gjør ny måling hvert 30. sekund.
 	}
 */
+
+	for(;;);
 	return 0;
 }
 
