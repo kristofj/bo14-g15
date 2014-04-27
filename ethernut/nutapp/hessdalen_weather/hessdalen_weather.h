@@ -10,7 +10,6 @@
 #include <pro/dhcp.h>
 #include <dev/board.h>
 #include <netinet/tcp.h>
-#include <dev/watchdog.h>
 
 //Standard C-library headers
 #include <stdint.h>
@@ -18,6 +17,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <io.h>
+
+#include <avr/wdt.h>
 
 #include "network.h"
 #include "adc.h"
@@ -58,7 +59,7 @@ typedef struct range {
 } range_t;
 
 //Starter watchdog-telleren, resetter CPU hvis ikke den blir tilbakestilt med restart_watchdog.
-void start_watchdog(uint32_t ms);
+void start_watchdog(void);
 
 //Tilbakestiller watchdog-telleren.
 void restart_watchdog(void);
