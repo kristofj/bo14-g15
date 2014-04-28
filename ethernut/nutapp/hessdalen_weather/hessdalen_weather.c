@@ -28,7 +28,7 @@ void read_sensors(void)
 {
 	double temp, humi, dew, wspeed, wdirection;
 	int32_t pressure;
-	char *dt = malloc(sizeof(char)*20);
+	char dt[20];
 	measure_t *sht10_temp = &temp_list[measure_index],
 		*sht10_humi = &humi_list[measure_index],
 		*bmp180_pressure = &pressure_list[measure_index],
@@ -61,7 +61,6 @@ void read_sensors(void)
 	wind_dir->value = wdirection;
 
 	measure_index++;
-	printf("Measure index: %d\n", measure_index);
 }
 
 void prepare_wind_data(range_t *ret_wind)
@@ -284,9 +283,6 @@ void prepare_data(void)
 
 	final_value_index++;
 	measure_index = 0;
-
-	puts("Prepare data");
-	printf("Final_value_index: %d\n", final_value_index);
 }
 
 void send_data(void)
@@ -326,10 +322,20 @@ void send_data(void)
 	
 		send_json(json);
 
-		free(temp->
+		free(temp->time_max);
+		free(temp->time_min);
 		free(temp);
+
+		free(humi->time_max);
+		free(humi->time_min);
 		free(humi);
+
+		free(pressure->time_max);
+		free(pressure->time_min);
 		free(pressure);
+
+		free(wind->time_max);
+		free(wind->time_min);
 		free(wind);
 	}
 
@@ -341,8 +347,6 @@ void send_data(void)
 	free(json);
 
 	final_value_index = 0;
-
-	puts("send data");
 }
 
 void wait_for_whole_min(void) {
@@ -514,7 +518,7 @@ int main(void)
 
 		if(((datetime->tm_min % 5) == 0) && (datetime->tm_sec == 0)) { //Regner ut gjennomsnitt og max/min hvert 5. min.
 			prepare_data();
-			//restart_wat�chdog();
+			//restart_watchdog();
 
 			if((datetime->tm_min == 0) && (datetime->tm_sec == 0)) { //Sender data hver hele time.
 				send_data();
