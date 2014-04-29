@@ -87,7 +87,6 @@ void prepare_wind_data(range_t *ret_wind)
 		wspeed_num++;
 		
 		wspeed = wspeed_current->value;
-		wdir = wdir_current->value;
 
 		if(wspeed > wspeed_max) {
 			wspeed_max = wspeed;
@@ -114,11 +113,7 @@ void prepare_wind_data(range_t *ret_wind)
 		strcpy(ret_wind->time_max, wspeed_max_dt);
 		strcpy(ret_wind->time_min, wspeed_min_dt);
 		ret_wind->max_dir = wdir_max;
-		printf(">>>>>>>>>>>>>>WIND: avg: %lf, max: %lf, min: %lf\n", ret_wind->avg, ret_wind->max, ret_wind->min);
 	}
-
-	free(wspeed_max_dt);
-	free(wspeed_min_dt);
 }
 
 void prepare_bmp180_data(range_t *ret_pressure)
@@ -170,9 +165,6 @@ void prepare_bmp180_data(range_t *ret_pressure)
 		strcpy(ret_pressure->time_max, pressure_max_dt);
 		strcpy(ret_pressure->time_min, pressure_min_dt);
 	}
-
-	free(pressure_max_dt);
-	free(pressure_min_dt);
 }
 
 void prepare_sht10_data(range_t *ret_temp, range_t *ret_humi)
@@ -259,11 +251,6 @@ void prepare_sht10_data(range_t *ret_temp, range_t *ret_humi)
 		strcpy(ret_humi->time_max, humi_max_dt);
 		strcpy(ret_humi->time_min, humi_min_dt);
 	}
-
-	free(temp_max_dt);
-	free(temp_min_dt);
-	free(humi_max_dt);
-	free(humi_min_dt);
 }
 
 void prepare_data(void)
@@ -273,23 +260,6 @@ void prepare_data(void)
 		*pressure = malloc(sizeof(range_t)),
 		*wind = malloc(sizeof(range_t));
 	final_value_t *final = &final_values[final_value_index];
-	final->datetime = malloc(sizeof(char) * 20);
-
-	//temp->measure_class = malloc(10);
-	temp->time_max = malloc(20);
-	temp->time_min = malloc(20);
-
-	//humi->measure_class = malloc(10);
-	humi->time_max = malloc(20);
-	humi->time_min = malloc(20);
-	
-	//pressure->measure_class = malloc(10);
-	pressure->time_max = malloc(20);
-	pressure->time_min = malloc(20);
-
-	//wind->measure_class = malloc(10);
-	wind->time_max = malloc(20);
-	wind->time_min = malloc(20);
 
 	sprintf(final->datetime, "%d-%d-%d %d:%d:%d", (datetime->tm_year + 1900), (datetime->tm_mon + 1), datetime->tm_mday, datetime->tm_hour, datetime->tm_min, datetime->tm_sec);
 	
@@ -432,7 +402,7 @@ void init_arrays(void) {
 	}
 }
 
-void configure_pressure_numdebug(uint32_t baud)
+void configure_debug(uint32_t baud)
 {
 	NutRegisterDevice(&DEV_DEBUG, 0, 0);
 	freopen(DEV_DEBUG_NAME, "w", stdout);

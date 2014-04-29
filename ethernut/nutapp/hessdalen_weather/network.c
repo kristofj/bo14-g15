@@ -7,7 +7,8 @@ THREAD(Send_data_thread, arg)
 	network_thread_args *args  = (network_thread_args *) arg;
 	sock = NutTcpCreateSocket();
 	uint16_t bytes = strlen(args->data) + 1;
-	uint16_t sent;
+	uint16_t sent, got;
+	char buffer[32];
 	
 	puts("Sending data...");
 
@@ -29,6 +30,15 @@ THREAD(Send_data_thread, arg)
 	}
 	
 	printf("Sent %d bytes\n", sent);
+
+	if((got = NutTcpReceive(sock, buffer, sizeof(buffer))) {
+		puts("Error receiving data");
+		printf("Got %d bytes\n", got);
+	}
+	
+	if(strcmp(got, "Done") == 0) {
+		puts("Got done from server.");
+	}
 	
 	puts("Sending complete...");
 	
