@@ -45,19 +45,19 @@ void read_sensors(void)
 	
 	printf("Read sensors: Temp: %lf, Humi: %lf, Pressure: %ld, WSpeed: %lf, WDir: %lf\n", temp, humi, pressure, wspeed, wdirection);
 
-	sht10_temp->datetime = dt;
+	strcpy(sht10_temp->datetime, dt);
 	sht10_temp->value = temp;
 
-	sht10_humi->datetime = dt;
+	strcpy(sht10_humi->datetime, dt);
 	sht10_humi->value = humi;
 
-	bmp180_pressure->datetime = dt;
+	strcpy(bmp180_pressure->datetime, dt);
 	bmp180_pressure->value = (double) pressure;
 
-	wind_speed->datetime = dt;
+	strcpy(wind_speed->datetime, dt);
 	wind_speed->value = wspeed;
 
-	wind_dir->datetime = dt;
+	strcpy(wind_dir->datetime, dt);
 	wind_dir->value = wdirection;
 
 	measure_index++;
@@ -71,15 +71,16 @@ void prepare_wind_data(range_t *ret_wind)
 	double wspeed_sum = 0.0;
 	double wspeed_max, wspeed_min, wdir_max, wspeed, wdir;
 
-	char *wspeed_max_dt = malloc(sizeof(char)*20),
-		*wspeed_min_dt = malloc(sizeof(char)*20);
+	char wspeed_max_dt[20],
+		wspeed_min_dt[20];
 	measure_t *last_wind = &wind_speed_list[measure_index - 1];
 	
-	ret_wind->measure_class = "wind";
+	strcpy(ret_wind->measure_class, "wind");
 	ret_wind->now = last_wind->value;
 	
 	wspeed_max = wspeed_min = wspeed_current->value;
-	wspeed_max_dt = wspeed_min_dt = wspeed_current->datetime;
+	strcpy(wspeed_max_dt, wspeed_current->datetime);
+	strcpy(wspeed_min_dt, wspeed_current->datetime);
 	wdir_max = wdir_current->value;
 
 	for(i = 0; i < measure_index; i++, wspeed_current++, wdir_current++) {
@@ -90,12 +91,12 @@ void prepare_wind_data(range_t *ret_wind)
 
 		if(wspeed > wspeed_max) {
 			wspeed_max = wspeed;
-			wspeed_max_dt = wspeed_current->datetime;
+			strcpy(wspeed_max_dt, wspeed_current->datetime);
 			wdir_max = wdir_current->value;
 		}
 		if(wspeed < wspeed_min) {
 			wspeed_min = wspeed;
-			wspeed_min_dt = wspeed_current->datetime;
+			strcpy(wspeed_min_dt, wspeed_current->datetime);
 		}
 		wspeed_sum += wspeed;
 	}
@@ -110,10 +111,14 @@ void prepare_wind_data(range_t *ret_wind)
 		ret_wind->avg = ((double) wspeed_sum) / ((double) wspeed_num);
 		ret_wind->max = wspeed_max;
 		ret_wind->min = wspeed_min;
-		ret_wind->time_max = wspeed_max_dt;
-		ret_wind->time_min = wspeed_min_dt;
+		strcpy(ret_wind->time_max, wspeed_max_dt);
+		strcpy(ret_wind->time_min, wspeed_min_dt);
 		ret_wind->max_dir = wdir_max;
+		printf(">>>>>>>>>>>>>>WIND: avg: %lf, max: %lf, min: %lf\n", ret_wind->avg, ret_wind->max, ret_wind->min);
 	}
+
+	free(wspeed_max_dt);
+	free(wspeed_min_dt);
 }
 
 void prepare_bmp180_data(range_t *ret_pressure)
@@ -124,15 +129,16 @@ void prepare_bmp180_data(range_t *ret_pressure)
 	int32_t pressure_sum = 0;
 	int32_t pressure_max, pressure_min, pressure;
 
-	char *pressure_max_dt = malloc(sizeof(char) * 20),
-		*pressure_min_dt = malloc(sizeof(char) * 20);
+	char pressure_max_dt[20],
+		pressure_min_dt[20];
 	measure_t *last_pressure = &pressure_list[measure_index - 1];
 	
-	ret_pressure->measure_class = "pressure";
+	strcpy(ret_pressure->measure_class, "pressure");
 	ret_pressure->now = last_pressure->value;
 	
 	pressure_max = pressure_min = pressure_current->value;
-	pressure_max_dt = pressure_min_dt = pressure_current->datetime;
+	strcpy(pressure_max_dt, pressure_current->datetime);
+	strcpy(pressure_min_dt, pressure_current->datetime);
 
 	for(i = 0; i < measure_index; i++, pressure_current++) {
 		pressure_num++;
@@ -141,11 +147,11 @@ void prepare_bmp180_data(range_t *ret_pressure)
 
 		if(pressure > pressure_max) {
 			pressure_max = pressure;
-			pressure_max_dt = pressure_current->datetime;
+			strcpy(pressure_max_dt, pressure_current->datetime);
 		}
 		if(pressure < pressure_min) {
 			pressure_min = pressure;
-			pressure_min_dt = pressure_current->datetime;
+			strcpy(pressure_min_dt, pressure_current->datetime);
 		}
 
 		pressure_sum += pressure;
@@ -161,9 +167,12 @@ void prepare_bmp180_data(range_t *ret_pressure)
 		ret_pressure->avg = ((double) pressure_sum) / ((double) pressure_num);
 		ret_pressure->max = pressure_max;
 		ret_pressure->min = pressure_min;
-		ret_pressure->time_max = pressure_max_dt;
-		ret_pressure->time_min = pressure_min_dt;
+		strcpy(ret_pressure->time_max, pressure_max_dt);
+		strcpy(ret_pressure->time_min, pressure_min_dt);
 	}
+
+	free(pressure_max_dt);
+	free(pressure_min_dt);
 }
 
 void prepare_sht10_data(range_t *ret_temp, range_t *ret_humi)
@@ -173,27 +182,29 @@ void prepare_sht10_data(range_t *ret_temp, range_t *ret_humi)
 	uint16_t temp_num = 0, humi_num = 0;
 	double temp_sum = 0.0, humi_sum = 0.0, temp_max, temp_min, humi_max, humi_min, temp, humi;
 
-	char *temp_max_dt = malloc(sizeof(char) * 20),
-		*humi_max_dt = malloc(sizeof(char) * 20),
-		*temp_min_dt = malloc(sizeof(char) * 20),
-		*humi_min_dt = malloc(sizeof(char) * 20);
+	char temp_max_dt[20],
+		humi_max_dt[20],
+		temp_min_dt[20],
+		humi_min_dt[20];
 
 	measure_t *last_temp = NULL, *last_humi = NULL;
 	
 	last_temp = &temp_list[measure_index - 1];
 	last_humi = &humi_list[measure_index - 1];
-
-	ret_temp->measure_class = "temp";
+	
+	strcpy(ret_temp->measure_class, "temp");
 	ret_temp->now = last_temp->value;
 
-	ret_humi->measure_class = "humidity";
+	strcpy(ret_humi->measure_class, "humidity");
 	ret_humi->now = last_humi->value;
 
 	temp_max = temp_min = temp_current->value;
-	temp_max_dt = temp_min_dt = temp_current->datetime;
+	strcpy(temp_max_dt, temp_current->datetime);
+	strcpy(temp_min_dt, temp_current->datetime);
 
 	humi_max = humi_min = humi_current->value;
-	humi_max_dt = humi_min_dt = humi_current->datetime;
+	strcpy(humi_max_dt, humi_current->datetime);
+	strcpy(humi_min_dt, humi_current->datetime);
 
 	for(i = 0; i < measure_index; i++, temp_current++, humi_current++) {
 		temp_num++;
@@ -204,19 +215,19 @@ void prepare_sht10_data(range_t *ret_temp, range_t *ret_humi)
 
 		if(temp > temp_max) {
 			temp_max = temp;
-			temp_max_dt = temp_current->datetime;
+			strcpy(temp_max_dt, temp_current->datetime);
 		}
 		if(temp < temp_min) {
 			temp_min = temp;
-			temp_min_dt = temp_current->datetime;
+			strcpy(temp_min_dt, temp_current->datetime);
 		}
 		if(humi > humi_max) {
 			humi_max = humi;
-			humi_max_dt = humi_current->datetime;
+			strcpy(humi_max_dt, humi_current->datetime);
 		}
 		if(humi < humi_min) {
 			humi_min = humi;
-			humi_min_dt = humi_current->datetime;
+			strcpy(humi_min_dt, humi_current->datetime);
 		}
 
 		temp_sum += temp;
@@ -237,17 +248,22 @@ void prepare_sht10_data(range_t *ret_temp, range_t *ret_humi)
 		ret_temp->avg = ((double) temp_sum) / ((double) temp_num);
 		ret_temp->max = temp_max;
 		ret_temp->min = temp_min;
-		ret_temp->time_max = temp_max_dt;
-		ret_temp->time_min = temp_min_dt;
+		strcpy(ret_temp->time_max, temp_max_dt);
+		strcpy(ret_temp->time_min, temp_min_dt);
 	}
 
 	if(humi_num > 0) {
 		ret_humi->avg = ((double) humi_sum) / ((double) humi_num);
 		ret_humi->max = humi_max;
 		ret_humi->min = humi_min;
-		ret_humi->time_max = humi_max_dt;
-		ret_humi->time_min = humi_min_dt;
+		strcpy(ret_humi->time_max, humi_max_dt);
+		strcpy(ret_humi->time_min, humi_min_dt);
 	}
+
+	free(temp_max_dt);
+	free(temp_min_dt);
+	free(humi_max_dt);
+	free(humi_min_dt);
 }
 
 void prepare_data(void)
@@ -258,6 +274,22 @@ void prepare_data(void)
 		*wind = malloc(sizeof(range_t));
 	final_value_t *final = &final_values[final_value_index];
 	final->datetime = malloc(sizeof(char) * 20);
+
+	//temp->measure_class = malloc(10);
+	temp->time_max = malloc(20);
+	temp->time_min = malloc(20);
+
+	//humi->measure_class = malloc(10);
+	humi->time_max = malloc(20);
+	humi->time_min = malloc(20);
+	
+	//pressure->measure_class = malloc(10);
+	pressure->time_max = malloc(20);
+	pressure->time_min = malloc(20);
+
+	//wind->measure_class = malloc(10);
+	wind->time_max = malloc(20);
+	wind->time_min = malloc(20);
 
 	sprintf(final->datetime, "%d-%d-%d %d:%d:%d", (datetime->tm_year + 1900), (datetime->tm_mon + 1), datetime->tm_mday, datetime->tm_hour, datetime->tm_min, datetime->tm_sec);
 	
@@ -274,6 +306,7 @@ void prepare_data(void)
 	printf("HUMI: class: %s, avg: %lf, now: %lf, max: %lf, time_max: %s, min: %lf, time_min: %s\n", humi->measure_class, humi->avg, humi->now, humi->max, humi->time_max, humi->min, humi->time_min);
 	printf("PRESSURE: class: %s, avg: %lf, now: %lf, max: %lf, time_max: %s, min: %lf, time_min: %s\n", pressure->measure_class, pressure->avg, pressure->now, pressure->max, pressure->time_max, pressure->min, pressure->time_min);
 	printf("WIND: class: %s, avg: %lf, now: %lf, max: %lf, time_max: %s, min: %lf, time_min: %s, max_dir: %lf\n", wind->measure_class, wind->avg, wind->now, wind->max, wind->time_max, wind->min, wind->time_min, wind->max_dir);
+	printf("AVAILABLE MEMORY: %d bytes\n", NutHeapAvailable());
 	puts("---------------- PREPARED DATA -----------------");
 
 	final->temp = temp;
@@ -322,20 +355,12 @@ void send_data(void)
 	
 		send_json(json);
 
-		free(temp->time_max);
-		free(temp->time_min);
 		free(temp);
 
-		free(humi->time_max);
-		free(humi->time_min);
 		free(humi);
 
-		free(pressure->time_max);
-		free(pressure->time_min);
 		free(pressure);
 
-		free(wind->time_max);
-		free(wind->time_min);
 		free(wind);
 	}
 
@@ -382,7 +407,7 @@ void wait_30_sec(void) {
 }
 
 void init_arrays(void) {
-	int i;
+	uint8_t i;
 	measure_t *p = temp_list,
 		*q = humi_list,
 		*r = pressure_list,
@@ -392,9 +417,13 @@ void init_arrays(void) {
 
 	for(i = 0; i < MEASURE_ARR_MAX; i++, p++, q++, r++, s++, t++) {
 		p = malloc(sizeof(measure_t));
+
 		q = malloc(sizeof(measure_t));
+
 		r = malloc(sizeof(measure_t));
+
 		s = malloc(sizeof(measure_t));
+
 		t = malloc(sizeof(measure_t));
 	}
 
@@ -403,7 +432,7 @@ void init_arrays(void) {
 	}
 }
 
-void configure_debug(uint32_t baud)
+void configure_pressure_numdebug(uint32_t baud)
 {
 	NutRegisterDevice(&DEV_DEBUG, 0, 0);
 	freopen(DEV_DEBUG_NAME, "w", stdout);
@@ -490,8 +519,9 @@ int main(void)
 		if((i % 11) == 0) { //Regner ut gjennomsnitt og max/min hvert 5. min.
 			prepare_data();
 			//restart_watchdog();
-
+			//send_data();
 			if(i == 132) { //Sender data hver hele time.
+				puts("I == 132");
 				send_data();
 				i = 1;
 				//restart_watchdog();
@@ -500,6 +530,8 @@ int main(void)
 		printf("i: %u\n", i);
 		//wait_30_sec(); //Gjør ny måling hvert 30. sekund.
 	}
+
+	puts("Out of ze loop :/");
 
 // HOVEDPROGRAM
 /*

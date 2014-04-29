@@ -1,9 +1,11 @@
 #include "network.h"
 
+TCPSOCKET *sock;
+
 THREAD(Send_data_thread, arg)
 {
 	network_thread_args *args  = (network_thread_args *) arg;
-	TCPSOCKET *sock = NutTcpCreateSocket();
+	sock = NutTcpCreateSocket();
 	uint16_t bytes = strlen(args->data) + 1;
 	uint16_t sent;
 	
@@ -31,8 +33,8 @@ THREAD(Send_data_thread, arg)
 	puts("Sending complete...");
 	
 	NutTcpCloseSocket(sock);
-	free(args);
 	*/
+	free(args);
 	NutThreadExit();
 	for(;;);
 }
@@ -96,15 +98,35 @@ void get_json(char *json_root, char *json_string1, char *json_string2, char *jso
 
 int send_json(const char *data)
 {
-	printf("Data to send:\n %s \n", data);	
+	sock = NutTcpCreateSocket();
+	uint16_t sent, bytes = strlen(data) + 1;
+	
+	puts("Sending data...");
 
-	network_thread_args *arguments = (network_thread_args *)malloc(sizeof(network_thread_args));
-	arguments->data = data;
-	arguments->address = FREJA_IP;
-	arguments->port = FREJA_PORT;
+	printf("Data to be sent: %s \n Bytes to be sent: %d\n", data, bytes);
+
+	/*
+	NutTcpSetSockOpt(sock, TCP_MAXSEG, &bytes, sizeof(bytes)); //Endrer maksimal segmentstørrelse for denne socketen.
 	
-	NutThreadCreate("send_data_thread", Send_data_thread, arguments, 1024); //Størrelse på stacken må evt. justeres fra 1024 hvis tråden blir endret
+	while (NutTcpConnect(sock, inet_addr(args->address), args->port)) {
+		puts("Could not connect to server, retrying in 10 seconds...");
+		NutSleep(10000);
+	}
 	
+	if ((sent = NutTcpSend(sock, args->data, bytes)) != bytes) {
+		puts("Error sending data, exiting thread...");
+		printf("Sent %d bytes\n", sent);
+		NutTcpCloseSocket(sock);
+		NutThreadExit();
+	}
+	
+	printf("Sent %d bytes\n", sent);
+	
+	puts("Sending complete...");
+	
+	NutTcpCloseSocket(sock);
+	*/
+
 	return 0;
 }
 

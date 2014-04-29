@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <sys/confnet.h>
 #include <sys/thread.h>
+#include <sys/heap.h>
 
 #include <arpa/inet.h>
 #include <pro/dhcp.h>
@@ -34,12 +35,12 @@
 #define FINAL_ARR_MAX	12
 
 typedef struct measure {
-	char *datetime;
+	char datetime[20];
 	double value;
 } measure_t;
 
 typedef struct final_value {
-	char *datetime;
+	char datetime[20];
 	uint8_t station_id;
 	struct range *temp;
 	struct range *humi;
@@ -48,13 +49,13 @@ typedef struct final_value {
 } final_value_t;
 
 typedef struct range {
-	char *measure_class;
+	char measure_class[10];
 	double avg;
 	double now;
 	double max;
-	char *time_max;
+	char time_max[20];
 	double min;
-	char *time_min;
+	char time_min[20];
 	double max_dir;
 } range_t;
 
