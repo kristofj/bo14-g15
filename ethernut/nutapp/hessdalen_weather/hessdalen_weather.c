@@ -415,6 +415,8 @@ int main(void)
 	uint32_t baud = 115200;
 	uint8_t i;
 
+	double speed = 0.0, dir = 0.0;
+
 	measure_index = 0;
 	final_value_index = 0;
 	datetime = malloc(sizeof(tm));
@@ -423,6 +425,18 @@ int main(void)
 
 	configure_debug(baud); // Setter output til serieutgang.
 	configure_network(); // Initialiserer ethernet.
+	
+//ADC diff-test
+/*
+	adc_init();
+
+	for(;;) {
+		wind_data_read(&speed, &dir);
+
+		printf("Dir: %lf \n", dir);
+		NutSleep(1000);
+	}
+*/
 /*
 	start_watchdog();
 	puts("Starting watchdog test");
@@ -440,7 +454,7 @@ int main(void)
 */
 
 //TEST AV UTREGNING
-/*
+
 	set_time_ntp();
 	datetime = get_current_time();
 
@@ -450,18 +464,18 @@ int main(void)
 	measure_t *d = wind_speed_list;
 	measure_t *e = wind_dir_list;
 
-	char *string = "DATETIME";
+	char string[20] = "DATETIME";
 
 	for(i = 0; i < MEASURE_ARR_MAX; i++, a++, b++, c++, d++, e++) {
-		a->datetime = string;
+		strcpy(a->datetime, string);
 		a->value = 12.12;
-		b->datetime = string;
+		strcpy(b->datetime, string);
 		b->value = 12.12;
-		c->datetime = string;
+		strcpy(c->datetime, string);
 		c->value = 12.12;
-		d->datetime = string;
+		strcpy(d->datetime, string);
 		d->value = 12.12;
-		e->datetime = string;
+		strcpy(e->datetime, string);
 		e->value = 12.12;
 		measure_index++;
 	}
@@ -470,9 +484,9 @@ int main(void)
 	NutSleep(1000);
 
 	send_data();
-*/
-//Test
 
+//Test
+/*
 	set_time_ntp(); // Setter klokken.
 	adc_init(); // Initialiserer ADC.
 	bmp180_init(); // Initialiserer BMP180.
@@ -502,7 +516,7 @@ int main(void)
 	}
 
 	puts("Out of ze loop :/");
-
+*/
 // HOVEDPROGRAM
 /*
 	set_time_ntp(); // Setter klokken.

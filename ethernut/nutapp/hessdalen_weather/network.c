@@ -109,34 +109,45 @@ void get_json(char *json_root, char *json_string1, char *json_string2, char *jso
 int send_json(const char *data)
 {
 	sock = NutTcpCreateSocket();
-	uint16_t sent, bytes = strlen(data) + 1;
+	uint16_t sent, got, bytes = strlen(data) + 1;
+	char buffer[32];
 	
 	puts("Sending data...");
 
 	printf("Data to be sent: %s \n Bytes to be sent: %d\n", data, bytes);
-
-	/*
+/*
 	NutTcpSetSockOpt(sock, TCP_MAXSEG, &bytes, sizeof(bytes)); //Endrer maksimal segmentstørrelse for denne socketen.
 	
-	while (NutTcpConnect(sock, inet_addr(args->address), args->port)) {
-		puts("Could not connect to server, retrying in 10 seconds...");
-		NutSleep(10000);
+	while (NutTcpConnect(sock, inet_addr(FREJA_IP), FREJA_PORT)) {
+		puts("Could not connect to server, retrying...");
+		NutSleep(100);
 	}
 	
-	if ((sent = NutTcpSend(sock, args->data, bytes)) != bytes) {
+	if ((sent = NutTcpSend(sock, data, bytes)) != bytes) {
 		puts("Error sending data, exiting thread...");
 		printf("Sent %d bytes\n", sent);
-		NutTcpCloseSocket(sock);
-		NutThreadExit();
+		return 1;
 	}
 	
 	printf("Sent %d bytes\n", sent);
 	
+	if((got = NutTcpReceive(sock, buffer, sizeof(buffer)))) {
+		puts("Error receiving data");
+		printf("Got %d bytes\n", got);
+		return 1;
+	}
+	
+	if(strcmp(buffer, "Done") == 0) {
+		puts("Got done from server.");
+	}
+	else {
+		puts("Didn't get done from server.");
+	}
+
 	puts("Sending complete...");
 	
 	NutTcpCloseSocket(sock);
-	*/
-
+*/
 	return 0;
 }
 
@@ -158,3 +169,4 @@ int configure_network(void)
 	printf("I'm at %s.\n", inet_ntoa(confnet.cdn_ip_addr)); //Printer IP-adressen til standard output
 	return 0;
 }
+

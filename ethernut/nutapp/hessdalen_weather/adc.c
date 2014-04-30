@@ -7,7 +7,7 @@ void lm35_temp_read(double *temp)
 	double voltage;
 
 	adc_read_single(&voltage);
-	*temp = (voltage - 0.5) * 100; // Er ikke garantert riktig.
+	*temp = (voltage - 0.5) * 100; // Er ikke garantert riktig. Må undersøkes mer.
 }
 
 void wind_data_read(double *speed, double *dir)
@@ -25,13 +25,13 @@ void adc_init(void)
 {
 	ADMUX = (1 << REFS0); //Setter Vref til AVCC = 5V.
 	ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); //Skrur på ADC og setter ADC-klokkehastighet til 115.2kHz. Må være mellom 50-200kHz for 10-bits konvertering.
-	MCUCSR |= (1 << JTD); // Skrur av JTAG for å bruke ADC-bits 4-7.
-	MCUCSR |= (1 << JTD); // Må repeteres innenfor to cycles for å endre verdien, ifølge datablad.
+	//MCUCSR |= (1 << JTD); // Skrur av JTAG for å bruke ADC-bits 4-7.
+	//MCUCSR |= (1 << JTD); // Må repeteres innenfor to cycles for å endre verdien, ifølge datablad.
 }
 
 void adc_set_channel(uint8_t mode)
 {
-	switch(channel) {
+	switch(mode) {
 		case WSPEED:
 			ADMUX = (1 << REFS0) | (1 << MUX4); //Positiv inngang på ADC0, negativ på ADC1.
 			break;
@@ -45,8 +45,21 @@ void adc_set_channel(uint8_t mode)
 
 void adc_read_single(double *data)
 {
+	uint16_t raw;
+	uint8_t msb, lsb;
+
 	ADMUX = (1 << REFS0) | (1 << MUX2); //Setter inngang til ADC4.
 	
+	ADCSRA |= (1 << ADSC);
+
+	while (ADCSRA & (1 << ADSC));
+
+	lsb = ADCL;
+	msb = ADCH;
+
+	raw = (msb << 8) | (lsb);
+
+	*data = ((double) raw * 5) / 1023;
 }
 
 void adc_read_diff(double *data, uint8_t mode)
@@ -65,8 +78,8 @@ void adc_read_diff(double *data, uint8_t mode)
 
 	raw = (msb << 8) | (lsb);
 	
-	printf("ADC Value: %d\n". raw);
+	printf("ADC Value: %d\n", raw);
 
-	*data = ((double)raw * 5) / 1023; //Gjør om til spenning.
+	*data = ((double)raw * 5) / 512; //Gjør om til spenning.
 }
 
