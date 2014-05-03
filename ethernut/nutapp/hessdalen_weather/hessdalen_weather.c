@@ -326,11 +326,8 @@ void send_data(void)
 		send_json(json);
 
 		free(temp);
-
 		free(humi);
-
 		free(pressure);
-
 		free(wind);
 	}
 
@@ -351,7 +348,7 @@ void wait_for_whole_min(void) {
 			break;
 
 		NutSleep(100);
-		//restart_watchdog();
+		restart_watchdog();
 	}
 	puts("Whole min");
 }
@@ -371,7 +368,7 @@ void wait_30_sec(void) {
 		if((datetime->tm_sec % 30) == 0)
 			break;
 		NutSleep(100);
-		//restart_watchdog();
+		restart_watchdog();
 	} 
 	puts("30 sec");
 }
@@ -454,7 +451,7 @@ int main(void)
 */
 
 //TEST AV UTREGNING
-
+/*
 	set_time_ntp();
 	datetime = get_current_time();
 
@@ -484,9 +481,9 @@ int main(void)
 	NutSleep(1000);
 
 	send_data();
-
+*/
 //Test
-/*
+
 	set_time_ntp(); // Setter klokken.
 	adc_init(); // Initialiserer ADC.
 	bmp180_init(); // Initialiserer BMP180.
@@ -516,7 +513,7 @@ int main(void)
 	}
 
 	puts("Out of ze loop :/");
-*/
+
 // HOVEDPROGRAM
 /*
 	set_time_ntp(); // Setter klokken.
