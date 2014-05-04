@@ -40,6 +40,7 @@ void read_sensors(void)
 	printf("Read sensors: current time: %s\n", dt);
 
 	sht10_measure(&temp, &humi, &dew);
+	pressure = 1;
 	bmp180_read_data(&pressure);
 	wind_data_read(&wspeed, &wdirection);
 	
@@ -294,12 +295,12 @@ void send_data(void)
 	final_value_t *current = final_values;
 	range_t *temp = NULL, *humi = NULL, *pressure = NULL, *wind = NULL;
 
-	char *json_root = malloc(sizeof(char) * JSON_MAX_ROOT_LENGTH),
-		*json_temp = malloc(sizeof(char) * JSON_MAX_STRING_LENGTH),
-		*json_humi = malloc(sizeof(char) * JSON_MAX_STRING_LENGTH),
-		*json_pressure = malloc(sizeof(char) * JSON_MAX_STRING_LENGTH),
-		*json_wind = malloc(sizeof(char) * JSON_MAX_WSTRING_LENGTH),
-		*json = malloc(sizeof(char) * JSON_MAX_LENGTH);
+	char *json_root = NULL,
+		*json_temp = NULL,
+		*json_humi = NULL,
+		*json_pressure = NULL,
+		*json_wind = NULL,
+		*json = NULL;
 
 	for(i = 0; i < final_value_index; i++, current++) {
 		temp = current->temp;
@@ -307,6 +308,13 @@ void send_data(void)
 		pressure = current->pressure;
 		wind = current->wind;
 		
+		json_root = malloc(sizeof(char) * JSON_MAX_ROOT_LENGTH);
+		json_temp = malloc(sizeof(char) * JSON_MAX_STRING_LENGTH);
+		json_humi = malloc(sizeof(char) * JSON_MAX_STRING_LENGTH);
+		json_pressure = malloc(sizeof(char) * JSON_MAX_STRING_LENGTH);
+		json_wind = malloc(sizeof(char) * JSON_MAX_WSTRING_LENGTH);
+		json = malloc(sizeof(char) * JSON_MAX_LENGTH);
+
 		puts("-------------- JSON STRINGS -------------");
 		get_json_string_root(current->datetime, current->station_id, json_root);
 		printf("Root string: %s\n", json_root);
@@ -329,14 +337,14 @@ void send_data(void)
 		free(humi);
 		free(pressure);
 		free(wind);
-	}
 
-	free(json_root);
-	free(json_temp);
-	free(json_humi);
-	free(json_pressure);
-	free(json_wind);
-	free(json);
+		free(json_root);
+		free(json_temp);
+		free(json_humi);
+		free(json_pressure);
+		free(json_wind);
+		free(json);
+	}
 
 	final_value_index = 0;
 }
@@ -384,13 +392,9 @@ void init_arrays(void) {
 
 	for(i = 0; i < MEASURE_ARR_MAX; i++, p++, q++, r++, s++, t++) {
 		p = malloc(sizeof(measure_t));
-
 		q = malloc(sizeof(measure_t));
-
 		r = malloc(sizeof(measure_t));
-
 		s = malloc(sizeof(measure_t));
-
 		t = malloc(sizeof(measure_t));
 	}
 
@@ -501,12 +505,15 @@ int main(void)
 			prepare_data();
 			//restart_watchdog();
 			//send_data();
+			send_data();
+/*			
 			if(i == 132) { //Sender data hver hele time.
 				puts("I == 132");
 				send_data();
 				i = 1;
 				//restart_watchdog();
 			}
+*/
 		}
 		printf("i: %u\n", i);
 		//wait_30_sec(); //Gjør ny måling hvert 30. sekund.

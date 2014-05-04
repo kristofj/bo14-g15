@@ -4,7 +4,7 @@ TCPSOCKET *sock;
 
 THREAD(Send_data_thread, arg)
 {
-	network_thread_args *args  = (network_thread_args *) arg;
+	network_thread_args_t *args  = (network_thread_args_t *) arg;
 	sock = NutTcpCreateSocket();
 	uint16_t bytes = strlen(args->data) + 1;
 	uint16_t sent, got;
@@ -14,8 +14,7 @@ THREAD(Send_data_thread, arg)
 
 	printf("Data to be sent: %s \n Bytes to be sent: %d\n", args->data, bytes);
 
-	/*
-	NutTcpSetSockOpt(sock, TCP_MAXSEG, &bytes, sizeof(bytes)); //Endrer maksimal segmentstørrelse for denne socketen.
+	NutTcpSetSockOpt(sock, TCP_MAXSEG, &bytes, sizeof(bytes) + 32); //Endrer maksimal segmentstørrelse for denne socketen.
 	
 	while (NutTcpConnect(sock, inet_addr(args->address), args->port)) {
 		puts("Could not connect to server, retrying in 10 seconds...");
@@ -31,19 +30,19 @@ THREAD(Send_data_thread, arg)
 	
 	printf("Sent %d bytes\n", sent);
 
-	if((got = NutTcpReceive(sock, buffer, sizeof(buffer))) {
+	if((got = NutTcpReceive(sock, buffer, sizeof(buffer)))) {
 		puts("Error receiving data");
 		printf("Got %d bytes\n", got);
 	}
 	
-	if(strcmp(got, "Done") == 0) {
+	if(strcmp(buffer, "Done") == 0) {
 		puts("Got done from server.");
 	}
 	
 	puts("Sending complete...");
 	
 	NutTcpCloseSocket(sock);
-	*/
+	
 	free(args);
 	NutThreadExit();
 	for(;;);
@@ -78,44 +77,61 @@ tm *get_current_time(void)
 
 void get_json_string_root(const char *date_time, uint8_t station_id, char *string)
 {
+	char temp[JSON_MAX_ROOT_LENGTH];
 	const char json_string[] = "{\"mainDatetime\":\"%s\",\"stationId\":%d,";
 
-	sprintf(string, json_string, date_time, station_id);
+	sprintf(temp, json_string, date_time, station_id);
+	strcpy(string, temp);
 }
 
 void get_json_string(const char *value, double avg, double now, double max, const char *time_max, double min, const char *time_min, char *string)
 {
+	char temp[JSON_MAX_STRING_LENGTH];
 	const char json_string[] = "\"%s\":{\"avg\":%lf,\"now\":%lf,\"max\":%lf,\"timeMax\":\"%s\",\"min\":%lf,\"timeMin\":\"%s\"},";
 
-	sprintf(string, json_string, value, avg, now, max, time_max, min, time_min);
+	sprintf(temp, json_string, value, avg, now, max, time_max, min, time_min);
+	strcpy(string, temp);
 }
 
 void get_json_wstring(double avg, double now, double max, const char *time_max, double max_dir, double min, const char *time_min, char *string)
 {
+	char temp[JSON_MAX_WSTRING_LENGTH];
 	const char json_string_wind[] = "\"wind\":{\"avg\":%lf,\"now\":%lf,\"max\":%lf,\"timeMax\":\"%s\",\"maxDir\":%lf,\"min\":%lf,\"timeMin\":\"%s\"}}";
 
-	sprintf(string, json_string_wind, avg, now, max, time_max, max_dir, min, time_min);
+	sprintf(temp, json_string_wind, avg, now, max, time_max, max_dir, min, time_min);
+	strcpy(string, temp);
 }
 
 void get_json(char *json_root, char *json_string1, char *json_string2, char *json_string3, char *json_wstring, char *string)
 {
-	strncat(string, json_root, JSON_MAX_ROOT_LENGTH);
-	strncat(string, json_string1, JSON_MAX_STRING_LENGTH);
-	strncat(string, json_string2, JSON_MAX_STRING_LENGTH);
-	strncat(string, json_string3, JSON_MAX_STRING_LENGTH);
-	strncat(string, json_wstring, JSON_MAX_WSTRING_LENGTH);
+	char temp[JSON_MAX_LENGTH];
+
+	strcat(temp, json_root);
+	strcat(temp, json_string1);
+	strcat(temp, json_string2);
+	strcat(temp, json_string3);
+	strcat(temp, json_wstring);
+	
+	string = temp;
 }
 
-int send_json(const char *data)
+int send_json(char *data)
 {
 	sock = NutTcpCreateSocket();
-	uint16_t sent, got, bytes = strlen(data) + 1;
+	uint16_t sent, got;
+	char testy[20] = "hello";
 	char buffer[32];
-	
+	char json_string[JSON_MAX_LENGTH];
+	uint16_t bytes;
+
+	strcpy(json_string, data);
+
+	bytes = strlen(json_string) + 1;
+
 	puts("Sending data...");
 
-	printf("Data to be sent: %s \n Bytes to be sent: %d\n", data, bytes);
-/*
+	printf("Data to be sent: %s \n Bytes to be sent: %d\n", json_string, bytes);
+
 	NutTcpSetSockOpt(sock, TCP_MAXSEG, &bytes, sizeof(bytes)); //Endrer maksimal segmentstørrelse for denne socketen.
 	
 	while (NutTcpConnect(sock, inet_addr(FREJA_IP), FREJA_PORT)) {
@@ -123,17 +139,19 @@ int send_json(const char *data)
 		NutSleep(100);
 	}
 	
-	if ((sent = NutTcpSend(sock, data, bytes)) != bytes) {
+	if ((sent = NutTcpSend(sock, json_string, bytes)) != bytes) {
 		puts("Error sending data, exiting thread...");
 		printf("Sent %d bytes\n", sent);
+		NutTcpCloseSocket(sock);
 		return 1;
 	}
 	
 	printf("Sent %d bytes\n", sent);
-	
+	/*
 	if((got = NutTcpReceive(sock, buffer, sizeof(buffer)))) {
 		puts("Error receiving data");
 		printf("Got %d bytes\n", got);
+		NutTcpCloseSocket(sock);
 		return 1;
 	}
 	
@@ -145,16 +163,16 @@ int send_json(const char *data)
 	}
 
 	puts("Sending complete...");
-	
+	*/
 	NutTcpCloseSocket(sock);
-*/
+
 	return 0;
 }
 
 int configure_network(void)
 {
-	uint8_t mac[6] = MAC_ETHERNUT1;
-	//uint8_t mac[6] = MAC_ETHERNUT2;
+	//uint8_t mac[6] = MAC_ETHERNUT1;
+	uint8_t mac[6] = MAC_ETHERNUT2;
 	
 	//Registrerer ethernet-kontroller
 	if (NutRegisterDevice(&DEV_ETHER, 0, 0)) {
