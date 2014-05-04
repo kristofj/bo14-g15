@@ -25,20 +25,21 @@ public class Db {
             conn.close();
             System.out.println("Executed: " + sql);
         } catch (SQLException se) {
-
+            System.out.println(se.toString());
         } catch (Exception e) {
-
+            System.out.println(e.toString());
         } finally {
             try {
                 if (stmt != null)
                     stmt.close();
             } catch (SQLException se2) {
+                System.out.println(se2.toString());
             }
             try {
                 if (conn != null)
                     conn.close();
             } catch (SQLException se) {
-
+                System.out.println(se.toString());
             }
         }
     }

@@ -37,7 +37,7 @@ public class HessdalenWeatherServer {
                 } catch (SocketTimeoutException s) {
                     System.out.println("Socket timed out!");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println(e.toString());
                 } finally {
                     in.close();
                 }
