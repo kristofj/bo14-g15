@@ -27,9 +27,9 @@
 #include "sht10.h"
 
 #define ETHERNUT_1	1;
-#define ETHERNUT_2	2;
+//#define ETHERNUT_2	2;
 
-#define STATION_ID	ETHERNUT_1 //Endres avhengig av ethernut.
+#define STATION_ID	ETHERNUT_2 //Endres avhengig av ethernut.
 
 #define MEASURE_ARR_MAX	11
 #define FINAL_ARR_MAX	12

@@ -4,6 +4,7 @@
 #include <pro/dhcp.h>
 #include <pro/sntp.h>
 #include <net/route.h>
+#include <sys/thread.h>
 #include "hessdalen_weather.h"
 
 //Definisjoner på strenglengder for JSON-strenger.
@@ -12,22 +13,19 @@
 #define JSON_MAX_WSTRING_LENGTH		170
 #define JSON_MAX_LENGTH			700
 
+#define DATETIME_STRING_LENGTH		20
+
 //MAC addresse for denne enheten
 #define MAC_ETHERNUT1 { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xC2 }
 #define MAC_ETHERNUT2 { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xE2 }
 
-#define FREJA_IP	"158.39.160.212"
+#define FREJA_IP	"172.16.0.5"
 //#define FREJA_IP	"158.39.165.8"
 #define FREJA_PORT	3123
 
 typedef struct network_thread_args{
-	char data[JSON_MAX_LENGTH];
-	char address[16];
-	uint16_t port;
+	char *data;
 } network_thread_args_t;
-
-//Tråd for å sende data til en server med TCP
-THREAD(Send_data_thread, arg);
 
 //Setter klokken.
 void set_time_ntp(void);
@@ -89,8 +87,14 @@ void get_json_wstring(double avg, double now, double max, const char *time_max, 
 //Samler sammen delene av JSON-strengen. Returnerer den i *string.
 void get_json(char *json_root, char *json_string1, char *json_string2, char *json_string3, char *json_wstring, char *string);
 
+void get_json_array_root(char *json_root, char *string);
+
+void get_json_array_ele(char * json_ele, char *string);
+
+void get_json_array_end(char *json_end, char *string);
+
 //Sender av gårde gitt data.
-int send_json(char *data);
+void send_json(char *data);
 
 //Konfigurerer netverkskontrolleren til ethernut, setter IP med DHCP.
 int configure_network(void);
