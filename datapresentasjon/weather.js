@@ -64,7 +64,14 @@ function fillForms(jsonResponse) {
     maxCalendarDate = new Date(ss[0], ss[1] - 1, ss[2], ts[0], ts[1]);
     toDate = new Date(maxCalendarDate.getTime());
     fromDate = new Date(maxCalendarDate.getTime());
-    fromDate.setDate(fromDate.getDate() - 7);
+
+    var diff = Math.floor(( Date.parse(maxCalendarDate) - Date.parse(minCalendarDate) ) / 86400000);
+    if (diff > 7){
+        fromDate.setDate(fromDate.getDate() - 7);
+    }
+    else{
+        fromDate.setDate(fromDate.getDate() - diff-1);
+    }
 
     $("#from").datepicker({ minDate: minCalendarDate, maxDate: maxCalendarDate });
     $("#from").datepicker("option", "dateFormat", "dd/mm/yy");
