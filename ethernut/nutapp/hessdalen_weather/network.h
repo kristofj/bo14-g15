@@ -13,6 +13,8 @@
 #define JSON_MAX_WSTRING_LENGTH		170
 #define JSON_MAX_LENGTH			700
 
+#define DATETIME_STRING_LENGTH		20
+
 //MAC addresse for denne enheten
 #define MAC_ETHERNUT1 { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xC2 }
 #define MAC_ETHERNUT2 { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xE2 }
@@ -92,7 +94,7 @@ void get_json_array_ele(char * json_ele, char *string);
 void get_json_array_end(char *json_end, char *string);
 
 //Sender av gårde gitt data.
-int send_json(char *data);
+void send_json(char *data);
 
 //Konfigurerer netverkskontrolleren til ethernut, setter IP med DHCP.
 int configure_network(void);

@@ -27,7 +27,7 @@
 #include "sht10.h"
 
 #define ETHERNUT_1	1;
-#define ETHERNUT_2	2;
+//#define ETHERNUT_2	2;
 
 #define STATION_ID	ETHERNUT_2 //Endres avhengig av ethernut.
 
