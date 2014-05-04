@@ -49,8 +49,6 @@ void adc_read(double *data, uint8_t mode)
 
 	raw = (msb << 8) | (lsb);
 	
-	printf("ADC Value: %d\n", raw);
-
 	*data = ((double)raw * 5) /  1023; //Gjør om til spenning.
 }
 
