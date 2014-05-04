@@ -10,7 +10,8 @@ if ($_GET["type"] == "getRange") {
         'maxdate' => $row[1]
     );
 } else {
-    $interval = (new DateTime($_GET["from"]))->diff((new DateTime($_GET["to"])));
+    $intervalDate=new DateTime($_GET["from"]);
+    $interval = ($intervalDate->diff((new DateTime($_GET["to"]))));
     $interval = intval($interval->format('%R%a'));
 
     if ($_GET["hoursOverride"] == "true") {
