@@ -111,10 +111,10 @@ public class DbManager implements Runnable {
     }
 
     public static boolean calculateData() {
-
-        for (int i = 0; i < json.size() - 1; i++) {
+        System.out.println(json.size());
+        for (int i = 0; i < json.size(); i++) {
             try {
-                JSONObject j = json.getJSONObject(json.size() - 1);
+                JSONObject j = json.getJSONObject(i);
                 JSONObject temp = j.getJSONObject("temp");
                 JSONObject humidity = j.getJSONObject("humidity");
                 JSONObject pressure = j.getJSONObject("pressure");
@@ -150,6 +150,7 @@ public class DbManager implements Runnable {
                     maxWindDirection = wind.getDouble("maxDir");
                 } else {
                     avgTemp += temp.getDouble("avg");
+                    System.out.println(avgTemp);
                     avgHumidity += humidity.getDouble("avg");
                     avgPressure += pressure.getDouble("avg");
                     avgWindSpeed += wind.getDouble("avg");
@@ -186,21 +187,21 @@ public class DbManager implements Runnable {
                         minWindSpeed = wind.getDouble("min");
                         minWindTime = wind.getString("timeMin");
                     }
+                    nowTemp = temp.getDouble("now");
+                    nowHumidity = humidity.getDouble("now");
+                    nowPressure = pressure.getDouble("now");
+                    nowWindSpeed = wind.getDouble("now");
                 }
-                avgTemp = avgTemp / json.size() - 1;
-                avgHumidity = avgHumidity / json.size() - 1;
-                avgPressure = avgPressure / json.size() - 1;
-                avgWindSpeed = avgWindSpeed / json.size() - 1;
-                nowTemp = temp.getDouble("now");
-                nowHumidity = humidity.getDouble("now");
-                nowPressure = pressure.getDouble("now");
-                nowWindSpeed = wind.getDouble("now");
             }
             catch (JSONException e){
                 System.out.println(e.toString());
                 return false;
             }
         }
+        avgTemp = avgTemp / json.size();
+        avgHumidity = avgHumidity / json.size();
+        avgPressure = avgPressure / json.size();
+        avgWindSpeed = avgWindSpeed / json.size();
         return true;
     }
 
