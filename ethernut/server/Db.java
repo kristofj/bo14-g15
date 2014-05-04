@@ -25,9 +25,9 @@ public class Db {
             conn.close();
             System.out.println("Executed: " + sql);
         } catch (SQLException se) {
-            se.printStackTrace();
+
         } catch (Exception e) {
-            e.printStackTrace();
+
         } finally {
             try {
                 if (stmt != null)
@@ -38,12 +38,43 @@ public class Db {
                 if (conn != null)
                     conn.close();
             } catch (SQLException se) {
-                se.printStackTrace();
+
             }
         }
     }
 
     public int getKey() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         return key;
     }
 }

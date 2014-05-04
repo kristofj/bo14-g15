@@ -32,8 +32,8 @@ public class HessdalenWeatherServer {
                     Date datedata = new Date();
                     System.out.println("Caught data at " + dateFormat.format(datedata) + ".");
                     System.out.println(rec);
-		    DbManager dbManager = new DbManager(rec, socket, out); //Lager ny tråd som håndterer data.
-		    new Thread(dbManager).run();
+                    DbManager dbManager = new DbManager(rec, socket, out); //Lager ny tråd som håndterer data.
+                    new Thread(dbManager).run();
                 } catch (SocketTimeoutException s) {
                     System.out.println("Socket timed out!");
                 } catch (IOException e) {
@@ -44,7 +44,7 @@ public class HessdalenWeatherServer {
 
             }
         } catch (Exception err) {
-            System.err.println("* err" + err);
+
         }
     }
 }
