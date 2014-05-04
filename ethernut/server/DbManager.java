@@ -1,21 +1,35 @@
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
+import java.lang.Runnable;
+import java.io.*;
 
-public class DbManager {
+public class DbManager implements Runnable {
     static int entryKey;
     static String mainDatetime;
     static JSONObject json;
     static String jsonString;
+    private Socket sock;
+    private PrintStream out;
 
-    public DbManager(String json){
+    public DbManager(String json, Socket sock, PrintStream out){
         jsonString=json;
+	this.sock = sock;
+	this.out = out;
+    }
+
+    public void run() {
         jsonParse();
         makeMainEntry();
         makeTempEntry();
         makeHumidityEntry();
         makePressureEntry();
         makeWindEntry();
+
+        out.print("Done");
+        out.close();
+        sock.close();
     }
+
     public static void jsonParse(){
         json = (JSONObject) JSONSerializer.toJSON(jsonString);
         mainDatetime = convD(json.getString("mainDatetime"));

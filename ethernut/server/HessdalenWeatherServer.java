@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.lang.Thread;
 
 public class HessdalenWeatherServer {
 
@@ -31,16 +32,14 @@ public class HessdalenWeatherServer {
                     Date datedata = new Date();
                     System.out.println("Caught data at " + dateFormat.format(datedata) + ".");
                     System.out.println(rec);
-                    new DbManager(rec);
-                    out.print("Done");
+		    DbManager dbManager = new DbManager(rec, socket, out); //Lager ny tråd som håndterer data.
+		    new Thread(dbManager).run();
                 } catch (SocketTimeoutException s) {
                     System.out.println("Socket timed out!");
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
                     in.close();
-                    out.close();
-                    socket.close();
                 }
 
             }
