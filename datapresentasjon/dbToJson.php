@@ -56,7 +56,10 @@ if ($_GET["type"] == "getRange") {
             $limiter = '';
         }
     }
-    $sql='SELECT * FROM logId LEFT JOIN ' . $_GET["type"] . ' ON logId.id=' . $_GET["type"] . '.logId_id WHERE ' . $limiter . ' datetime <= "' . $_GET["to"] . '" AND datetime >= "' . $_GET["from"] . '";';
+    $datatype=mysql_real_escape_string($_GET["type"]);
+    $toDate=mysql_real_escape_string($_GET["to"]);
+    $fromDate=mysql_real_escape_string($_GET["from"]);
+    $sql='SELECT * FROM logId LEFT JOIN ' . $datatype . ' ON logId.id=' . $datatype . '.logId_id WHERE ' . $limiter . ' datetime <= "' . $toDate . '" AND datetime >= "' . $fromDate . '";';
 
     $data = mysql_query($sql)
     or die(mysql_error());
