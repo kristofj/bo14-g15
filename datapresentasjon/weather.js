@@ -283,7 +283,7 @@ function populateArrays(jsonResponse) {
         divedent=2.25;
     }
     else if (radioSelected == "wind") {
-        typeData = "Vindhastighet (Meter per sekund";
+        typeData = "Vindhastighet (Meter per sekund)";
         mTypeData = " m/s";
     }
     else {
@@ -406,18 +406,42 @@ function fillChart() {
             windDirMax1 = "<br/>" + tabEntry + tabEntry + "Retning: " + dirMax1[i];
             windDirMax2 = "<br/>" + tabEntry + tabEntry + "Retning: " + dirMax2[i];
         }
-        var tooltip1="<br/>" + tabEntry + "<b>Gjennomsnitt:</b> " + valAvg1[i] +
-            mTypeData + "<br/>" + tabEntry + "<b>Maks:</b> " + valMax1[i] + mTypeData + " kl " + timeMax1[i] +
-            windDirMax1 + "<br/>" + tabEntry + "<b>Minimum:</b> " + valMin1[i] + mTypeData + " kl " + timeMin1[i];
+        var errorMsg="Ingen data";
+        if(valAvg1[i]==null || valMax1[i]==null || valMin1[i]==null){
+            var Avg1=errorMsg;
+            var Max1=errorMsg;
+            var Min1=errorMsg;
+        }
+        else{
+            var Avg1=valAvg1[i] + mTypeData;
+            var Max1=valMax1[i] + mTypeData + " kl " + timeMax1[i] + windDirMax1;
+            var Min1=valMin1[i] + mTypeData + " kl " + timeMin1[i];
+        }
 
-        var tooltip2="<br/>" + tabEntry + "<b>Gjennomsnitt:</b> " + valAvg2[i] +
-            mTypeData + "<br/>" + tabEntry + "<b>Maks:</b> " + valMax2[i] + mTypeData + " kl " + timeMax2[i] +
-            windDirMax2 + "<br/>" + tabEntry + "<b>Minimum:</b> " + valMin2[i] + mTypeData + " kl " + timeMin2[i];
+        if(valAvg2[i]==null || valMax2[i]==null || valMin2[i]==null){
+            var Avg2=errorMsg;
+            var Max2=errorMsg;
+            var Min2=errorMsg;
+        }
+        else{
+            var Avg2=valAvg2[i] + mTypeData;
+            var Max2=valMax2[i] + mTypeData + " kl " + timeMax2[i] + windDirMax2;
+            var Min2=valMin2[i] + mTypeData + " kl " + timeMin2[i];
+        }
+
+        var tooltip1="<br/>" + tabEntry + "<b>Gjennomsnitt:</b> " + Avg1 + "<br/>" + tabEntry + "<b>Maks:</b> " +Max1+ "<br/>" + tabEntry + "<b>Minimum:</b> " + Min1;
+        var tooltip2="<br/>" + tabEntry + "<b>Gjennomsnitt:</b> " + Avg2 + "<br/>" + tabEntry + "<b>Maks:</b> " +Max2+ "<br/>" + tabEntry + "<b>Minimum:</b> " + Min2;
 
         if (isData1 ==true && isData2==true){
             var tooltipDif="<br/>" + tabEntry + "<b>Gjennomsnitt: </b><i>" + (valAvg1[i] - valAvg2[i]) + mTypeData + "</i><br/>" + tabEntry + "<b>Maks: </b><i>" + (valMax1[i] - valMax2[i]) + mTypeData + "</i><br/>"
                 + tabEntry + "<b>Min: </b><i>" + (valMin1[i] - valMin2[i]) + mTypeData + "</i>";
-            data.addRow([time[i], parseFloat(valAvg1[i]),tooltip1, parseFloat(valAvg2[i]),tooltip2,0, tooltipDif]);
+            if(isData1==true){
+                data.addRow([time[i], parseFloat(valAvg1[i]),tooltip1, parseFloat(valAvg2[i]),tooltip2,parseFloat(valAvg1[i]), tooltipDif]);
+            }
+            else{
+                data.addRow([time[i], parseFloat(valAvg1[i]),tooltip1, parseFloat(valAvg2[i]),tooltip2,parseFloat(valAvg2[i]), tooltipDif]);
+            }
+
         }
         else{
             data.addRow([time[i], parseFloat(valAvg1[i]),tooltip1, parseFloat(valAvg2[i]),tooltip2]);
