@@ -268,20 +268,22 @@ function makeTable() {
 }
 
 function populateArrays(jsonResponse) {
+    var divedent=1;
     if (radioSelected == "temperature") {
-        typeData = "Temperatur";
-        mTypeData = "&deg;";
+        typeData = "Temperatur (Celsius)";
+        mTypeData = "&deg;C";
     }
     else if (radioSelected == "humidity") {
-        typeData = "Luftfuktighet";
+        typeData = "Luftfuktighet (Prosent)";
         mTypeData = "&#37;";
     }
     else if (radioSelected == "pressure") {
-        typeData = "Lufttrykk";
+        typeData = "Lufttrykk (Hektopascal)";
         mTypeData = " hPa";
+        divedent=2.25;
     }
     else if (radioSelected == "wind") {
-        typeData = "Vindhastighet";
+        typeData = "Vindhastighet (Meter per sekund";
         mTypeData = " m/s";
     }
     else {
@@ -303,9 +305,9 @@ function populateArrays(jsonResponse) {
             else {
                 var index = findIndex;
             }
-            valAvg1[index] = (item.valueAvg);
-            valMin1[index] = (item.valueMin);
-            valMax1[index] = (item.valueMax);
+            valAvg1[index] = parseFloat((item.valueAvg/divedent).toFixed(1)).toString();
+            valMin1[index] = parseFloat((item.valueMin/divedent).toFixed(1)).toString();
+            valMax1[index] = parseFloat((item.valueMax/divedent).toFixed(1)).toString();
             if (radioSelected == "wind") {
                 dirMax1[index] = (item.dirMax);
             }
@@ -322,6 +324,7 @@ function populateArrays(jsonResponse) {
             var ts = fs[1].split(":");
             var d = new Date(ss[0], ss[1], ss[2], ts[0], ts[1]);
             timeMax1[index] = (getDateFixed(d, "hour") + ':' + getDateFixed(d, "minute"));
+            isData1=true;
         }
         else {
             var fs = item.time.split(" ");
@@ -340,9 +343,9 @@ function populateArrays(jsonResponse) {
                 var index = findIndex;
             }
 
-            valAvg2[index] = (item.valueAvg);
-            valMin2[index] = (item.valueMin);
-            valMax2[index] = (item.valueMax);
+            valAvg2[index] = parseFloat((item.valueAvg/divedent).toFixed(1)).toString();
+            valMin2[index] = parseFloat((item.valueMin/divedent).toFixed(1)).toString();
+            valMax2[index] = parseFloat((item.valueMax/divedent).toFixed(1)).toString();
             if (radioSelected == "wind") {
                 dirMax2[index] = (item.dirMax);
             }
@@ -359,6 +362,7 @@ function populateArrays(jsonResponse) {
             var ts = fs[1].split(":");
             var d = new Date(ss[0], ss[1], ss[2], ts[0], ts[1]);
             timeMax2[index] = (getDateFixed(d, "hour") + ':' + getDateFixed(d, "minute"));
+            isData2=true;
         }
     });
 }
@@ -390,8 +394,10 @@ function fillChart() {
     data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
     data.addColumn('number', 'Stasjon 2');
     data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
-    data.addColumn('number', 'Differanse');
-    data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
+    if (isData1 ==true && isData2==true){
+        data.addColumn('number', 'Differanse');
+        data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
+    }
 
     for (i = 0; i < time.length; i++) {
         var windDirMax1 = "";
@@ -408,11 +414,14 @@ function fillChart() {
             mTypeData + "<br/>" + tabEntry + "<b>Maks:</b> " + valMax2[i] + mTypeData + " kl " + timeMax2[i] +
             windDirMax2 + "<br/>" + tabEntry + "<b>Minimum:</b> " + valMin2[i] + mTypeData + " kl " + timeMin2[i];
 
-        var tooltipDif="<br/>" + tabEntry + "<b>Gjennomsnitt: </b><i>" + (valAvg1[i] - valAvg2[i]) + mTypeData + "</i><br/>" + tabEntry + "<b>Maks: </b><i>" + (valMax1[i] - valMax2[i]) + mTypeData + "</i><br/>"
-            + tabEntry + "<b>Min: </b><i>" + (valMin1[i] - valMin2[i]) + mTypeData + "</i>";
-
-        data.addRow([time[i], parseFloat(valAvg1[i]),tooltip1, parseFloat(valAvg2[i]),tooltip2,0, tooltipDif]);
-
+        if (isData1 ==true && isData2==true){
+            var tooltipDif="<br/>" + tabEntry + "<b>Gjennomsnitt: </b><i>" + (valAvg1[i] - valAvg2[i]) + mTypeData + "</i><br/>" + tabEntry + "<b>Maks: </b><i>" + (valMax1[i] - valMax2[i]) + mTypeData + "</i><br/>"
+                + tabEntry + "<b>Min: </b><i>" + (valMin1[i] - valMin2[i]) + mTypeData + "</i>";
+            data.addRow([time[i], parseFloat(valAvg1[i]),tooltip1, parseFloat(valAvg2[i]),tooltip2,0, tooltipDif]);
+        }
+        else{
+            data.addRow([time[i], parseFloat(valAvg1[i]),tooltip1, parseFloat(valAvg2[i]),tooltip2]);
+        }
     }
 
 
@@ -420,6 +429,12 @@ function fillChart() {
         title: typeData,
         curveType: 'function',
         legend: { position: 'bottom'},
+        backgroundColor: '#E8F6FA',
+        'chartArea': {
+            'backgroundColor': {
+                'fill': 'white'
+            }
+        },
         hAxis: {showTextEvery: 1},
         focusTarget: 'category',
         series: {2: {lineWidth: 1, color: 'transparent', areaOpacity: 0.0, visibleInLegend: false}},
@@ -486,6 +501,7 @@ var timeMin1 = [];
 var valMax1 = [];
 var timeMax1 = [];
 var dirMax1 = [];
+var isData1=false;
 
 var valAvg2 = [];
 var valMin2 = [];
@@ -493,7 +509,7 @@ var timeMin2 = [];
 var valMax2 = [];
 var timeMax2 = [];
 var dirMax2 = [];
-
+var isData2=false;
 
 //variabler fra kalendere
 var minCalendarDate;

@@ -1,3 +1,6 @@
+body{
+    background-color: #E8F6FA;
+}
 table {
     border-collapse: collapse;
 }
@@ -11,7 +14,7 @@ td, th {
     padding: 10px;
 }
 #upperWrapper{
-
+    background-color: #E8F6FA;
 }
 #chart_div {
     width: 900px;
@@ -19,6 +22,7 @@ td, th {
     margin-right:-40px;
     height: 500px;
     float: left;
+    background-color: #E8F6FA;
 }
 #description {
     width: 250px;
@@ -31,6 +35,7 @@ td, th {
 #lowerWrapper{
     clear:both;
     padding-left:50px;
+    background-color: #E8F6FA;
 }
 #typeData, #buttons, #dateAndHours, #stationPick{
     padding:10px;
@@ -43,4 +48,5 @@ td, th {
 }
 #main{
     margin-left:200px;
+    background-color: #E8F6FA;
 }

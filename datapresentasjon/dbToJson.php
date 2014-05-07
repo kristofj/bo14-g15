@@ -1,6 +1,6 @@
 <?php
-mysql_connect("j3nsen.com", "hessdalen", "hessdalen123") or die(mysql_error());
-mysql_select_db("hessdalen_weather") or die(mysql_error());
+mysql_connect("xxx", "xxx", "xxx") or die(mysql_error());
+mysql_select_db("xxx") or die(mysql_error());
 if ($_GET["type"] == "getRange") {
     $data = mysql_query('SELECT min(datetime) AS mindate, max(datetime) as maxdate FROM logId;')
     or die(mysql_error());
