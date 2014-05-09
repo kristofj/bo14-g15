@@ -38,9 +38,10 @@ function getDateFixed(date, type) {
         return date.getDate();
     }
     else if (type == "month") {
-        if (date.getMonth() < 10)
-            return "0" + date.getMonth();
-        return date.getMonth();
+        var month=date.getMonth()+1;
+        if (month < 10)
+            return "0" + month;
+        return month;
     }
     //egentlig redundant
     else if (type == "year") {
@@ -83,6 +84,9 @@ function fillForms(jsonResponse) {
     $("#from").datepicker("option", "dateFormat", "dd/mm/yy");
     $("#from").datepicker("setDate", fromDate);
 
+    //workaround for rar bug med freja
+    fromDate = $("#from").datepicker('getDate');
+
     $("#to").datepicker({ minDate: fromDate, maxDate: maxCalendarDate });
     $("#to").datepicker("option", "dateFormat", "dd/mm/yy");
     $("#to").datepicker("setDate", maxCalendarDate);
@@ -99,7 +103,7 @@ function changedDates() {
     var hours12form = $("#hours12");
     var hours18form = $("#hours18");
     var hoursStandardForm = $("#hoursStandard");
-    if (diff >= 10) {
+    if (diff >= 30) {
         if (hours00form.is(":checkbox")) {
             hours00form.replaceWith('<input name="hours" type="radio" id="' + hours00form.attr('id') + '" />');
             hours06form.replaceWith('<input name="hours" type="radio" id="' + hours06form.attr('id') + '" />');
@@ -217,14 +221,14 @@ function genChart() {
 //laget for å unngå å endre kallargumenter på flere steder
 function weatherFetch(type) {
     if(type=="graph"){
-        document.getElementById("graphButton").style.backgroundColor = "#4c6e4a";
+        document.getElementById("graphButton").style.backgroundColor = "#648762";
         document.getElementById("tableButton").style.backgroundColor = "#78a576";
         document.getElementById("graphButton").style.borderStyle = "inset";
         document.getElementById("tableButton").style.borderStyle = "outset";
     }
     else{
         document.getElementById("graphButton").style.backgroundColor = "#78a576";
-        document.getElementById("tableButton").style.backgroundColor = "#4c6e4a";
+        document.getElementById("tableButton").style.backgroundColor = "#648762";
         document.getElementById("tableButton").style.borderStyle = "inset";
         document.getElementById("graphButton").style.borderStyle = "outset";
     }
