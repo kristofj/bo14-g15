@@ -8,29 +8,23 @@ THREAD(DataThread, arg)
 
 	sock = NutTcpCreateSocket();
 	uint16_t bytes = strlen(args->data) + 1;
-	uint16_t sent, remaining;
+	uint16_t sent, sock_opt = 1460, timeout = 10000;
 	uint8_t retries = 0;
-	
+
 	puts("Sending data...");
 
 	printf("Data to be sent: %s \n Bytes to be sent: %d\n", args->data, bytes);
 
-	NutTcpSetSockOpt(sock, TCP_MAXSEG, &bytes, sizeof(bytes)); //Endrer maksimal segmentstørrelse for denne socketen.
-	NutTcpSetSockOpt(sock, SO_SNDBUF, &bytes, sizeof(bytes));
+	NutTcpSetSockOpt(sock, TCP_MAXSEG, &sock_opt, sizeof(sock_opt)); //Endrer maksimal segmentstørrelse for denne socketen.
+	NutTcpSetSockOpt(sock, SO_SNDBUF, &sock_opt, sizeof(sock_opt));
+	NutTcpSetSockOpt(sock, SO_SNDTIMEO, &timeout, sizeof(timeout));
 
 	while (NutTcpConnect(sock, inet_addr(FREJA_IP), FREJA_PORT)) {
-		puts("Could not connect to server, retrying in 60 seconds...");
-		NutSleep(60000);
-		if(retries == 1) { //Forsøk på å fikse bug.
-			configure_network();
-			set_time_ntp();
-		}
+		printf("Could not connect to server, retry %d\n", retries);
 
-		if(retries == 15) { //Slutter å prøve etter ca. 15 min
-			free(args->data);
-			free(args);
-			NutTcpCloseSocket(sock);
-			NutThreadExit();
+		if(retries == 5) {
+			NutThreadSetPriority(0);
+			for(;;); //Restarter ethernut.
 		} else {
 			retries++;
 		}
@@ -38,7 +32,6 @@ THREAD(DataThread, arg)
 
 	retries = 0;
 	
-	restart_watchdog();
 	while ((sent = NutTcpSend(sock, args->data, bytes)) != bytes) {
 		printf("Sent %d bytes\n", sent);
 		
@@ -51,17 +44,19 @@ THREAD(DataThread, arg)
 	
 	free(args->data);
 	free(args);
-
+	
 	NutTcpCloseSocket(sock);
-	NutThreadExit();
-	for(;;);
+
+	NutThreadSetPriority(0);
+	for(;;); //Restarter ethernut.
 }
 
 void set_time_ntp(void)
 {
 	time_t ntp_time = 0;
 	uint32_t timeserver = 0;
-	
+	uint8_t i = 0;
+
 	_timezone = -1 * 60 * 60; //Setter tidssonen til UTC+1
 	timeserver = inet_addr("85.252.162.7"); //Benytter pool.ntp.org sin norske server. http://www.pool.ntp.org/en/
 
@@ -71,9 +66,14 @@ void set_time_ntp(void)
 			stime(&ntp_time); //Setter klokken til Ethernut.
 			return;
 		} else {
-			puts("Failed retrieving time. Retrying in 10 sec...");
-			restart_watchdog();
+			i++;
+			printf("Failed retrieving time, retry %d\n", i);
 			NutSleep(10000);
+			
+			if(i == 5) { //Restarter ethernut.
+				start_watchdog();
+				for(;;);
+			}
 		}
 	}
 }
@@ -138,11 +138,11 @@ void get_json_array_end(char *json_end, char *string)
 
 void send_json(char *data)
 {
-	//sock = NutTcpCreateSocket();
-	network_thread_args_t *args = (network_thread_args_t*) malloc(sizeof(network_thread_args_t));
+	network_thread_args_t *args = malloc(sizeof(network_thread_args_t));
+
 	args->data = strdup(data);
 
-	NutThreadCreate("Thread", DataThread, args, 512);
+	NutThreadCreate("DataThread", DataThread, args, 512);
 }
 
 int configure_network(void)
@@ -164,16 +164,7 @@ int configure_network(void)
 		puts("Configuring " DEV_ETHER_NAME " failed.");
 		return 1;
 	}
-/* TODO: Fikse statisk IP til hver mikrokontroller.
-#ifdef ETHERNUT_1
-	if(NutNetIfConfig(DEV_ETHER_NAME, mac, "","255.255.255.0")) {
-		puts("Configuring" DEV_ETHER_NAME " failed.");
-	}
-#else
-	if(
 
-#endif
-*/
 	printf("I'm at %s.\n", inet_ntoa(confnet.cdn_ip_addr)); //Printer IP-adressen til standard output
 	return 0;
 }

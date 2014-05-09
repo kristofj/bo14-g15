@@ -15,18 +15,25 @@ uint8_t sht10_measure(double *temp, double *humi, double *dew)
 	double humival_d, tempval_d, dew_point_d;
 	
 	initiate_pins();
+	restart_watchdog();
 	reset_connection();
+	restart_watchdog();
 
 	if((error = read_sensor_raw(&tempval_raw, TEMP)) != 0)
 		return error;
 
+	restart_watchdog();
+
 	if((error = read_sensor_raw(&humival_raw, HUMI)) != 0)
 		return error;
+
+	restart_watchdog();
 
 	humival_d = (double) humival_raw;
 	tempval_d = (double) tempval_raw;
 
 	extract_values(&humival_d, &tempval_d);
+	restart_watchdog();
 	dew_point_d = get_dew_point(humival_d, tempval_d);
 
 	*temp = tempval_d;

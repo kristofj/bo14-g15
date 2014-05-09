@@ -19,8 +19,7 @@
 #define MAC_ETHERNUT1 { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xC2 }
 #define MAC_ETHERNUT2 { 0x00, 0x06, 0x33, 0x21, 0x6D, 0xE2 }
 
-#define FREJA_IP	"172.16.0.5"
-//#define FREJA_IP	"158.39.165.8"
+#define FREJA_IP	"158.39.165.8"
 #define FREJA_PORT	3123
 
 typedef struct network_thread_args{
