@@ -1,11 +1,16 @@
-body{
+body {
     background-color: #E8F6FA;
 }
-table {
+
+#dataTable {
+    background-color: white;
+}
+
+table#dataTable {
     border-collapse: collapse;
 }
 
-table, td, th {
+table#dataTable, td, th {
     border: 1px solid black;
 }
 
@@ -13,40 +18,120 @@ td, th {
     text-align: center;
     padding: 10px;
 }
-#upperWrapper{
+
+#upperWrapper {
     background-color: #E8F6FA;
 }
+
 #chart_div {
     width: 900px;
-    margin-left:-100px;
-    margin-right:-40px;
+    margin-left: -100px;
     height: 500px;
     float: left;
     background-color: #E8F6FA;
 }
+
+#loadingOverlay {
+    position: absolute;
+    height: 308px;
+    width: 578px;
+    visibility: hidden;
+    margin-left: 62px;
+    margin-top: 97px;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+#loading {
+    position: absolute;
+    margin-left: 285px;
+    font-family: Arial;
+    font-style: italic;
+    margin-top: 220px;
+    font-weight: bolder;
+    font-size: 2.5em;
+    z-index: 3;
+}
+
+#timeout {
+    font-size: 0.5em;
+    font-weight: bold;
+    margin-left: -70px;
+    visibility: hidden;
+}
+
 #description {
     width: 250px;
+    margin-left: 800px;
     border: 1px dashed black;
     background-color: #f0eee9;
-    height:500px;
+    height: 500px;
     float: left;
-    position: relative
+    position: absolute;
+    padding: 5px;
+    font-size: 0.9em;
+    font-family: Verdana;
 }
-#lowerWrapper{
-    clear:both;
-    padding-left:50px;
+
+#description h3 {
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+#description p {
+    margin-left: 10px;
+    margin-bottom: -10px;
+}
+
+#lowerWrapper {
+    padding-top: 10px;
+    clear: both;
+    padding-left: 50px;
     background-color: #E8F6FA;
 }
-#typeData, #buttons, #dateAndHours, #stationPick{
-    padding:10px;
-    float:left;
-    margin-left:20px;
+
+#changesDone {
+    float: left;
+    font-size: 0.9em;
+    font-style: italic;
+    font-weight: bold;
+    margin-top: 8px;
+    margin-left: 10px;
+    visibility: hidden;
 }
-#typeData, #dateAndHours, #stationPick{
+
+.loaderButtons {
+    width: 80px;
+    font-weight: bold;
+    height: 28px;
+    border-style: outset;
+    margin: 2px;
+    -moz-outline: 0 none;
+    outline: 0 none;
+}
+
+#graphButton {
+    background-color: #78a576;
+}
+
+#tableButton {
+    background-color: #78a576;
+}
+
+#buttons {
+    float: left;
+    margin-left: 20px;
+}
+
+#typeData, #dateAndHours, #stationPick {
+    padding: 10px;
+    float: left;
+    margin-left: 20px;
     border: 1px solid black;
     background-color: #f0eee9;
 }
-#main{
-    margin-left:200px;
+
+#main {
+    margin-left: 100px;
     background-color: #E8F6FA;
 }

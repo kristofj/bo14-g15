@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <!--stilark-->
     <link rel="stylesheet" type="text/css" href="weather_style.css">
     <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
@@ -15,8 +16,40 @@
 </head>
 <body>
 <div id="main">
-    <div id="chart_div"></div>
-    <div id="description">Fancy beskrivelse</div>
+    <div id="loadingOverlay"></div>
+    <div id="loading">
+        Laster...
+        <div id="timeout">
+            Tidsavbrudd. Fortsetter å prøve...
+        </div>
+    </div>
+    <div id="chart_div">
+    </div>
+    <div id="description">
+        <h3>Værstasjoner i Hessdalen</h3>
+        Satt opp 07.05.2014<br/><br/>
+        Oppdateres hver time.
+        <p><b>Måledata:</b></p>
+        <ul>
+        <li>Temperatur</li>
+        <li>Luftfuktighet</li>
+        <li>Lufttrykk</li>
+        <li>Vindhastighet</li>
+        <li>Vindretning</li>
+        </ul>
+        <p><b>Stasjon 1:</b></p>
+        <ul>
+            <li>Plassert ved målestasjonen</li>
+            <li>Høyde: ca 650 m.o.h</li>
+            <li>Kart: <a target="_blank" href="https://www.google.com/maps/place/62%C2%B049%2716.1%22N+11%C2%B012%2709.2%22E/@62.8211512,11.202568,2077m/data=!3m1!1e3!4m2!3m1!1s0x0:0x0">Google</a> <a target="_blank" href="http://kart.gulesider.no/m/J2qrp">Gule Sider</a></li>
+        </ul>
+        <p><b>Stasjon 2:</b></p>
+        <ul>
+            <li>Plassert 171m Sør-Øst for målestasjonen</li>
+            <li>Høyde: ca 690 m.o.h</li>
+            <li>Kart: <a target="_blank" href="https://www.google.com/maps/place/62%C2%B049%2716.1%22N+11%C2%B012%2709.2%22E/@62.8211512,11.202568,2077m/data=!3m1!1e3!4m2!3m1!1s0x0:0x0">Google</a> <a target="_blank" href="http://kart.gulesider.no/m/J2qrp">Gule Sider</a></li>
+        </ul>
+    </div>
     <div id="lowerWrapper">
         <div id="typeData">
             <form onchange="changedType()" action="">
@@ -52,9 +85,9 @@
             </form>
         </div>
         <div id="buttons">
-            <button onclick="weatherFetch('graph')">Vis graf</button>
+            <button id="graphButton" class="loaderButtons" onclick="weatherFetch('graph')">Graf</button>
             <br/>
-            <button onclick="weatherFetch('table')">Vis tabell</button>
+            <button id="tableButton" class="loaderButtons" onclick="weatherFetch('table')">Tabell</button>
         </div>
     </div>
 </div>
