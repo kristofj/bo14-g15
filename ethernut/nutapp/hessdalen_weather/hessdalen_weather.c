@@ -14,6 +14,8 @@ static uint8_t measured;
 static int measure_index;
 static int final_value_index;
 
+uint8_t bmp180_initialized;
+
 void start_watchdog(void)
 {
 	wdt_enable(7); //Setter wdt til 1.8s (egentlig rundt 1.5s).
@@ -24,9 +26,15 @@ void restart_watchdog(void)
 	wdt_reset();
 }
 
+void disable_watchdog(void)
+{
+	wdt_disable();
+}
+
 void read_sensors(void)
 {
 	double temp, humi, dew, wspeed, wdirection;
+	uint8_t error;
 	int32_t pressure;
 	char *dt = malloc(sizeof(char) * 20);
 	measure_t *sht10_temp = &temp_list[measure_index],
@@ -35,15 +43,29 @@ void read_sensors(void)
 		*wind_speed = &wind_speed_list[measure_index],
 		*wind_dir = &wind_dir_list[measure_index];
 
+	restart_watchdog();
+
 	sprintf(dt, "%d-%d-%d %d:%d:%d", (datetime->tm_year + 1900), (datetime->tm_mon + 1), datetime->tm_mday, datetime->tm_hour, datetime->tm_min, datetime->tm_sec);
 	
+	restart_watchdog();
+
 	printf("Read sensors: current time: %s\n", dt);
 
-	sht10_measure(&temp, &humi, &dew);
+	error = sht10_measure(&temp, &humi, &dew);
 
 	restart_watchdog();
 
-	bmp180_read_data(&pressure);
+	if(error != 0) {
+		temp = 0.0;
+		humi = 0.0;
+	}
+
+	restart_watchdog();
+
+	if(bmp180_initialized == 1)
+		bmp180_read_data(&pressure);
+	else
+		pressure = 0;
 
 	restart_watchdog();
 
@@ -427,6 +449,7 @@ void send_data(void)
 
 void wait_for_whole_min(void) {
 	for(;;) {
+		restart_watchdog();
 		datetime = get_current_time();
 		if(datetime->tm_sec == 0)
 			break;
@@ -490,76 +513,40 @@ void configure_debug(uint32_t baud)
 
 int main(void)
 {
-	start_watchdog(); //Starter watchdog med nedtelling på 5 sec.
+	disable_watchdog();
 	uint32_t baud = 115200;
 	uint8_t i;
+
+	bmp180_initialized = 0;
 
 	measure_index = 0;
 	final_value_index = 0;
 	datetime = malloc(sizeof(tm));
 
-	restart_watchdog();
-
 	init_arrays();
-
-	restart_watchdog();
 
 	configure_debug(baud); // Setter output til serieutgang.
 
-	restart_watchdog();
-
 	configure_network(); // Initialiserer ethernet.
 
-//Test
-/*
-	set_time_ntp(); // Setter klokken.
-	adc_init(); // Initialiserer ADC.
-	bmp180_init(); // Initialiserer BMP180.
-	datetime = get_current_time();
-	puts("Project Hessdalen weather station");
-
-	NutSleep(1000);
-
-	for (i = 1; i < 133; i++) { //Hovedløkke.
-		datetime = get_current_time();
-		read_sensors();
-		NutSleep(100);
-		//restart_watchdog();
-		measured = 1;
-
-		if((i % 11) == 0) { //Regner ut gjennomsnitt og max/min hvert 5. min.
-			prepare_data();
-			//restart_watchdog();
-			//send_data();
-			if((i % 33 ) == 0) { //Sender data hver hele time.
-				//puts("I == 132");
-				send_data();
-				i = 1;
-				//restart_watchdog();
-			}
-		}
-		printf("i: %u\n", i);
-		//wait_30_sec(); //Gjør ny måling hvert 30. sekund.
-	}
-	
-	for(;;);
-
-*/
 // HOVEDPROGRAM
 
 	puts("Initializing...");
 
-	restart_watchdog();
-
 	set_time_ntp(); // Setter klokken.
 
-	restart_watchdog();
+	start_watchdog();
 
 	adc_init(); // Initialiserer ADC.
 
 	restart_watchdog();
 
-	bmp180_init(); // Initialiserer BMP180.
+	i = bmp180_init();// Initialiserer BMP180.
+
+	if(i == 0) //Klarte å initialisere
+		bmp180_initialized = 1;
+	else
+		puts("BMP180 not initialized");
 
 	restart_watchdog();
 
@@ -568,6 +555,7 @@ int main(void)
 	wait_for_whole_min(); // Venter på helt minutt før vi begynner å måle.
 
 	for (;;) { //Hovedløkke.
+		restart_watchdog();
 		read_sensors();
 		restart_watchdog();
 		measured = 1;
@@ -579,14 +567,17 @@ int main(void)
 
 			if((datetime->tm_min == 0) && (datetime->tm_sec == 0)) { //Sender data hver hele time.
 				send_data();
-				restart_watchdog();
+				for(;;) {
+					restart_watchdog();
+					NutSleep(500);
+				}
 			}
 		}
 		wait_30_sec(); //Gjør ny måling hvert 30. sekund.
 	}
 
 	for(;;);
-	
+
 	return 0;
 }
 

@@ -26,10 +26,14 @@
 #include "bmp180.h"
 #include "sht10.h"
 
-#define ETHERNUT_1	1;
-//#define ETHERNUT_2	2;
+//#define ETHERNUT_1	1;
+#define ETHERNUT_2	2;
 
-#define STATION_ID	ETHERNUT_2 //Endres avhengig av ethernut.
+#ifdef ETHERNUT_1
+#define STATION_ID	ETHERNUT_1 //Endres avhengig av ethernut.
+#else
+#define STATION_ID	ETHERNUT_2
+#endif
 
 #define MEASURE_ARR_MAX	11
 #define FINAL_ARR_MAX	12
@@ -64,6 +68,8 @@ void start_watchdog(void);
 
 //Tilbakestiller watchdog-telleren.
 void restart_watchdog(void);
+
+void disable_watchdog(void);
 
 //Leser alle sensorer.
 void read_sensors(void);

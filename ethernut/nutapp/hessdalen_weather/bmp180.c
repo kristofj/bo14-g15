@@ -81,7 +81,10 @@ uint8_t bmp180_init(void)
 	uint8_t bmp180_adress;
 
 	TWI_init();
+	
 	bmp180_adress = TWI_scan();
+
+	printf("BMP180: %d\n", bmp180_adress);
 
 	if(bmp180_adress != 0xee) {
 		puts("Could not find bmp180.");
@@ -106,13 +109,10 @@ void TWI_init(void)
 	TWCR = (1<<TWEN); //Aktiverer TWI. 
 }
 
-//TODO: Er nødvendig å scanne hele bussen for i det hele tatt å kommunisere med BMP180. FIX ME PLEASE.
 uint8_t TWI_scan(void)
 {
 	uint8_t i, status, addr = -1;
 
-	TWI_init();
-	
 	for(i=0x10; i<0xf0; i++) { //Sjekker alle mulige adreser på TWI-bussen.
 		TWI_start();
 
@@ -132,8 +132,18 @@ uint8_t TWI_scan(void)
 
 void TWI_start(void)
 {
+	uint8_t i = 0;
+
 	TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); //Sender start.
-	while((TWCR & (1<<TWINT)) == 0); //Venter på at TWINT er satt. Start har blitt sendt.
+	while((TWCR & (1<<TWINT)) == 0) { //Venter på at TWINT er satt. Start har blitt sendt.
+		if(i == 5) {
+			return;
+		} else {
+			NutSleep(10);
+			restart_watchdog();
+			i++;
+		}
+	}
 }
 
 void TWI_stop(void)
@@ -143,9 +153,19 @@ void TWI_stop(void)
 
 void TWI_write(uint8_t data)
 {
+	uint8_t i = 0;
+
 	TWDR = data; //Laster byten inn i data-registeret. Klar for sending.
 	TWCR = (1<<TWINT) | (1<<TWEN); //Starter sending av data i data-registeret.
-	while((TWCR & (1<<TWINT)) == 0); //Venter på at data er sendt.
+	while((TWCR & (1<<TWINT)) == 0) { //Venter på at data er sendt.
+		if(i == 5) {
+			return;
+		} else {
+			NutSleep(10);
+			restart_watchdog();
+			i++;
+		}
+	}
 }
 
 uint8_t TWI_read_ack(void)
