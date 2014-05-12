@@ -1,6 +1,6 @@
 <?php
-mysql_connect("xxx", "xxx", "xxx") or die(mysql_error());
-mysql_select_db("xxx") or die(mysql_error());
+mysql_connect("host", "user", "password") or die(mysql_error());
+mysql_select_db("database") or die(mysql_error());
 if ($_GET["type"] == "getRange") {
     $data = mysql_query('SELECT min(datetime) AS mindate, max(datetime) as maxdate FROM logId;')
     or die(mysql_error());

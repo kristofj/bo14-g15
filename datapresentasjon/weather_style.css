@@ -129,6 +129,15 @@ table#dataTable, #dataTable td, th {
     border: 1px solid black;
     background-color: #f0eee9;
 }
+#typeData{
+	height:83px;
+}
+#dateAndHours{
+	height:130px;
+}
+#stationPick{
+	height:45px;
+}
 
 #main {
     margin-left: 100px;
