@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!-- http://hessdalen.hiof.no/weather/index.shtml -->
+
+<HTML>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--stilark-->
+    <link rel="stylesheet" type="text/css" href="weather_style.css">
+    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <!--laster inn jQuery-->
+    <script src="jquery-2.1.0.min.js"></script>
+    <!--jQuery UI-lib for kalender-->
+    <script src="jquery-ui-1.10.4.custom.min.js"></script>
+    <!--laster inn Googles JavaScript-bibliotek-->
+    <script src="jsapi.js"></script>
+    <!--laster inn egenskrevet kode for datafremvisning-->
+    <script src="weather_e.js"></script>
+
+<TITLE>Project Hessdalen - Weather Station</TITLE>
+<!--#include virtual="../common/starttopp2_e.conf"-->
+
+<!-- overskrift -->
+<font size="+2">Project Hessdalen - Weather Station</font>
+<!--#include virtual="../common/topplinje2.conf"-->
+
+<hr>
+
+<!-- hovedtekst i en celle. tr td ved flere hoveddeler-->
+<div id="main">
+    <div id="loadingOverlay"></div>
+    <div id="loading">
+        Loading...
+        <div id="timeout">
+            Timeout. We'll keep trying...
+        </div>
+    </div>
+    <div id="chart_div">
+    </div>
+    <div id="description">
+        <h3>Weather Stations in Hessdalen</h3>
+        Installed 07.05.2014<br/><br/>
+        Updated every hour.
+        <p><b>Data Measurement:</b></p>
+        <ul>
+        <li>Temperature</li>
+        <li>Humidity</li>
+        <li>Air pressure</li>
+        <li>Wind speed</li>
+        <li>Wind direction</li>
+        </ul>
+        <p><b>Station 1:</b></p>
+        <ul>
+            <li>Placed at the Automatic Measurement Station</li>
+            <li>Altitude: ca 640 m.a.s.l</li>
+            <li>Map: <a target="_blank" href="https://www.google.com/maps/place/62%C2%B049%2716.1%22N+11%C2%B012%2709.2%22E/@62.8211512,11.202568,2077m/data=!3m1!1e3!4m2!3m1!1s0x0:0x0">Google</a> <a target="_blank" href="http://kart.gulesider.no/m/J2qrp">Gule Sider</a></li>
+        </ul>
+        <p><b>Station 2:</b></p>
+        <ul>
+            <li>Placed 171m South-East of the AMS</li>
+            <li>Altitude: ca 690 m.a.s.l</li>
+            <li>Map: <a target="_blank" href="https://www.google.com/maps/place/62%C2%B049'13.8%22N+11%C2%B012'20.7%22E/@62.820501,11.20576,2082m/data=!3m2!1e3!4b1!4m2!3m1!1s0x0:0x0">Google</a> <a target="_blank" href="http://kart.gulesider.no/m/gd5nPs">Gule Sider</a></li>
+        </ul>
+        <p><b>Graph presentation:</b></p>
+        <ul>
+            <li>If the selected time period is 10 days or less, all measurement data can be displayed. If selected time period is between 11 and 30 days, "default" is to display data from 06 AM and 12 PM. At periods greater than 30 days, data is limited to show one measurement per day.</li>
+            <li>You may choose to restrict the measurement data for specific times of the day. This can be done by checking the various times shown in the settings. For example, if we choose 00:00 it will only give you data for that hour every day.</li>
+        </ul>
+    </div>
+    <div id="lowerWrapper">
+        <div id="typeData">
+            <form onchange="changedType()" action="">
+                <input checked type="radio" name="type" value="temperature">Temperature<br/>
+                <input type="radio" name="type" value="humidity">Humidity<br/>
+                <input type="radio" name="type" value="pressure">Air Pressure<br/>
+                <input type="radio" name="type" value="wind">Wind
+            </form>
+        </div>
+        <div id="dateAndHours">
+            From: <input type="text" onchange="changedDates()" id="from" size="10">
+            <br/>
+            To: <input type="text" onchange="changedDates()" id="to" size="10">
+            <br/>
+
+            <form onchange="changedHours()">
+                00.00<input name="hours" id="hours00" type="checkbox">
+                12.00<input name="hours" id="hours12" type="checkbox">
+                <br/>
+                06.00<input name="hours" id="hours06" type="checkbox">
+                18.00<input name="hours" id="hours18" type="checkbox">
+                <br/>
+            </form>
+            <form onchange="changedHours(true)">
+                Default<input name="hours" id="hoursStandard" type="checkbox">
+            </form>
+        </div>
+        <div id="stationPick">
+            <form onchange="changedStations()">
+                Station 1<input id="station1" checked="true" type="checkbox">
+                <br/>
+                Station 2<input id="station2" checked="true" type="checkbox">
+            </form>
+        </div>
+        <div id="buttons">
+            <button id="graphButton" class="loaderButtons" onclick="weatherFetch('graph')">Graph</button>
+            <br/>
+            <button id="tableButton" class="loaderButtons" onclick="weatherFetch('table')">Table</button>
+        </div>
+    </div>
+</div>
+
+<p>
+<!--#include virtual="../common/stopptopp2_e.conf"-->
+<!--#config timefmt="%d %B %Y %T"-->
+Last updated
+<!--#flastmod file="index.shtml"-->.</FONT></b></DIV>
+<!--#include virtual="../common/bunntopp2_e.conf"-->
+<a href="./index_n.shtml"><IMG SRC="../common/NorwPages.gif" BORDER="0" ALT="nor-flagg"></a>
+
+
+</body>
+</HTML>

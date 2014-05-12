@@ -1,5 +1,8 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!-- http://hessdalen.hiof.no/gjest/index.shtml -->
+
+<HTML>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <!--stilark-->
@@ -13,23 +16,32 @@
     <script src="jsapi.js"></script>
     <!--laster inn egenskrevet kode for datafremvisning-->
     <script src="weather.js"></script>
-</head>
-<body>
+
+<TITLE>Project Hessdalen - V&aelig;rstasjon</TITLE>
+<!--#include virtual="../common/starttopp2_n.conf"-->
+
+<!-- overskrift -->
+<font size="+2">Project Hessdalen - V&aelig;rstasjon</font>
+<!--#include virtual="../common/topplinje2.conf"-->
+
+<hr>
+
+<!-- hovedtekst i en celle. tr td ved flere hoveddeler-->
 <div id="main">
     <div id="loadingOverlay"></div>
     <div id="loading">
         Laster...
         <div id="timeout">
-            Tidsavbrudd. Fortsetter å prøve...
+            Tidsavbrudd. Fortsetter &aring; pr&oslash;ve...
         </div>
     </div>
     <div id="chart_div">
     </div>
     <div id="description">
-        <h3>Værstasjoner i Hessdalen</h3>
+        <h3>V&aelig;rstasjoner i Hessdalen</h3>
         Satt opp 07.05.2014<br/><br/>
         Oppdateres hver time.
-        <p><b>Måledata:</b></p>
+        <p><b>M&aring;ledata:</b></p>
         <ul>
         <li>Temperatur</li>
         <li>Luftfuktighet</li>
@@ -39,20 +51,20 @@
         </ul>
         <p><b>Stasjon 1:</b></p>
         <ul>
-            <li>Plassert ved målestasjonen</li>
-            <li>Høyde: ca 640 m.o.h</li>
+            <li>Plassert ved m&aring;lestasjonen</li>
+            <li>H&oslash;yde: ca 640 m.o.h</li>
             <li>Kart: <a target="_blank" href="https://www.google.com/maps/place/62%C2%B049%2716.1%22N+11%C2%B012%2709.2%22E/@62.8211512,11.202568,2077m/data=!3m1!1e3!4m2!3m1!1s0x0:0x0">Google</a> <a target="_blank" href="http://kart.gulesider.no/m/J2qrp">Gule Sider</a></li>
         </ul>
         <p><b>Stasjon 2:</b></p>
         <ul>
-            <li>Plassert 171m Sør-Øst for målestasjonen</li>
-            <li>Høyde: ca 690 m.o.h</li>
+            <li>Plassert 171m S&oslash;r-&Oslash;st for m&aring;lestasjonen</li>
+            <li>H&oslash;yde: ca 690 m.o.h</li>
             <li>Kart: <a target="_blank" href="https://www.google.com/maps/place/62%C2%B049'13.8%22N+11%C2%B012'20.7%22E/@62.820501,11.20576,2082m/data=!3m2!1e3!4b1!4m2!3m1!1s0x0:0x0">Google</a> <a target="_blank" href="http://kart.gulesider.no/m/gd5nPs">Gule Sider</a></li>
         </ul>
         <p><b>Graffremvisning:</b></p>
         <ul>
-            <li>Dersom valgt tidsrom er 10 dager eller mindre, vil alle måledata kunne vises. Er valgt tidsrom mellom 11 og 30 dager, vil "standard" være å vise data fra kl 06 og 12. Ved tidsrom høyere enn 30 dager, begrenses datafremvisning til èn måling per dag. </li>
-            <li>Du kan selv velge å begrense måledata for speiselle klokkeslett om dagen. Dette kan gjøres ved å huke av de ulike klokkeslettene i innstillingene nedenfor. F.eks vil det å velge kl 00:00 kun gi deg data for denne timen hver dag.</li>
+            <li>Dersom valgt tidsrom er 10 dager eller mindre, vil alle m&aring;ledata kunne vises. Er valgt tidsrom mellom 11 og 30 dager, vil "standard" v&aelig;re &aring; vise data fra kl 06 og 12. Ved tidsrom st&oslash;rre enn 30 dager, begrenses datafremvisning til en m&aring;ling per dag. </li>
+            <li>Du kan selv velge &aring; begrense m&aring;ledata for spesielle klokkeslett om dagen. Dette kan gj&oslash;res ved &aring; huke av de ulike klokkeslettene i innstillingene. F.eks vil det &aring; velge kl 00:00 kun gi deg data for denne timen hver dag.</li>
         </ul>
 
     </div>
@@ -97,5 +109,16 @@
         </div>
     </div>
 </div>
+
+<p>
+<!--#include virtual="../common/stopptopp2_n.conf"-->
+<!--#config timefmt="%d %B %Y %T"-->
+Sist oppdatert 
+<!--#flastmod file="index_n.shtml"-->.</FONT></b></DIV>
+<!--#include virtual="../common/bunntopp2_n.conf"-->
+<a href="./index.shtml"><IMG SRC="../common/EnglishPages.gif" BORDER="0" ALT="eng-flagg"></a>
+
+
 </body>
-</html>
+</HTML>
+

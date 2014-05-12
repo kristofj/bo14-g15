@@ -13,17 +13,19 @@
 \usepackage{subcaption}
 
 
+
 \input{meta}       % Use this to fill in author, title and other metadata used on front page
 \input{defs}        % DO NOT CHANGE
 
 \makeindex
 
 \begin{document}
-
+	\raggedbottom %Test for å fikse merkelig whitespace mellom paragrafer.
 % FRONT MATTER
     % DO NOT CHANGE
     %-------------------------------------------------    
-    \includepdf[pages={1, {}}] {titlepage} % Make your own catchy PDF title page, named titlepage.pdf
+    \includepdf[pages={1, {}}] {titlepage_NO} % Make your own catchy PDF title page, named titlepage.pdf
+    \includepdf[pages={1, {}}] {titlepage_EN} 
     \maketitle
 	\input{preface}
     \input{abstract}
