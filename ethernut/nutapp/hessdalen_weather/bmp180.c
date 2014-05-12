@@ -102,10 +102,9 @@ uint8_t bmp180_init(void)
 
 void TWI_init(void)
 {
-	//SCL frekvens = 14745.6/(16+2*17*4^1) = 97kHz. Atmega128 datablad s.203.
-	//Setter SCL til 97kHz.
-	TWSR = (0<<TWPS1) | (0<<TWPS0);
-	TWBR = 0x11;
+	//SCL frekvens = 14745.6/(16+2*TWBR*4^TWSR) = 97kHz. Atmega128 datablad s.203.
+	TWSR = (0<<TWPS1) | (0<<TWPS0); //Setter prescalar til 1.
+	TWBR = (1<<TWBR4) | (1<<TWBR0); //Setter bit rate til 17.
 	TWCR = (1<<TWEN); //Aktiverer TWI. 
 }
 
@@ -113,7 +112,7 @@ uint8_t TWI_scan(void)
 {
 	uint8_t i, status, addr = -1;
 
-	for(i=0x10; i<0xf0; i++) { //Sjekker alle mulige adreser på TWI-bussen.
+	for(i=0x10; i<0xf0; i++) { //Sjekker alle mulige adresser på TWI-bussen.
 		TWI_start();
 
 		TWI_write(i);
@@ -136,7 +135,7 @@ void TWI_start(void)
 
 	TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); //Sender start.
 	while((TWCR & (1<<TWINT)) == 0) { //Venter på at TWINT er satt. Start har blitt sendt.
-		if(i == 5) {
+		if(i == 5) { //Venter 5*10 ms før vi gir opp.
 			return;
 		} else {
 			NutSleep(10);
