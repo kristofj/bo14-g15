@@ -40,7 +40,7 @@ Ut i fra disse kriteriene, nevnt ovenfor, har vi bestemt oss for disse sensorene
         \centering
         \begin{subfigure}[H]{0.3\textwidth}
                 \includegraphics[width=\textwidth]{sht10}
-                \caption{SHT10 - temperatur}
+                \caption{SHT10 - temperatur og luftfuktighet}
                 \label{fig:sht10}
                 \quad
         \end{subfigure}%
@@ -64,6 +64,8 @@ Ut i fra disse kriteriene, nevnt ovenfor, har vi bestemt oss for disse sensorene
         \caption{Sensorene vi skal bruke}\label{fig:Sensorer}
 \end{figure}
 Disse sensorene tilfredsstiller alle kravene, bortsett fra BMP180 som ikke har beskyttelse. Til denne må få tak i en innkapslingsboks som er vanntett og har tette kabelgjennomføringer. Det må også være en form for luftgjennomstrøming slik at lufttrykket blir riktig målt. Mer informasjon om disse sensorene står i delkapittel \ref{sec:HardwareDelen}.
+
+BMP180\cite{nettside:lufttrykk}, SHT10\cite{nettside:temperatur}, WRG2/O50\cite{nettside:vindretning} og WG2/=50\cite{nettside:vindhastighet}.
 
 
 \subsection{Kretsskjema}
@@ -96,7 +98,7 @@ BMP180 og SHT10 er digitale sensorer og disse krever en spenningstilførsel på 
   \label{fig:vindretning}
 \end{figure}
 
-I figur \ref{fig:vindhastighet} og \ref{fig:vindretning} ovenfor ser du kretskjema for de analoge vindsensorene vi har valgt ut. Disse krever en strømforsyning fra 15-30V AC/DC. Vi har valgt å bruke en strømforsyning på 24V DC da denne også kan brukes på varmefunksjonen disse sensorene også har. Disse sensorene sender ut en analog spenning på 0-10V og denne spenningen må vi strupe ned til å matche $\mu$P-kortet som ikke tåler mer enn 5V. Dette har vi løst ved å bruke en spenningsdeler som gjør at spenningen inn på mikrokontrolleren kun varierer mellom 0-5V. 
+I figur \ref{fig:vindhastighet} og \ref{fig:vindretning} ovenfor ser du kretskjema for de analoge vindsensorene vi har valgt ut. Disse krever en strømforsyning fra 15-30V AC/DC. Vi har valgt å bruke en strømforsyning på 24V DC da denne også kan brukes på varmefunksjonen disse sensorene også har. Disse sensorene sender ut en analog spenning på 0-10V og denne spenningen må vi strupe ned til å matche mikrokontrolleren som ikke tåler mer enn 5V. Dette har vi løst ved å bruke en spenningsdeler som gjør at spenningen inn på mikrokontrolleren kun varierer mellom 0-5V. 
 
 \subsection{Kabinettet til værstasjonen}
 Det er behov for et kabinett som kan beskytte mikrokontrolleren, strømforsyningene og kretsene mellom sensorene og mikrokontrolleren. \\ 
@@ -135,7 +137,7 @@ Databasen som skal ta vare på værdata skal være lokalisert på en av skolens 
 \end{figure}
 
 \subsection{Visualisering av værdata}
-I vårt valg av hvilke teknologier vi skulle bruke for å presentere værdata på hessdalen.org, har vi tatt utangspunkt i de webprogrammeringsspråkene vi har grei kunskap om fra før. Det vil si JavaScript, PHP, og CGI-basert Python.\\
+I vårt valg av hvilke teknologier vi skulle bruke for å presentere værdata på hessdalen.org, har vi tatt utangspunkt i de webprogrammeringsspråkene vi har grei kunskap om fra før. Det vil si JavaScript, PHP, og CGI-basert Python.
 
 For å best kunne vurdere hva vi skulle velge, satte vi opp en liste med fordeler og ulemper ved de forskjellige metodene.
 \subsubsection{CGI-basert Python\cite{nettside:python} \cite{nettside:cgi}}
@@ -218,7 +220,8 @@ Oppdragsgiver hadde følgende krav til funksjonaliteten til mikrokontrolleren:
 \subsection{Grensesnitt mot sensorene}
 \subsubsection{BMP180}
 BMP180 benytter den kjente kommunikasjonsbusen I\textsuperscript{2}C (Inter-Integrated Circuit), også kalt TWI (Two-wire Serial Interface). Et TWI maskinvaregrensesnitt er tilgjengelig på mikrokontrolleren.
-I\textsuperscript{2}C er en flerbruker seriell databuss som benytter seg av et master-slave system. Vår implementasjon krever kun en master, Ethernut 2.1, men alle enheter har mulighet til å være master i en slik buss. Alle enhetene kobles til to kabler, som er SCL (klokken) og SDA (data). Klokken styres av master når det foregår kommunikasjon.
+I\textsuperscript{2}C er en flerbruker seriell databuss som benytter seg av et master-slave system. Vår implementasjon krever kun en master, Ethernut 2.1, men alle enheter har mulighet til å være master i en slik buss. Alle enhetene kobles til to kabler, som er SCL (klokken) og SDA (data). Klokken styres av master når det foregår kommunikasjon. Hver enhet koblet til bussen har en adresse på 8 bit. Den siste biten bestemmer om man ønsker å skrive til, eller lese av sensoren.
+
 % TODO: Legge inn et bilde av en typisk I2C-buss.
 Det er fire forskjellige moduser for hver enhet tilkoblet bussen:
 \begin{itemize}
