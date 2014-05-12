@@ -2,33 +2,132 @@
 \chapter{Produksjon}
 \label{chap:production} 
 
-
 I dette kapittelet vil vi ta for oss hvordan vi har produsert resultatene i proskjetet og beskrive selve produktet. Vi tar med hvilke verktøy vi har brukt og hvordan produksjonen foregikk. Da med tanke på hvordan vi har jobbet. Delegering av oppgaver og hvordan vi har løst problemer som har oppstått.
 
 \section{Software}
+\subsection{Ethernut 2.1}
+\meta{Kan Kristoffer skrive her hvordan du jobbet, og hvilken løsninger du hadde, og litt om koden? Kan sikkert ta med eksempelkode også}
 
-\subsection{C kode mellom ethernut og hardware}
+\meta{Kort intro}
 
-Kan Kristoffer skrive her hvordan du jobbet, og hvilken løsninger du hadde, og litt om koden? Kan sikkert ta med eksempelkode også
+\subsubsection{Implementasjon av grensesnitt mot BMP180}
+BMP180 benytter I\textsuperscript{2}C/TWI for kommunikasjon med mikrokontrolleren. Dette er en egen maskinvaremodul på mikrokontrolleren, som aksesseres gjennom dataregister. Disse registrene er dokumentert i databladet til mikrokontrolleren, og vi må benytte oss av disse fire:
+\begin{itemize}
+\item TWI Bit Rate Register (TWBR)
 
-\subsection{Javascript}
+Brukes sammen med to bit i TWSR for å sette klokkefrekvensen i master-modus.
+\item TWI Control Register (TWCR)
+
+Brukes for å kontrollere TWI-modulen.
+\item TWI Status Register (TWSR)
+
+Bit 7-4 brukes for å sjekke status på TWI-modulen. Bit 1-0 er brukt til å skalere klokkefrekvensen.
+\item TWI Data Register (TWDR)
+
+I transmit-modus, holder dette registeret på neste byte som skal sendes. I recieve-modus vil dette registeret inneholde data som ble mottatt.
+\end{itemize}
+
+
+\meta{Hvordan man bruker dataregister på mikrokontrolleren for I2C. Hvilke adresser som brukes på BMP180}
+\subsubsection{Implementasjon av grensesnitt mot SHT10}
+\meta{Litt om hvordan kommunikasjon foregår i detalj, ta med hvilke kommandoer som gjør hva ++}
+
+\subsubsection{Implementasjon av ADC}
+\meta{Kort om register for å styre/lese av ADC}
+
+\subsubsection{Implementasjon av nettverk}
+\meta{Hvordan nettverket blir tatt i bruk med NutOS, hvordan man henter ut tid fra NTP-server. Bruk av tråd for å sende }
+
+\subsubsection{Implemtasjon av hovedløkke}
+\meta{Hvordan hele applikasjonen er satt sammen. Skjema over hele gangen i hovedløkken.}
+
+\subsection{Serverside}
+For å ta imot TCP-pakkene med JSON-formatert data og legge det inn i databasen, var vi avhengig av å ha en server kjørende på skolens nettverk. Denne serveren valgte vi som beskrevet i (ref) å bygge på Java\cite{nettside:java}.
+
+\subsubsection{Ta imot TCP-pakker}
+\meta{Ved bruk av sockets, etc.}
+
+\subsubsection{Konvertere JSON til SQL-spørringer}
+\meta{Hvordan ble dette gjort? Hvilket bibliotek ble brukt for å parse JSON?}
+
+\subsubsection{Databasebehandling}
+\meta{Hvordan ble dette gjort? Noe om driveren som krevdes for dette}
+
+\subsubsection{Trådbasert kode}
+\meta{Hva, hvordan og hvorfor?}
+
+\subsubsection{Kompilert JAR-fil}
+\meta{Hva, hvorfor og hvordan? Fordeler med dette?}
+
+\subsubsection{Sikkerhet}
+\meta{Åpnet port for spesifikke iper (ikke nevn hvilken port, eller hvilken ip)}
+
+\subsubsection{Crontab}
+\meta{Litt om hva, hvorfor og hvordan.}
+
+\subsubsection{Problemer underveis}
+\meta{Var det noen problemer? Hvis så, hvilke?}
+
+\subsection{Datapresentasjon}
 \meta{Kan Mikael skrive her hvordan du jobbet, og hvilken løsninger du hadde, og litt om koden? Kan sikkert ta med eksempelkode også}
 
-\subsection{Databaselagring}
-\meta{Datalagringen på frigg}
+\subsubsection{Backend}
+\meta{Hva, hvorfor og hvordan? Stikkord: PHP, "url-variabler", JSON-konvertering, skjult databaseinfo}
+
+\subsubsection{Biblioteker brukt}
+\meta{Hvilke (jQuery, jQuery UI og Google visualisation, til hva og hvorfor?}
+\begin{description}
+  \item[jQuery] \hfill \\
+  Tekst
+  \item[jQuery UI] \hfill \\
+  Tekst
+  \item[Google visualisation] \hfill \\
+  Tekst
+\end{description}
+
+\subsubsection{Brukervalg}
+\meta{Hvilke valg har brukeren når det kommer til datafremvisning? Hvorfor? Stikkord: Idiotsikkert}
+
+\subsubsection{Dynamisk innholdslasting}
+\meta{Hva, hvorfor(fordeler) og hvordan? Stikkord: AJAX}
+
+\subsubsection{Graffremvisning}
+\meta{Hva, hvorfor og hvordan? Stikkord: Google Visualisation og begrensninger satt}
+
+\subsubsection{Tabellvisning}
+\meta{Hva, hvorfor og hvordan? Stikkord: html-tabeller}
+
+\subsubsection{Feilhåndering}
+\meta{Hvordan håndteres tidsavbrudd, ikke-eksisterende data, osv.}
+
+\subsubsection{Design}
+\meta{Hva har det vært fokus på? Hvordan har dette blitt gjort i praksis. Stikkord: enkelt/lettforståelig, oversiktlig, CSS og brukerinfo(tekstboks)}
+
+\subsubsection{Engelsk versjon}
+\meta{Hvorfor, og hvordan? Hvilke filer måtte endres}
+
+\subsubsection{Sikkerhet}
+\meta{Hvilke sikkerhetsaspekter måtte tas hensyn til, og hvordan ble de løst? Stikkord: SQL-injection}
+
+\subsubsection{Implementasjon på hessdalen.org}
+\meta{Hvordan ble dette gjort? Stikkord: CSS-konflikter}
+
+\subsubsection{Arbeidsprosessen}
+\meta{Hvilken rekkefølge ble ting gjort i? Stikkord: Hva vi begynte med, osv. Input fra arbeidsgiver}
+
+\subsubsection{Problemer underveis}
+\meta{Var det noen problemer? Hvis så, hvilke? Stikkord: Ikke all info i Google Visualisation API(ref) var helt oppdatert og mer tidkrevende enn antatt.}
 
 \section{Hardware}
 \label{sec:HardwareDelen}
 
-
 \meta{Ting å nevne: jobbet på verkstedet på skolen.. etc.. loddet sammen komponenter, bygd deksel og beskyttelse til sensorene.} \\
 
-
+\subsection{Sensorer}
 Vi endte opp med å kjøpe inn følgende målere: lufttrykk\cite{nettside:lufttrykk}, temperatur\cite{nettside:temperatur}, vindretning\cite{nettside:vindretning} og vindhastighet\cite{nettside:vindhastighet}. Vi kjøpte også inn monteringsstang der vindhastighet og vindretningsmåleren skal være montert.\cite{nettside:monteringsstang}
+\subsubsection{SHT10}
 
-\subsection{SHT10}
-
-Denne sensoren måler temperatur og luftfuktighet. Vi baserte valget på pris og hvor godt den egner seg til vårt forbruk. Måleren skal etter planen være montert i Hessdalen, og da trengte vi en måler som måler for et stort temperaturområdet. Den skal fungere i området minus 40 celsius grader til 120 celsius grader. Denne kjøpte vi inn flere av enn det vi trengte i tilfelle noe skulle gå galt under oppkoblingen. Det var svært liten prisforskjell.
+SHT10 måler temperatur og luftfuktighet. Vi baserte valget på pris og hvor godt den egner seg til vårt forbruk. Måleren skal etter planen være montert i Hessdalen, og da trengte vi en måler som måler for et stort temperaturområdet. Den skal fungere i området $-40\,^{\circ}\mathrm{C}$ til $120\,^{\circ}\mathrm{C}$. Denne kjøpte vi inn flere av enn det vi trengte i tilfelle noe skulle gå galt under oppkoblingen. Det var svært liten prisforskjell.
 
 \begin{figure}[H]
   \centering
@@ -36,7 +135,7 @@ Denne sensoren måler temperatur og luftfuktighet. Vi baserte valget på pris og
   \caption{Måler for temperatur og luftfuktighet}
 \end{figure}
 
-\subsection{BMP180}
+\subsubsection{BMP180}
 
 Lufttrykk og temperatur, men velger bare å bruke den som lufttrykk. SHT10 egnet seg bedre enn denne måleren til temperatur og begge målerne var billige, så vi tok en måler til hver måling. Vi fikk tilsendt kun kretskortet, så vi måtte lage en slags beskyttelse til kretskortet. BMP180 måler lufttrykk i området 300hPa til 1100hPa. Dette tilsvarer alt fra 9000 meters høyde til 500 meter under havnivået. Denne kjøpte vi inn også flere av.
 
@@ -46,7 +145,7 @@ Lufttrykk og temperatur, men velger bare å bruke den som lufttrykk. SHT10 egnet
   \caption{Måler for lufttrykk}
 \end{figure}
 
-\subsection{WG2/O-50}
+\subsubsection{WG2/O-50}
 
 WG2 måler vindhastighet. Den måler i området 0m/s til 50m/s, med en feilmargin på 0,5m/s. Den kan også overleve vindkast opp mot 80m/s i 30 minutter. Denne måleren var relativt dyrt i forhold til de andre sensorene så vi kjøpte bare det vi trengte, to målere for to værstasjoner.
 
@@ -56,7 +155,7 @@ WG2 måler vindhastighet. Den måler i området 0m/s til 50m/s, med en feilmargi
   \caption{Måler for vindhastighet}
 \end{figure}
 
-\subsection{WRG2/O-50}
+\subsubsection{WRG2/O-50}
 
 WRG2 måler vindretningen. Denne måleren var også relativt dyr så vi kjøpte inn bare det vi trengte. Den kan også tåle store vindkast slik som WG2, og tåler opp til 80m/s i 30 minutter.
 \begin{figure}[H]
