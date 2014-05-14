@@ -59,7 +59,8 @@ function getDateFixed(date, type) {
     }
 }
 
-//fyller forms med info (kanskje bruke en kalender?)
+//fyller kalenderforms med info. begrenser datovalg basert på første og siste måling i databasen,
+//og setter fra-dato til å være 7 dager siden, til-dato til nåtid.
 function fillForms(jsonResponse) {
     var fs = jsonResponse.mindate.split(" ");
     var ss = fs[0].split("-");
@@ -93,7 +94,9 @@ function fillForms(jsonResponse) {
     weatherFetch('graph');
 }
 
-//kalles av onChange på form
+//kalles av onChange på forms for til- og fra-dato. Oppdaterer globale variabler,
+//konverterer timevalg knapper mellom checkbokser og radioknapper basert på nytt tidsintervall,
+//og kjører changedType()
 function changedDates() {
     fromDate = $("#from").datepicker('getDate');
     toDate = $("#to").datepicker('getDate');
@@ -103,6 +106,8 @@ function changedDates() {
     var hours12form = $("#hours12");
     var hours18form = $("#hours18");
     var hoursStandardForm = $("#hoursStandard");
+
+    //dersom tidsrom større enn 30 dager, konverter checkbokser til radioknapper
     if (diff >= 30) {
         if (hours00form.is(":checkbox")) {
             hours00form.replaceWith('<input name="hours" type="radio" id="' + hours00form.attr('id') + '" />');
@@ -112,6 +117,7 @@ function changedDates() {
             hoursStandardForm.replaceWith('<input name="hours" type="radio" id="' + hoursStandardForm.attr('id') + '"checked/>');
         }
     }
+    //ellers konverter radioknapper til checkbokser
     else {
         if (hours00form.is(":radio")) {
             hours00form.replaceWith('<input name="hours" type="checkbox" id="' + hours00form.attr('id') + '" />');
@@ -130,6 +136,7 @@ function changedDates() {
     changedType();
 }
 
+//kalles av onChange på forms for stasjonsvalg. Oppdaterer globale variabler og tegner graf/tabell på nytt
 function changedStations() {
     if (((document.getElementById("station1").checked) == true) && ((document.getElementById("station2").checked) == true)) {
         document.getElementById("station1").disabled = false;
@@ -155,13 +162,13 @@ function changedStations() {
     }
 }
 
-//kalles av onChange på værtype
+//kalles av onChange på forms for værtype. Oppdaterer global variabel og kjører weatherFetch();
 function changedType() {
     radioSelected = ($('input[name=type]:checked').val());
     weatherFetch(stateOfDiv);
 }
 
-//kalles av onChange på timer
+//kalles av onChange på forms for timevalg. Oppdaterer globale variabler og kjører weatherFetch(stateOfDiv);
 function changedHours(standard) {
     if (standard == true) {
         document.getElementById("hoursStandard").checked = true;
@@ -209,7 +216,9 @@ function changedHours(standard) {
     weatherFetch(stateOfDiv);
 }
 
-//fyller globalt deklarerte variabler
+//kjøres første gang siden lastes. klargjør graf
+//og starter prosessen med å hente ut når første og
+//siste måling er gjort (getJson('dbToJson.php?type=getRange', 'formFiller');)
 function genChart() {
     radioSelected = ($('input[name=type]:checked').val());
     chart = new google.visualization.LineChart(document.getElementById('chart_div'));
@@ -218,7 +227,8 @@ function genChart() {
     getJson('dbToJson.php?type=getRange', 'formFiller');
 }
 
-//laget for å unngå å endre kallargumenter på flere steder
+//endrer CSS-for å korrekt vise siden basert på om graf eller tabell skal vises.
+//kjører så getJson(ulike argumenter) for å starte prosessen med å hente fra databasen.
 function weatherFetch(type) {
     if(type=="graph"){
         document.getElementById("graphButton").style.backgroundColor = "#648762";
@@ -261,11 +271,13 @@ function weatherFetch(type) {
     }
 }
 
+//bygger og viser HTML-tabellen basert på globale data-arrays med målingsdata
 function makeTable() {
     document.getElementById("loading").style.visibility = "hidden";
     document.getElementById("loadingOverlay").style.visibility = "hidden";
     stateOfDiv = "table";
     var htmlTable = "<b>" + typeData + "</b><br/>";
+    //bestemmer CSS og antall kolonner basert på valg stasjonsvalg
     if (station1 == true && station2 == true) {
         htmlTable += '<table id="dataTable"><tr><th>Dato</th><th>Kl</th><th>Stasjon 1<br/>Gjennomsnitt</th><th>Stasjon 2<br/>Gjennomsnitt</th><th>Stasjon 1<br/>Maks</th><th>Stasjon 2<br/>Maks</th><th>Stasjon 1<br/>Min</th><th>Stasjon 2<br/>Min</th></tr>';
         document.getElementById("chart_div").style.width = "750px";
@@ -329,15 +341,16 @@ function makeTable() {
 
     }
     htmlTable += "</table>";
+    //skriver generert tabell til siden, og endrer CSS for å vise siden korrekt med tabellen
     document.getElementById("chart_div").style.overflow = "auto";
     document.getElementById("chart_div").style.marginLeft = "0px";
     document.getElementById("chart_div").innerHTML = htmlTable;
-    document.getElementById("dataTable").style.backgroundColor = "white";
 
+    //klargjør div for bruk med google visualisation igjen
     chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 }
 
-//fyller data-arrays med værdata for bruk i enten tabell eller graf
+//fyller globale data-arrays og variabler med værdata for bruk i enten tabell eller graf
 function populateArrays(jsonResponse) {
     var divedent = 1;
     if (radioSelected == "temperature") {
@@ -441,6 +454,7 @@ function populateArrays(jsonResponse) {
     });
 }
 
+//konverterer grader til kompassretninger
 function windDirection(deg) {
     if (deg >= 337 || deg < 22) {
         return "N";
@@ -471,7 +485,7 @@ function windDirection(deg) {
     }
 }
 
-//tømmer dataarrays
+//tømmer dataarrays (brukes når ny data skal hentes ut fra databasen)
 function clearArrays() {
     time = [];
     trackerTime = [];
@@ -490,7 +504,7 @@ function clearArrays() {
 
 }
 
-//fyller opp grafdata. blir kalt opp med JSON.
+//fyller opp grafdata basert på globale data-arrays og variabler. kaller deretter drawChart();
 function fillChart() {
     data = new google.visualization.DataTable();
     data.addColumn('datetime', 'time');
@@ -569,6 +583,8 @@ function fillChart() {
         },
         tooltip: { isHtml: true }
     };
+
+    //endrer CSS for å vise siden korrekt med grafen
     document.getElementById("chart_div").style.width = "900px";
     document.getElementById("chart_div").style.marginLeft = "-100px";
     document.getElementById("chart_div").style.marginRight = "0px";
@@ -606,10 +622,11 @@ function drawChart() {
 var options;
 var chart;
 var data;
+
+//diverse globale variabler for å forenkle kommunikasjon mellom funksjoner
 var stateOfDiv;
 var station1 = true;
 var station2 = true;
-
 var tabEntry = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 var radioSelected;
 var hoursOverride = false;
@@ -617,11 +634,17 @@ var hours00 = false;
 var hours06 = false;
 var hours12 = false;
 var hours18 = false;
-
-var time = [];
-var trackerTime = [];
+var minCalendarDate;
+var maxCalendarDate;
+var fromDate;
+var toDate;
 var typeData;
 var mTypeData;
+var errorMsg = "Ingen data";
+
+//globale data-arrays som skal tar vare på værdata
+var time = [];
+var trackerTime = [];
 var valAvg1 = [];
 var valMin1 = [];
 var timeMin1 = [];
@@ -629,7 +652,6 @@ var valMax1 = [];
 var timeMax1 = [];
 var dirMax1 = [];
 var isData1 = false;
-
 var valAvg2 = [];
 var valMin2 = [];
 var timeMin2 = [];
@@ -637,15 +659,6 @@ var valMax2 = [];
 var timeMax2 = [];
 var dirMax2 = [];
 var isData2 = false;
-
-//variabler fra kalendere
-var minCalendarDate;
-var maxCalendarDate;
-var fromDate;
-var toDate;
-
-//språk
-var errorMsg = "Ingen data";
 
 //laster inn grafobjekter asynkront. kjører deretter genChart for å sette opp grafobjektene
 google.load("visualization", "1", {packages: ["corechart"]});
