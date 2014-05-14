@@ -11,23 +11,21 @@
 #include <pro/dhcp.h>
 #include <dev/board.h>
 #include <netinet/tcp.h>
+#include <avr/wdt.h>
 
-//Standard C-library headers
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <io.h>
 
-#include <avr/wdt.h>
-
 #include "network.h"
 #include "adc.h"
 #include "bmp180.h"
 #include "sht10.h"
 
-//#define ETHERNUT_1	1;
-#define ETHERNUT_2	2;
+#define ETHERNUT_1	1;
+//#define ETHERNUT_2	2;
 
 #ifdef ETHERNUT_1
 #define STATION_ID	ETHERNUT_1 //Endres avhengig av ethernut.
@@ -38,13 +36,15 @@
 #define MEASURE_ARR_MAX	11
 #define FINAL_ARR_MAX	12
 
+//Holder på en måling for en målingstype gjort hvert 30.sek.
 typedef struct measure {
-	char datetime[20];
+	char datetime[DATETIME_STRING_LENGTH];
 	double value;
 } measure_t;
 
+//Holder på ferdig utregnede verdier fra de sist 5 min.
 typedef struct final_value {
-	char datetime[20];
+	char datetime[DATETIME_STRING_LENGTH];
 	uint8_t station_id;
 	struct range *temp;
 	struct range *humi;
@@ -52,26 +52,28 @@ typedef struct final_value {
 	struct range *wind;
 } final_value_t;
 
+//Holder på utregnede verdier for en målingstype.
 typedef struct range {
 	char measure_class[10];
 	double avg;
 	double now;
 	double max;
-	char time_max[20];
+	char time_max[DATETIME_STRING_LENGTH];
 	double min;
-	char time_min[20];
+	char time_min[DATETIME_STRING_LENGTH];
 	double max_dir;
 } range_t;
 
-//Starter watchdog-telleren, resetter CPU hvis ikke den blir tilbakestilt med restart_watchdog.
+//Starter watchdog-telleren, starter om CPU hvis ikke den blir tilbakestilt med restart_watchdog.
 void start_watchdog(void);
 
 //Tilbakestiller watchdog-telleren.
 void restart_watchdog(void);
 
+//Skrur av watchdog.
 void disable_watchdog(void);
 
-//Leser alle sensorer.
+//Leser data fra alle sensorer.
 void read_sensors(void);
 
 //Samler data og gjør de klar for sending.
@@ -80,10 +82,7 @@ void prepare_data(void);
 //Sender data til server.
 void send_data(void);
 
-//Venter på helt minutt.
-void wait_for_whole_min(void);
-
-//Venter i 30 sekunder.
+//Venter på en 30.sekunder.
 void wait_30_sec(void);
 
 //Registerer output på serieutgang, brukes ved debug.

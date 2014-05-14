@@ -1,24 +1,29 @@
 #include "hessdalen_weather.h"
 
+//Holder på målinger som gjøres hvert 30.sek.
 static measure_t temp_list[MEASURE_ARR_MAX];
 static measure_t humi_list[MEASURE_ARR_MAX];
 static measure_t pressure_list[MEASURE_ARR_MAX];
 static measure_t wind_speed_list[MEASURE_ARR_MAX];
 static measure_t wind_dir_list[MEASURE_ARR_MAX];
 
+//Holder på utregnet gjennomsnitt mm. for hvert 5. min.
 static final_value_t final_values[FINAL_ARR_MAX];
 
 static tm *datetime;
+
 static uint8_t measured;
 
+//Holder orden på hvor mange målinger og utregninger som har blitt gjort.
 static int measure_index;
 static int final_value_index;
 
-uint8_t bmp180_initialized;
+//Er 1 hvis bmp180 ble initialisert riktig.
+static uint8_t bmp180_initialized;
 
 void start_watchdog(void)
 {
-	wdt_enable(7); //Setter wdt til 1.8s (egentlig rundt 1.5s).
+	wdt_enable(7); //Setter watchdog til 1.8s (egentlig rundt 1.5s).
 }
 
 void restart_watchdog(void)
@@ -36,7 +41,7 @@ void read_sensors(void)
 	double temp, humi, dew, wspeed, wdirection;
 	uint8_t error;
 	int32_t pressure;
-	char *dt = malloc(sizeof(char) * 20);
+	char *dt = malloc(sizeof(char) * DATETIME_STRING_LENGTH);
 	measure_t *sht10_temp = &temp_list[measure_index],
 		*sht10_humi = &humi_list[measure_index],
 		*bmp180_pressure = &pressure_list[measure_index],
@@ -55,7 +60,7 @@ void read_sensors(void)
 
 	restart_watchdog();
 
-	if(error != 0) {
+	if(error != 0) { //Hvis noe gikk galt med å lese fra SHT10
 		temp = 0.0;
 		humi = 0.0;
 	}
@@ -64,7 +69,7 @@ void read_sensors(void)
 
 	if(bmp180_initialized == 1)
 		bmp180_read_data(&pressure);
-	else
+	else //Hvis BMP180 ikke ble initialisert ved oppstart.
 		pressure = 0;
 
 	restart_watchdog();
@@ -75,6 +80,7 @@ void read_sensors(void)
 	
 	printf("Read sensors: Temp: %lf, Humi: %lf, Pressure: %ld, WSpeed: %lf, WDir: %lf\n", temp, humi, pressure, wspeed, wdirection);
 
+	//Legger til målte verdier i array.
 	strcpy(sht10_temp->datetime, dt);
 	sht10_temp->value = temp;
 
@@ -90,7 +96,7 @@ void read_sensors(void)
 	strcpy(wind_dir->datetime, dt);
 	wind_dir->value = wdirection;
 
-	measure_index++;
+	measure_index++; //En måling har blitt gjort.
 	free(dt);
 
 	restart_watchdog();
@@ -104,18 +110,19 @@ void prepare_wind_data(range_t *ret_wind)
 	double wspeed_sum = 0.0;
 	double wspeed_max, wspeed_min, wdir_max, wspeed, wdir;
 
-	char *wspeed_max_dt = malloc(sizeof(char) * 20),
-		*wspeed_min_dt = malloc(sizeof(char) * 20);
-	measure_t *last_wind = &wind_speed_list[measure_index - 1];
+	char *wspeed_max_dt = malloc(sizeof(char) * DATETIME_STRING_LENGTH),
+		*wspeed_min_dt = malloc(sizeof(char) * DATETIME_STRING_LENGTH);
+	measure_t *last_wind = &wind_speed_list[measure_index - 1]; //Siste måling
 	
 	strcpy(ret_wind->measure_class, "wind");
-	ret_wind->now = last_wind->value;
+	ret_wind->now = last_wind->value; //Nåverdi er siste måling.
 	
 	wspeed_max = wspeed_min = wspeed_current->value;
 	strcpy(wspeed_max_dt, wspeed_current->datetime);
 	strcpy(wspeed_min_dt, wspeed_current->datetime);
 	wdir_max = wdir_current->value;
 
+	//Finner max og min fra de siste målingene.
 	for(i = 0; i < measure_index; i++, wspeed_current++, wdir_current++) {
 		wspeed_num++;
 		
@@ -132,6 +139,8 @@ void prepare_wind_data(range_t *ret_wind)
 		}
 		wspeed_sum += wspeed;
 	}
+	
+	//Hvis flere enn to målinger, fjern max og min før vi regner gjennomsnitt. I tilfelle støy.
 	if(wspeed_num > 2) {
 		wspeed_num -= 2;
 
@@ -139,7 +148,7 @@ void prepare_wind_data(range_t *ret_wind)
 		wspeed_sum -= wspeed_min;
 	}
 	
-	if(wspeed_num > 0) {
+	if(wspeed_num > 0) { //Returnerer gjennomsnitt og resterende verdier.
 		ret_wind->avg = ((double) wspeed_sum) / ((double) wspeed_num);
 		ret_wind->max = wspeed_max;
 		ret_wind->min = wspeed_min;
@@ -160,9 +169,9 @@ void prepare_bmp180_data(range_t *ret_pressure)
 	int32_t pressure_sum = 0;
 	int32_t pressure_max, pressure_min, pressure;
 
-	char *pressure_max_dt = malloc(sizeof(char) * 20),
-		*pressure_min_dt = malloc(sizeof(char) * 20);
-	measure_t *last_pressure = &pressure_list[measure_index - 1];
+	char *pressure_max_dt = malloc(sizeof(char) * DATETIME_STRING_LENGTH),
+		*pressure_min_dt = malloc(sizeof(char) * DATETIME_STRING_LENGTH);
+	measure_t *last_pressure = &pressure_list[measure_index - 1]; //Siste måling.
 	
 	strcpy(ret_pressure->measure_class, "pressure");
 	ret_pressure->now = last_pressure->value;
@@ -171,6 +180,7 @@ void prepare_bmp180_data(range_t *ret_pressure)
 	strcpy(pressure_max_dt, pressure_current->datetime);
 	strcpy(pressure_min_dt, pressure_current->datetime);
 
+	//Finner max og min fra de siste målingene.
 	for(i = 0; i < measure_index; i++, pressure_current++) {
 		pressure_num++;
 		
@@ -187,6 +197,8 @@ void prepare_bmp180_data(range_t *ret_pressure)
 
 		pressure_sum += pressure;
 	}
+	
+	//Hvis flere enn to målinger, fjern max og min før vi regner gjennomsnitt. I tilfelle støy.
 	if(pressure_num > 2) {
 		pressure_num -= 2;
 
@@ -194,7 +206,7 @@ void prepare_bmp180_data(range_t *ret_pressure)
 		pressure_sum -= pressure_min;
 	}
 
-	if(pressure_num > 0) {
+	if(pressure_num > 0) { //Returnerer verdier.
 		ret_pressure->avg = ((double) pressure_sum) / ((double) pressure_num);
 		ret_pressure->max = pressure_max;
 		ret_pressure->min = pressure_min;
@@ -213,15 +225,13 @@ void prepare_sht10_data(range_t *ret_temp, range_t *ret_humi)
 	uint16_t temp_num = 0, humi_num = 0;
 	double temp_sum = 0.0, humi_sum = 0.0, temp_max, temp_min, humi_max, humi_min, temp, humi;
 
-	char *temp_max_dt = malloc(sizeof(char) * 20),
-		*humi_max_dt = malloc(sizeof(char) * 20),
-		*temp_min_dt = malloc(sizeof(char) * 20),
-		*humi_min_dt = malloc(sizeof(char) * 20);
+	char *temp_max_dt = malloc(sizeof(char) * DATETIME_STRING_LENGTH),
+		*humi_max_dt = malloc(sizeof(char) * DATETIME_STRING_LENGTH),
+		*temp_min_dt = malloc(sizeof(char) * DATETIME_STRING_LENGTH),
+		*humi_min_dt = malloc(sizeof(char) * DATETIME_STRING_LENGTH);
 
-	measure_t *last_temp = NULL, *last_humi = NULL;
-	
-	last_temp = &temp_list[measure_index - 1];
-	last_humi = &humi_list[measure_index - 1];
+	measure_t *last_temp = &temp_list[measure_index - 1], //Siste målinger.
+			*last_humi = &humi_list[measure_index - 1];;
 	
 	strcpy(ret_temp->measure_class, "temp");
 	ret_temp->now = last_temp->value;
@@ -237,6 +247,7 @@ void prepare_sht10_data(range_t *ret_temp, range_t *ret_humi)
 	strcpy(humi_max_dt, humi_current->datetime);
 	strcpy(humi_min_dt, humi_current->datetime);
 
+	//Finner max og min.
 	for(i = 0; i < measure_index; i++, temp_current++, humi_current++) {
 		temp_num++;
 		humi_num++;
@@ -265,6 +276,7 @@ void prepare_sht10_data(range_t *ret_temp, range_t *ret_humi)
 		humi_sum += humi;
 	}
 	
+	//Hvis flere enn to målinger, fjerner vi max og min. I tilfelle støy.
 	if(temp_num > 2 && humi_num > 2) {
 		temp_sum -= temp_max;
 		temp_sum -= temp_min;
@@ -275,7 +287,7 @@ void prepare_sht10_data(range_t *ret_temp, range_t *ret_humi)
 		humi_num -= 2;
 	}
 
-	if(temp_num > 0) {
+	if(temp_num > 0) { //Returnerer temperaturverdier.
 		ret_temp->avg = ((double) temp_sum) / ((double) temp_num);
 		ret_temp->max = temp_max;
 		ret_temp->min = temp_min;
@@ -283,7 +295,7 @@ void prepare_sht10_data(range_t *ret_temp, range_t *ret_humi)
 		strcpy(ret_temp->time_min, temp_min_dt);
 	}
 
-	if(humi_num > 0) {
+	if(humi_num > 0) { //Returnerer fuktighetsverdier.
 		ret_humi->avg = ((double) humi_sum) / ((double) humi_num);
 		ret_humi->max = humi_max;
 		ret_humi->min = humi_min;
@@ -311,18 +323,19 @@ void prepare_data(void)
 
 	restart_watchdog();
 
-	prepare_sht10_data(temp, humi);
+	prepare_sht10_data(temp, humi); //Finner gjennomsnitt, max, min osv. fra siste 5 .min.
 
 	restart_watchdog();
 
-	prepare_bmp180_data(pressure);
+	prepare_bmp180_data(pressure); //Finner gjennomsnitt, max, min osv. fra siste 5 .min.
 
 	restart_watchdog();
 
-	prepare_wind_data(wind);
+	prepare_wind_data(wind); //Finner gjennomsnitt, max, min osv. fra siste 5 .min.
 
 	restart_watchdog();
 	
+	//Printer utregnede verdier for debug.
 	puts("---------------- PREPARED DATA -----------------");
 	printf("DATETIME: %s \n", final->datetime);
 	printf("STATION_ID: %d \n", final->station_id);
@@ -333,13 +346,14 @@ void prepare_data(void)
 	printf("AVAILABLE MEMORY: %d bytes\n", NutHeapAvailable());
 	puts("---------------- PREPARED DATA -----------------");
 
+	//Legger de utregnede verdiene inn i array-elementet.
 	final->temp = temp;
 	final->humi = humi;
 	final->pressure = pressure;
 	final->wind = wind;
 
 	final_value_index++;
-	measure_index = 0;
+	measure_index = 0; //Klar for nye verdier.
 
 	restart_watchdog();
 }
@@ -356,22 +370,23 @@ void send_data(void)
 		*json_pressure = NULL,
 		*json_wind = NULL,
 		*json = NULL,
-		*json_array = malloc(13000),
-		*temp_string = malloc(1024);
+		*json_array = malloc(sizeof(char) * JSON_ARRAY_LENGTH),
+		*temp_string = malloc(sizeof(char) * 1024); //Midlertidig streng.
 
-	memset(temp_string, 0, strlen(temp_string));
+	memset(temp_string, 0, strlen(temp_string)); //Nullsetter hele strengen.
 	memset(json_array, 0, strlen(json_array));
 
 	restart_watchdog();
 
 	for(i = 0; i < final_value_index; i++, current++) {
-		json_root = malloc(100);
-		json_temp = malloc(200);
-		json_humi = malloc(200);
-		json_pressure = malloc(200);
-		json_wind = malloc(200);
-		json = malloc(1024);
+		json_root = malloc(sizeof(char) * JSON_ROOT_LENGTH);
+		json_temp = malloc(sizeof(char) * JSON_STRING_LENGTH);
+		json_humi = malloc(sizeof(char) * JSON_STRING_LENGTH);
+		json_pressure = malloc(sizeof(char) * JSON_STRING_LENGTH);
+		json_wind = malloc(sizeof(char) * JSON_STRING_LENGTH);
+		json = malloc(sizeof(char) * JSON_OBJECT_LENGTH);
 
+		//Nullsetter alle strenger.
 		memset(json_root, 0, strlen(json_root));
 		memset(json_temp, 0, strlen(json_temp));
 		memset(json_humi, 0, strlen(json_humi));
@@ -386,39 +401,43 @@ void send_data(void)
 		pressure = current->pressure;
 		wind = current->wind;
 		
-		puts("-------------- JSON STRINGS -------------");
+		//Lager JSON-strenger.
 		get_json_string_root(current->datetime, current->station_id, json_root);
-		printf("Root string: %s\n", json_root);
 		get_json_string(temp->measure_class, temp->avg, temp->now, temp->max, temp->time_max, temp->min, temp->time_min, json_temp);
-		printf("Temp string: %s\n", json_temp);
 		get_json_string(humi->measure_class, humi->avg, humi->now, humi->max, humi->time_max, humi->min, humi->time_min, json_humi);
-		printf("Humi string: %s\n", json_humi);
 		get_json_string(pressure->measure_class, pressure->avg, pressure->now, pressure->max, pressure->time_max, pressure->min, pressure->time_min, json_pressure);
-		printf("Pressure string: %s\n", json_pressure);
 		get_json_wstring(wind->avg, wind->now, wind->max, wind->time_max, wind->max_dir, wind->min, wind->time_min, json_wind);
-		printf("Wind string: %s\n", json_wind);
-
+		
+		//Setter de sammen til et JSON-objekt.
 		get_json(json_root, json_temp, json_humi, json_pressure, json_wind, json);
+		
+		//Printer strenger for debug.
+		puts("-------------- JSON STRINGS -------------");
+		printf("Root string: %s\n", json_root);
+		printf("Temp string: %s\n", json_temp);
+		printf("Humi string: %s\n", json_humi);
+		printf("Pressure string: %s\n", json_pressure);
+		printf("Wind string: %s\n", json_wind);
 		printf("Json string: %s\n", json);
 		puts("-------------- JSON STRINGS  -------------");
 	
 		restart_watchdog();
 
-		if(i == 0) {
+		if(i == 0) { //Lager første del av JSON-array.
 			get_json_array_root(json, temp_string);
 			strcat(json_array, temp_string);
 
-			if(i == (final_value_index -1))
+			if(i == (final_value_index -1)) //Dette var også det siste JSON-objektet.
 				strcat(json_array, "]");
 
-		} else if(i == (final_value_index - 1)) {
+		} else if(i == (final_value_index - 1)) { //Dette er det siste objektet som skal inn i arrayet.
 			get_json_array_end(json, temp_string);
 			strcat(json_array, temp_string);
-		} else if(i < (final_value_index - 1)) {
+		} else if(i < (final_value_index - 1)) { //Dette er et objekt som skal inn i arrayet.
 			get_json_array_ele(json, temp_string);
 			strcat(json_array, temp_string);
 
-			if(i == (final_value_index - 1))
+			if(i == (final_value_index - 1)) //Dette var også det siste objektet.
 				strcat(json_array, "]");
 		}
 
@@ -439,25 +458,12 @@ void send_data(void)
 	printf("JSON_ARRAY\n%s\n", json_array);
 
 	restart_watchdog();
-	send_json(json_array);
+	send_json(json_array); //Sender data.
 	restart_watchdog();
 
 	free(json_array);
 
-	final_value_index = 0;
-}
-
-void wait_for_whole_min(void) {
-	for(;;) {
-		restart_watchdog();
-		datetime = get_current_time();
-		if(datetime->tm_sec == 0)
-			break;
-
-		NutSleep(100);
-		restart_watchdog();
-	}
-	puts("Whole min");
+	final_value_index = 0; //Klar for nye utregninger.
 }
 
 void wait_30_sec(void) {
@@ -474,9 +480,9 @@ void wait_30_sec(void) {
 			measured = 0;
 		}
 
-		if((datetime->tm_sec % 30) == 0)
+		if((datetime->tm_sec % 30) == 0) //Dette er en trettisekunder. F.eks 13:31:30, 14:32:00.
 			break;
-		NutSleep(100);
+		NutSleep(100); //Sover litt så vi ikke gjør noe konstant.
 		restart_watchdog();
 	} 
 	puts("30 sec");
@@ -491,6 +497,7 @@ void init_arrays(void) {
 		*t = wind_dir_list;
 	final_value_t *u = final_values;
 
+	//Initialiserer alle elementer i målingsarrayene. Overskriver de når programmet går.
 	for(i = 0; i < MEASURE_ARR_MAX; i++, p++, q++, r++, s++, t++) {
 		p = malloc(sizeof(measure_t));
 		q = malloc(sizeof(measure_t));
@@ -499,6 +506,7 @@ void init_arrays(void) {
 		t = malloc(sizeof(measure_t));
 	}
 
+	//Initialiserer alle elementer i ferdig utregnede verdier.
 	for(i = 0; i < FINAL_ARR_MAX; i++, u++) {
 		u = malloc(sizeof(final_value_t));
 	}
@@ -506,6 +514,7 @@ void init_arrays(void) {
 
 void configure_debug(uint32_t baud)
 {
+	//Registrerer serieporten som standard output.
 	NutRegisterDevice(&DEV_DEBUG, 0, 0);
 	freopen(DEV_DEBUG_NAME, "w", stdout);
 	_ioctl(_fileno(stdout), UART_SETSPEED, &baud);
@@ -513,8 +522,9 @@ void configure_debug(uint32_t baud)
 
 int main(void)
 {
+	//Starter uten watchdog. Noen elementer av initialiseringen tar for lang tid.
 	disable_watchdog();
-	uint32_t baud = 115200;
+	uint32_t baud = 115200; //Hastighet på serieutgang som brukes til standard output.
 	uint8_t i;
 
 	bmp180_initialized = 0;
@@ -523,19 +533,18 @@ int main(void)
 	final_value_index = 0;
 	datetime = malloc(sizeof(tm));
 
-	init_arrays();
+	init_arrays(); //Initialiserer arrays som skal holde på målinger og utregninger.
 
-	configure_debug(baud); // Setter output til serieutgang.
+	configure_debug(baud); //Setter output til serieutgang.
 
-	configure_network(); // Initialiserer ethernet.
+// Start på hovedprogram.
+	puts("Initializing hardware...");
+	
+	configure_network(); //Initialiserer nettverksmodulen.
 
-// HOVEDPROGRAM
+	set_time_ntp(); //Setter klokken.
 
-	puts("Initializing...");
-
-	set_time_ntp(); // Setter klokken.
-
-	start_watchdog();
+	start_watchdog(); //Starter watchdog.
 
 	adc_init(); // Initialiserer ADC.
 
@@ -543,7 +552,7 @@ int main(void)
 
 	i = bmp180_init();// Initialiserer BMP180.
 
-	if(i == 0) //Klarte å initialisere
+	if(i == 0) //Klarte å initialisere BMP180.
 		bmp180_initialized = 1;
 	else
 		puts("BMP180 not initialized");
@@ -552,31 +561,32 @@ int main(void)
 
 	puts("Project Hessdalen weather station");
 
-	wait_for_whole_min(); // Venter på helt minutt før vi begynner å måle.
+	wait_30_sec(); // Venter på 30.sek før vi begynner.
 
 	for (;;) { //Hovedløkke.
 		restart_watchdog();
 		read_sensors();
 		restart_watchdog();
-		measured = 1;
-
-		if(((datetime->tm_min % 5) == 0) && (datetime->tm_sec == 0)) { //Regner ut gjennomsnitt og max/min hvert 5. min.
+		measured = 1; //Har gjort en måling for denne 30 sekunderen.
+		
+		//Regner ut gjennomsnitt, max/min etc. hvert 5. min.
+		if(((datetime->tm_min % 5) == 0) && (datetime->tm_sec == 0)) {
 			restart_watchdog();
 			prepare_data();
 			restart_watchdog();
 
-			if((datetime->tm_min == 0) && (datetime->tm_sec == 0)) { //Sender data hver hele time.
+			//Sender data hver hele time.
+			if((datetime->tm_min == 0) && (datetime->tm_sec == 0)) {
 				send_data();
+				//Gir all kontroll til tråden som skal sende data.
 				for(;;) {
 					restart_watchdog();
-					NutSleep(500);
+					NutSleep(1000);
 				}
 			}
 		}
 		wait_30_sec(); //Gjør ny måling hvert 30. sekund.
 	}
-
-	for(;;);
 
 	return 0;
 }

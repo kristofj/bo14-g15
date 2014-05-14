@@ -4,11 +4,12 @@ enum {TEMP, HUMI};
 
 void initiate_pins(void)
 {
+	//Setter pins til output.
 	GpioPinConfigSet(PORT_B, SCK_PIN, GPIO_CFG_OUTPUT);
 	GpioPinConfigSet(PORT_B, DATA_PIN, GPIO_CFG_OUTPUT);
 }
 
-uint8_t sht10_measure(double *temp, double *humi, double *dew)
+uint8_t sht10_measure(double *temp, double *humi)
 {
 	uint8_t error;
 	uint16_t humival_raw, tempval_raw;
@@ -32,13 +33,11 @@ uint8_t sht10_measure(double *temp, double *humi, double *dew)
 	humival_d = (double) humival_raw;
 	tempval_d = (double) tempval_raw;
 
-	extract_values(&humival_d, &tempval_d);
+	extract_values(&humival_d, &tempval_d); //Råverdi til temp og fuktighet.
 	restart_watchdog();
-	dew_point_d = get_dew_point(humival_d, tempval_d);
 
 	*temp = tempval_d;
 	*humi = humival_d;
-	*dew = dew_point_d;
 
 	return 0;
 }
@@ -75,7 +74,7 @@ uint8_t read_sensor_raw(uint16_t *p_value, uint8_t mode)
 	}
 	
 	if(i) { //Timeout.
-		return 3;
+		return 1;
 	}
 	i = read_byte(1); //Leser MSB.
 	*p_value = (i << 8) | read_byte(0); //Leser LSB.
@@ -85,10 +84,10 @@ uint8_t read_sensor_raw(uint16_t *p_value, uint8_t mode)
 
 uint8_t read_byte(uint8_t ack)
 {
-	uint8_t i = 0x80;
+	uint8_t i = 0x80; //Bit-maske.
 	uint8_t val = 0;
 	
-	set_data_input();
+	set_data_input(); //Setter data-pin til input.
 	
 	while(i) {
 		SCK_HIGH;
@@ -102,10 +101,9 @@ uint8_t read_byte(uint8_t ack)
 	}
 	set_data_output();
 	
-	if(ack) {
+	if(ack) { //Sender ACK.
 		DATA_LOW;
-	}
-	else {
+	} else {
 		DATA_HIGH;
 	}
 	SCK_HIGH;
@@ -124,10 +122,9 @@ uint8_t write_byte(uint8_t data)
 	set_data_output();
 
 	while(i) {
-		if(i & data) {
+		if(i & data) { //Sender 1.
 			DATA_HIGH;
-		}
-		else {
+		} else { //Sender 0.
 			DATA_LOW;
 		}
 
@@ -198,6 +195,7 @@ uint8_t soft_reset(void)
 
 void extract_values(double *p_humidity, double *p_temperature)
 {
+	//Paramtere fra datablad.
 	const double C1 = -2.0468;
 	const double C2 = +0.0367;
 	const double C3 = -0.0000015955;
@@ -221,16 +219,6 @@ void extract_values(double *p_humidity, double *p_temperature)
 
 	*p_temperature = t_C;
 	*p_humidity = rh_true;
-}
-
-double get_dew_point(double h, double t)
-{
-	double log_ex, dew_point;
-	
-	log_ex = (log10(h)-2)/0.4343 + (17.62*t)/(243.12*t);
-	dew_point = 243.12*log_ex/(17.62 - log_ex);
-	
-	return dew_point;
 }
 
 uint16_t read_data_pin(void)

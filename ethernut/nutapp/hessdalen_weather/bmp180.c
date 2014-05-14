@@ -1,6 +1,6 @@
 #include "bmp180.h"
 
-//Holder kalibreringsparamterene som leses ifra bmp180.
+//Holder på kalibreringsparamterene som leses ifra bmp180.
 struct bmp180_cal_params {
 	int16_t AC1;
 	int16_t AC2;
@@ -15,30 +15,25 @@ struct bmp180_cal_params {
 	int16_t MD;
 };
 
-static struct bmp180_cal_params params;
+struct bmp180_cal_params params;
 
-uint8_t bmp180_read_data(int32_t *pressure)
+void bmp180_read_data(int32_t *pressure)
 {
-	uint8_t error = 0;
 	uint16_t ut;
 	uint32_t up;
 	int32_t X1, X2, X3, B3, B5, B6;
 	uint32_t B4, B7;
 
-	error = bmp180_read_ut(&ut);
-	if(error > 0)
-		return error;
-
-	error = bmp180_read_up(&up);
-	if(error > 0)
-		return error;
+	//Leser rådata
+	bmp180_read_ut(&ut);
+	bmp180_read_up(&up);
 
 	//Regner ut temperatur:
 	X1 = (((int32_t) ut - (int32_t)params.AC6) * (int32_t)params.AC5) >> 15;
 	X2 = ((int32_t) params.MC << 11) / (X1 + params.MD);
 	B5 = X1 + X2;
 
-	//Regner ut trykk
+	//Regner ut trykk:
 	B6 = B5 - 4000;
 
 	X1 = (B6 * B6) >> 12;
@@ -71,33 +66,34 @@ uint8_t bmp180_read_data(int32_t *pressure)
 	X2 = (*pressure * (-7357)) >> 16;
 	*pressure += (X1 + X2 + 3791) >> 4; //Lufttrykk i Pa.
 	*pressure /= 100; //Lufttrykk i hPa.
-
-	return error;
 }
 
 uint8_t bmp180_init(void)
 {
-	uint8_t chip_id, error = 0;
+	uint8_t chip_id;
 	uint8_t bmp180_adress;
 
 	TWI_init();
 	
 	bmp180_adress = TWI_scan();
 
-	printf("BMP180: %d\n", bmp180_adress);
-
 	if(bmp180_adress != 0xee) {
 		puts("Could not find bmp180.");
 		return -1;
 	}
 
-	error = bmp180_read8(0xd0, &chip_id); //Chip-id skal være 0x55.
+	bmp180_read8(0xd0, &chip_id); //Chip-id skal være 0x55.
 
-	printf("Chip id: 0x%x\n",chip_id);
+	if(chip_id == 0x55) {
+		puts("Chip id confirmed");
+	} else {
+		printf("Wrong chip id: %x\n", chip_id);
+		return -1;
+	}
 
-	error = bmp180_read_cal_params();
+	bmp180_read_cal_params();
 
-	return error;
+	return 0;
 }
 
 void TWI_init(void)
@@ -116,13 +112,13 @@ uint8_t TWI_scan(void)
 		TWI_start();
 
 		TWI_write(i);
-		status = TWI_STATUS;
+		status = TWI_get_status();
 
 		TWI_stop();
 
-		if(status == 0x18) {
+		if(status == 0x18) { //ACK har blitt mottatt. Fant en enhet.
 			addr = i;
-			printf("BMP180 found at %x\n", i);
+			printf("Slave found at %x\n", i);
 			break;
 		}
 	}
@@ -133,9 +129,10 @@ void TWI_start(void)
 {
 	uint8_t i = 0;
 
-	TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); //Sender start.
-	while((TWCR & (1<<TWINT)) == 0) { //Venter på at TWINT er satt. Start har blitt sendt.
-		if(i == 5) { //Venter 5*10 ms før vi gir opp.
+	TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); //Sender START.
+	//Venter på at TWINT er satt. START har blitt sendt. Venter maks 5*10 ms før vi gir opp.
+	while((TWCR & (1<<TWINT)) == 0) {
+		if(i == 5) { //Timeout.
 			return;
 		} else {
 			NutSleep(10);
@@ -147,7 +144,7 @@ void TWI_start(void)
 
 void TWI_stop(void)
 {
-	TWCR = (1<<TWINT) | (1<<TWSTO) | (1<<TWEN); //Sender stop.
+	TWCR = (1<<TWINT) | (1<<TWSTO) | (1<<TWEN); //Sender STOP.
 }
 
 void TWI_write(uint8_t data)
@@ -156,8 +153,8 @@ void TWI_write(uint8_t data)
 
 	TWDR = data; //Laster byten inn i data-registeret. Klar for sending.
 	TWCR = (1<<TWINT) | (1<<TWEN); //Starter sending av data i data-registeret.
-	while((TWCR & (1<<TWINT)) == 0) { //Venter på at data er sendt.
-		if(i == 5) {
+	while((TWCR & (1<<TWINT)) == 0) { //Venter på at data er sendt. Venter maks 5*10 ms.
+		if(i == 5) { //Timeout.
 			return;
 		} else {
 			NutSleep(10);
@@ -171,9 +168,10 @@ uint8_t TWI_read_ack(void)
 {
 	uint8_t data;
 
-	TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWEA);
-	while((TWCR & (1<<TWINT)) == 0);
-	data = TWDR;
+	TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWEA); //Sender ACK.
+	while((TWCR & (1<<TWINT)) == 0); //Venter på at TWINT er satt. Data har blitt mottatt.
+	data = TWDR; //Leser mottat data.
+	
 	return data;
 }
 
@@ -181,9 +179,10 @@ uint8_t TWI_read_nack(void)
 {
 	uint8_t data;
 
-	TWCR = (1<<TWINT) | (1<<TWEN);
-	while((TWCR & (1<<TWINT)) == 0);
-	data = TWDR;
+	TWCR = (1<<TWINT) | (1<<TWEN); //Sender ikke ACK.
+	while((TWCR & (1<<TWINT)) == 0); //Venter på at TWINT er satt. Data har blitt mottatt.
+	data = TWDR; //Leser mottatt data.
+	
 	return data;
 }
 
@@ -194,14 +193,14 @@ uint8_t TWI_get_status(void)
 	return status;
 }
 
-uint8_t bmp180_read_cal_params(void)
+void bmp180_read_cal_params(void)
 {
-	uint8_t i, error = 0;
+	uint8_t i;
 	uint16_t data[11];
 	uint16_t *p = data;
 
-	for(i=0xaa, p=data; i<0xbf; i+=2, p++) { //Leser EEPROM fra 0xAA - 0xBF.
-		error += bmp180_read16(i, p);
+	for(i=0xaa; i<0xbf; i+=2, p++) { //Leser EEPROM fra 0xAA - 0xBF.
+		bmp180_read16(i, p);
 	}
 
 	params.AC1 = (int16_t) data[0];
@@ -215,15 +214,11 @@ uint8_t bmp180_read_cal_params(void)
 	params.MB = (int16_t) data[8];
 	params.MC = (int16_t) data[9];
 	params.MD = (int16_t) data[10];
-
-	return error;
 }
 
-//TODO: Legge til mer feilsøking ved å sjekke TWI_STATUS.
-uint8_t bmp180_read16(uint8_t reg_addr, uint16_t *data)
+void bmp180_read16(uint8_t reg_addr, uint16_t *data)
 {
-	uint8_t MSB;
-	uint8_t LSB;
+	uint8_t MSB, LSB;
 
 	TWI_start();
 
@@ -239,12 +234,9 @@ uint8_t bmp180_read16(uint8_t reg_addr, uint16_t *data)
 	TWI_stop();
 
 	*data = (MSB<< 8) | (LSB); //Summerer MSB og LSB.
-
-	return 0;
 }
 
-//TODO: Legge til mer feilsøking ved å sjekke TWI_STATUS.
-uint8_t bmp180_read8(uint8_t reg_addr, uint8_t *data)
+void bmp180_read8(uint8_t reg_addr, uint8_t *data)
 {
 	TWI_start(); //Start på kommunikasjon.
 	
@@ -257,12 +249,9 @@ uint8_t bmp180_read8(uint8_t reg_addr, uint8_t *data)
 	*data = TWI_read_nack(); //Trenger ikke ack for siste byte.
 	
 	TWI_stop();
-
-	return 0;
 }
 
-//TODO: Legge til mer feilsøking ved å sjekke TWI_STATUS.
-uint8_t bmp180_write8(uint8_t reg_addr, uint8_t data)
+void bmp180_write8(uint8_t reg_addr, uint8_t data)
 {
 	TWI_start();
 
@@ -271,40 +260,34 @@ uint8_t bmp180_write8(uint8_t reg_addr, uint8_t data)
 	TWI_write(data);
 
 	TWI_stop();
-
-	return 0;
 }
 
-uint8_t bmp180_read_ut(uint16_t *data)
+void bmp180_read_ut(uint16_t *data)
 {
-	uint8_t error = 0;
 	uint16_t a;
 
-	error = bmp180_write8(BMP180_CTRL_ADDR, BMP180_MEASURE_TEMP);
+	//Ber BMP180 starte måling av temperatur.
+	bmp180_write8(BMP180_CTRL_ADDR, BMP180_MEASURE_TEMP);
 
 	NutMicroDelay(5); //Venter på at bmp180 er ferdig med å måle temp. Maks 4.5ms
 
-	bmp180_read16(BMP180_DATA_ADDR, &a);
+	bmp180_read16(BMP180_DATA_ADDR, &a); //Leser målt verdi.
 
 	*data = a;
-
-	return error;
 }
 
-uint8_t bmp180_read_up(uint32_t *data)
+void bmp180_read_up(uint32_t *data)
 {
 	uint16_t a;
-	uint8_t b, error = 0;
+	uint8_t b;
 
-	error = bmp180_write8(BMP180_CTRL_ADDR, BMP180_MEASURE_PRESSURE);
+	//Ber BMP180 starte måling av lufttrykk.
+	bmp180_write8(BMP180_CTRL_ADDR, BMP180_MEASURE_PRESSURE);
 
 	NutMicroDelay(26); //Venter på at bmp180 er ferdig. Maks 25.5 ms ved oss=3.
 
-	error = bmp180_read16(BMP180_DATA_ADDR, &a); //Leser MSB + LSB.
-	error = bmp180_read8(0xf6 + 2, &b); //Leser XLSB.
+	bmp180_read16(BMP180_DATA_ADDR, &a); //Leser MSB + LSB.
+	bmp180_read8(0xf6 + 2, &b); //Leser XLSB.
 
-	*data = ((a << 8) | (b)) >> (8 - BMP180_OSS);
-
-	return error;
+	*data = ((a << 8) | (b)) >> (8 - BMP180_OSS); //Returnerer rådata.
 }
-

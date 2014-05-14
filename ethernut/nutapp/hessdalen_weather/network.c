@@ -1,14 +1,15 @@
 #include "network.h"
 
-TCPSOCKET *sock;
-
+//Tråd som sender data til server.
 THREAD(DataThread, arg)
 {
 	network_thread_args_t *args  = (network_thread_args_t *) arg;
 
-	sock = NutTcpCreateSocket();
-	uint16_t bytes = strlen(args->data) + 1;
-	uint16_t sent, sock_opt = 1460, timeout = 10000;
+	TCPSOCKET *sock = NutTcpCreateSocket();
+	uint16_t sent,
+			bytes = strlen(args->data) + 1, //Antall bytes som skal sendes.
+			sock_opt = 1460, //Segmentstørrelse og bufferstørrelse.
+			timeout = 10000; //Timeout på 10 sekunder.
 	uint8_t retries = 0;
 
 	puts("Sending data...");
@@ -16,27 +17,27 @@ THREAD(DataThread, arg)
 	printf("Data to be sent: %s \n Bytes to be sent: %d\n", args->data, bytes);
 
 	NutTcpSetSockOpt(sock, TCP_MAXSEG, &sock_opt, sizeof(sock_opt)); //Endrer maksimal segmentstørrelse for denne socketen.
-	NutTcpSetSockOpt(sock, SO_SNDBUF, &sock_opt, sizeof(sock_opt));
-	NutTcpSetSockOpt(sock, SO_SNDTIMEO, &timeout, sizeof(timeout));
+	NutTcpSetSockOpt(sock, SO_SNDBUF, &sock_opt, sizeof(sock_opt)); //Endrer bufferstørrelse.
+	NutTcpSetSockOpt(sock, SO_SNDTIMEO, &timeout, sizeof(timeout)); //Endrer tid for timeout.
 
+	//Kobler til server. Prøver 6 ganger.
 	while (NutTcpConnect(sock, inet_addr(FREJA_IP), FREJA_PORT)) {
 		printf("Could not connect to server, retry %d\n", retries);
 
-		if(retries == 5) {
-			NutThreadSetPriority(0);
+		if(retries == 5) { //Gir oss etter ca. et minutt.
+			NutThreadSetPriority(0); //Setter høyeste prioritet. Tar kontroll.
 			for(;;); //Restarter ethernut.
 		} else {
 			retries++;
 		}
 	}
 
-	retries = 0;
-	
+	//Sender data til server. Kan sende maks 1460 bytes av gangen.
 	while ((sent = NutTcpSend(sock, args->data, bytes)) != bytes) {
 		printf("Sent %d bytes\n", sent);
 		
-		bytes -= sent;
-		memcpy(args->data, &args->data[sent], bytes);
+		bytes -= sent; //Regner ut resterende bytes.
+		memcpy(args->data, &args->data[sent], bytes); //Flytter resterende data til begynnelsen i bufferet.
 		printf("Remaining: %d bytes \n", bytes);
 	}
 	
@@ -45,10 +46,11 @@ THREAD(DataThread, arg)
 	free(args->data);
 	free(args);
 	
-	NutTcpCloseSocket(sock);
+	NutTcpCloseSocket(sock); //Lukker socketen.
 
-	NutThreadSetPriority(0);
+	NutThreadSetPriority(0); //Høyeste prioritet, tar kontroll.
 	for(;;); //Restarter ethernut.
+	//Problemer med nettverksmodulen over lengre tid har ført oss til å restarte mikrokontrolleren hver time.
 }
 
 void set_time_ntp(void)
@@ -58,19 +60,21 @@ void set_time_ntp(void)
 	uint8_t i = 0;
 
 	_timezone = -1 * 60 * 60; //Setter tidssonen til UTC+1
-	timeserver = inet_addr("85.252.162.7"); //Benytter pool.ntp.org sin norske server. http://www.pool.ntp.org/en/
+	//Benytter pool.ntp.org sin norske server. http://www.pool.ntp.org/en/
+	timeserver = inet_addr("85.252.162.7");
 
 	for(;;) {
+		//Henter tid fra server.
 		if(NutSNTPGetTime(&timeserver, &ntp_time) == 0) {
 			puts("Time set");
 			stime(&ntp_time); //Setter klokken til Ethernut.
 			return;
-		} else {
+		} else { //Prøver å sette tiden innenfor en periode på ca. et minutt.
 			i++;
 			printf("Failed retrieving time, retry %d\n", i);
 			NutSleep(10000);
 			
-			if(i == 5) { //Restarter ethernut.
+			if(i == 5) { //Klarte ikke å hente tiden. Restarter ethernut.
 				start_watchdog();
 				for(;;);
 			}
@@ -82,7 +86,7 @@ tm *get_current_time(void)
 {
 	time_t t;
 	t = time(NULL);
-	return localtime(&t);
+	return localtime(&t); //Returnerer lokaltiden.
 }
 
 void get_json_string_root(const char *date_time, uint8_t station_id, char *string)
@@ -140,12 +144,12 @@ void send_json(char *data)
 {
 	network_thread_args_t *args = malloc(sizeof(network_thread_args_t));
 
-	args->data = strdup(data);
+	args->data = strdup(data); //Kopier data til ny buffer.
 
-	NutThreadCreate("DataThread", DataThread, args, 512);
+	NutThreadCreate("DataThread", DataThread, args, 512); //Starter tråden som sender data.
 }
 
-int configure_network(void)
+uint8_t configure_network(void)
 {
 #ifdef ETHERNUT_1
 	uint8_t mac[6] = MAC_ETHERNUT1;
@@ -165,7 +169,8 @@ int configure_network(void)
 		return 1;
 	}
 
-	printf("I'm at %s.\n", inet_ntoa(confnet.cdn_ip_addr)); //Printer IP-adressen til standard output
+	//Printer IP-adressen til standard output
+	printf("I'm at %s.\n", inet_ntoa(confnet.cdn_ip_addr));
 	return 0;
 }
 
