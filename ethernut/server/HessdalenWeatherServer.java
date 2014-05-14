@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.lang.Thread;
 
+//Hovedklassen i serverprogramvaren for å ta imot TCP-pakker fra værstasjonene.
 public class HessdalenWeatherServer {
 
     public static void main(String a[]) {
@@ -12,10 +13,12 @@ public class HessdalenWeatherServer {
         serverListener();
     }
 
+    //Bruker stream socket med et bestemt portnummer for å kunne ta imot pakker.
+    //Så fort en tilkobling blir opprettet, lages det en egen tråd for å håndere den mottatte JSON-dataen.
     private static void serverListener() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
-            ServerSocket server = new ServerSocket(3123);
+            ServerSocket server = new ServerSocket("portnummer");
             System.out.println("Server started at " + ((server.getInetAddress()).getLocalHost()).getHostAddress() + ":3123");
             while (true) {
                 System.out.println("Ready to receive data.");

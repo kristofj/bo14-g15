@@ -1,11 +1,13 @@
 import java.sql.*;
 
+//håndterer tilkoblinger til databasen
 public class Db {
-    static final String DB_URL = "jdbc:mysql://j3nsen.com/hessdalen_weather";
-    static final String USER = "hessdalen";
-    static final String PASS = "hessdalen123";
+    static final String DB_URL = "jdbc:mysql://host/database_name";
+    static final String USER = "username";
+    static final String PASS = "password";
     int key = 0;
 
+    //konstruktøren tar imot SQL-setningen som skal kjøres opp mot databasen
     public Db(String sql) {
         Connection conn = null;
         Statement stmt = null;
@@ -24,7 +26,11 @@ public class Db {
             stmt.close();
             conn.close();
             System.out.println("Executed: " + sql);
-        } catch (SQLException se) {
+        }
+        //catcher exceptions og printer de ut. (Merk: stopper ikke opp programmet.
+        // Dette er et bevisst valg, da det sikrer at andre ikke kan stoppe programmet
+        // ved å sende malformerte pakker)
+        catch (SQLException se) {
             System.out.println(se.toString());
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -43,7 +49,7 @@ public class Db {
             }
         }
     }
-
+    //returnerer nøkkelen generert av MySQL
     public int getKey() {
 
 

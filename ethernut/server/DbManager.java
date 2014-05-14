@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
+//Parser JSON-array til et objekter, og bygger SQL-spøøringer for innsetting in databasen.
 public class DbManager implements Runnable {
     static int entryKey;
     static String mainDatetime;
@@ -15,6 +16,7 @@ public class DbManager implements Runnable {
     private Socket sock;
     private PrintStream out;
 
+    //globale variabler for å forenkle kommunikasjon mellom funksjoner
     static int stationId;
 
     static Double maxTemp;
@@ -52,6 +54,8 @@ public class DbManager implements Runnable {
         this.out = out;
     }
 
+    //Gjør funksjonskallene nødvendig for å parse data og bygge SQL.
+    //Skriver deretter "Done" på out-stream tilbake til værstasjonen.
     public void run() {
         if (jsonParse() && calculateData()) {
             makeMainEntry();
@@ -73,6 +77,7 @@ public class DbManager implements Runnable {
         }
     }
 
+    //bygger JSON-objekt av siste element i array for å hente ut stasjonsID og tidspunktet det ble sendt på.
     public static boolean jsonParse() {
         try {
             json = (JSONArray) JSONSerializer.toJSON(jsonString);
@@ -87,6 +92,8 @@ public class DbManager implements Runnable {
 
     }
 
+    //"convD" står for "Convert Date".
+    //laget for å gjøre slik at datoer blir riktige formaterte for SQL (innkludere nuller)
     public static String convD(String datetime) {
         String[] parts1 = datetime.split(" ");
         String[] parts2 = parts1[0].split("-");
@@ -102,6 +109,7 @@ public class DbManager implements Runnable {
         return year + month + date + hour + minute + seconds;
     }
 
+    //laget for å forenkle funksjonen convD ved å legge til null dersom verdi er på ett siffer
     public static String addZero(String s) {
         if (s.length() == 1) {
             return "0" + s;
@@ -110,6 +118,8 @@ public class DbManager implements Runnable {
         }
     }
 
+    //bruker alle elementene i JSON-arrayen for å regne ut hvilke timesverdier som skal inn i databasen.
+    //setter så de relevante verdiene i globale variabler
     public static boolean calculateData() {
         System.out.println(json.size());
         for (int i = 0; i < json.size(); i++) {
@@ -150,7 +160,6 @@ public class DbManager implements Runnable {
                     maxWindDirection = wind.getDouble("maxDir");
                 } else {
                     avgTemp += temp.getDouble("avg");
-                    System.out.println(avgTemp);
                     avgHumidity += humidity.getDouble("avg");
                     avgPressure += pressure.getDouble("avg");
                     avgWindSpeed += wind.getDouble("avg");
@@ -205,27 +214,32 @@ public class DbManager implements Runnable {
         return true;
     }
 
+    //setter inn i databasetabellen logId, og henter ut hvilken nøkkel MySQL genererte
     public static void makeMainEntry() {
         String sql = "INSERT INTO logId (datetime, stationId) VALUES (" + mainDatetime + "," + stationId + ")";
         Db mainEntry = new Db(sql);
         entryKey = mainEntry.getKey();
     }
 
+    //setter inn i databasetabellen temperature
     public static void makeTempEntry() {
         String sql = "INSERT INTO temperature (`logId_id`, `temperatureAvg`, `temperatureNow`, `temperatureMax`, `timeMax`, `temperatureMin`, `timeMin`) VALUES (" + entryKey + ", " + avgTemp + ", " + nowTemp + ", " + maxTemp + ", " + convD(maxTempTime) + ", " + minTemp + ", " + convD(minTempTime) + ");";
         new Db(sql);
     }
 
+    //setter inn i databasetabellen humidity
     public static void makeHumidityEntry() {
         String sql = "INSERT INTO humidity (`logId_id`, `humidityAvg`, `humidityNow`, `humidityMax`, `timeMax`, `humidityMin`, `timeMin`) VALUES (" + entryKey + ", " + avgHumidity + ", " + nowHumidity + ", " + maxHumidity + ", " + convD(maxHumidityTime) + ", " + minHumidity + ", " + convD(minHumidityTime) + ");";
         new Db(sql);
     }
 
+    //setter inn i databasetabellen pressure
     public static void makePressureEntry() {
         String sql = "INSERT INTO pressure (`logId_id`, `pressureAvg`, `pressureNow`, `pressureMax`, `timeMax`, `pressureMin`, `timeMin`) VALUES (" + entryKey + ", " + avgPressure + ", " + nowPressure + ", " + maxPressure + ", " + convD(maxPressureTime) + ", " + minPressure + ", " + convD(minPressureTime) + ");";
         new Db(sql);
     }
 
+    //setter inn i databasetabellen wind
     public static void makeWindEntry() {
         String sql = "INSERT INTO wind (`logId_id`, `windspeedAvg`, `windspeedNow`, `windspeedMax`, `winddirectionMax`, `timeMax`, `windspeedMin`, `timeMin`) VALUES (" + entryKey + ", " + avgWindSpeed + ", " + nowWindSpeed + ", " + maxWindSpeed + "," + maxWindDirection + ", " + convD(maxWindTime) + ", " + minWindSpeed + ", " + convD(minWindTime) + ");";
         new Db(sql);
