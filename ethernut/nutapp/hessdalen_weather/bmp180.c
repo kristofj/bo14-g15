@@ -233,7 +233,7 @@ void bmp180_read16(uint8_t reg_addr, uint16_t *data)
 
 	TWI_stop();
 
-	*data = (MSB<< 8) | (LSB); //Summerer MSB og LSB.
+	*data = (MSB<< 8) | (LSB); //Setter sammen MSB og LSB.
 }
 
 void bmp180_read8(uint8_t reg_addr, uint8_t *data)
@@ -245,7 +245,7 @@ void bmp180_read8(uint8_t reg_addr, uint8_t *data)
 
 	TWI_start(); //Restart.
 
-	TWI_write(BMP180_ADDR+1); //Master Reciever mode.
+	TWI_write(BMP180_ADDR + 1); //Master Reciever mode.
 	*data = TWI_read_nack(); //Trenger ikke ack for siste byte.
 	
 	TWI_stop();
@@ -278,16 +278,20 @@ void bmp180_read_ut(uint16_t *data)
 
 void bmp180_read_up(uint32_t *data)
 {
-	uint16_t a;
-	uint8_t b;
+	uint16_t MSB_LSB; //Deklarerer variabler.
+	uint8_t XLSB;
 
 	//Ber BMP180 starte måling av lufttrykk.
 	bmp180_write8(BMP180_CTRL_ADDR, BMP180_MEASURE_PRESSURE);
 
-	NutMicroDelay(26); //Venter på at bmp180 er ferdig. Maks 25.5 ms ved oss=3.
+	//Venter på at bmp180 er ferdig. Maks 25.5 ms ved oss=3.
+	NutMicroDelay(26);
 
-	bmp180_read16(BMP180_DATA_ADDR, &a); //Leser MSB + LSB.
-	bmp180_read8(0xf6 + 2, &b); //Leser XLSB.
+	//Leser MSB + LSB fra 0xF6-0xF7.
+	bmp180_read16(BMP180_DATA_ADDR, &MSB_LSB);
 
-	*data = ((a << 8) | (b)) >> (8 - BMP180_OSS); //Returnerer rådata.
+	//Leser XLSB fra 0xF8.
+	bmp180_read8(BMP180_DATA_ADDR + 2, &XLSB);
+
+	*data = ((a << 8) | (b)) >> (8 - BMP180_OSS); //Returnerer rådata. Formel fra datablad.
 }
