@@ -7,7 +7,7 @@
 Det har vært mange tidligere prosjekter i forbindelse med Hessdalen, men ingen prosjekter der værdata skal representeres. I dag kan nesten hvem som helst kjøpe et værstasjon-system å koble opp, og programmere værstasjonen på sin måte. Det finnes systemer som er mer brukervennlig enn andre, hvis man ikke er erfarne på det området. \\
 
 \subsubsection{Dr. Bunson\cite{nettside:drbunson}}
-Det er mange eksempler på andre som har laget sin egen værstasjson. En av de  er Seth Brown og kaller seg "Dr Bunson". Han har laget en liknende værstasjon som det vi skal. Bakgrunnen for at han bygde sin værstasjon er at han bor på et område det der er dårlige representative værdata, så han valgte å ta saken i egne hender. \\ \\
+Det er mange eksempler på andre som har laget sin egen værstasjson. En av de er Seth Brown som kaller seg "Dr Bunson" på bloggen sin. Han har laget en liknende værstasjon som det vi skal. Bakgrunnen for at han bygde sin værstasjon er at han bor på et område det der er dårlige representative værdata, så han valgte å ta saken i egne hender. \\ \\
 Han vurderte først å lage sin egen værstasjon fra bunnen, basert på enten Arduino\cite{nettside:arduino} eller Tessel\cite{nettside:tessel}, men fant ut at ingen av disse ville tåle påkjenningene av ekstremværet der han bor (Mount Washington). Derfor bestemte han seg for å kjøpe Davis 6250 Vantage Vue\cite{nettside:davis6250}, en ferdigbygd kombinert vind-, regn- og temperaturmåler. Denne værstasjonen sender data trådløst, og serveren som tar i mot dette er en Raspberry Pi model B\cite{nettside:rpi} med en Edimax EW-7811Un trådløs nettverksadapter\cite{nettside:edimax}. \\ \\
 Serveren programmerte han i Node\cite{nettside:nodejs}, et JavaScript-bibliotek for nettverksservere. Han brukte også JavaScript for å få visualisert data på skjermer i huset. Han har også programmert et varslingssystem på serversiden ved bruk av Nodemailer\cite{nettside:nodemailer} som sender SMS-varslinger til telefonen hans når været når ekstreme verdier.
 \begin{figure}[H]
@@ -32,62 +32,78 @@ Bram2202 forklarer ikke koden han har skrevet for prosjektet, men han har vedlag
 \section{Værstasjonens historie}
 
 \subsection{Fra observasjoner til datamodeller}
-Mennesket har alltid vært helt avhengig av været, og behovet for å forutsi værgudenes neste trekk har eksistert til alle tider. 
-Været har alltid spilt en stor rolle for blant annet landbruk, skipsfart og fiske. Derfor har mennesket i årtusener hatt et intenst ønske om å kunne forutsi værgudenes neste trekk.
-I begynnelsen bygde forutsigelsene bare på observasjoner og tilfeldige målinger, men på 1700-tallet utviklet vitenskapsfolk instrumentene som la grunnlaget for at den moderne meteorologien kunne bli en reell vitenskap. Dermed kunne forskere forstå de faktorene som bestemmer værets utvikling, og lage nyttige værmeldinger, som for eksempel stormvarsler.\\
+Vi har alltid vært helt avhengig av været, og behovet for å forutsi hvordan været vil bli har eksistert til alle tider. 
+Været har alltid spilt en stor rolle for blant annet landbruk, skipsfart og fiske. Derfor har vi mennesker i årtusener hatt et intenst ønske om å kunne forutsi hvordan været kommer til å bli.
+I begynnelsen bygde forutsigelsene bare på observasjoner og tilfeldige målinger, men på 1700-tallet utviklet vitenskapsfolk instrumentene som la grunnlaget for at den moderne meteorologien kunne bli en reell vitenskap. Dermed kunne forskere forstå de faktorene som bestemmer værets utvikling, og lage nyttige værmeldinger, som for eksempel stormvarsler.\cite{nettside:historienet1}\\
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.75\textwidth]{himmel}
-  \caption{Uvær der det kan være gunstig å måle forskjellige parametere som for eksempel lufttrykk}
+  \caption{Uvær der det kan være gunstig å måle forskjellige parametere som for eksempel lufttrykk. Bildet er tatt fra historienet}
 \end{figure}
 
 \subsection{Måling av lufttrykk}
-Ingen visste at luft har tyngde\cite{nettside:historienet}, før italieneren Evangelista Torricelli fant opp kvikksølvbarometeret i 1643. Han la merke til at en kvikksølvsøyle sto høyere i godt vær enn i blåst og regn. I 1714 fant Gabriel Fahrenheit ut at det gikk an å måle temperaturen i luft og vann med et kvikksølvtermometer. Det teoretiske grunnlaget ble også lagt på 1700-tallet, da sveitseren Daniel Bernoulli ga ut verket «Hydrodynamica».\\
+Ingen visste noen gang at luft har tyngde, før italieneren Evangelista Torricelli oppfant kvikksølvbarometeret i 1643. Han la merke til at en kvikksølvsøyle sto høyere i godt vær enn i blåst og regn. I 1714 fant Gabriel Fahrenheit ut at det gikk an å måle temperaturen i luft og vann med et kvikksølvtermometer. Det teoretiske grunnlaget ble også lagt på 1700-tallet, da sveitseren Daniel Bernoulli ga ut verket han kalte «Hydrodynamica».\cite{nettside:historienet2}\\
 
 \subsection{Første ballongferd}
-I 1783 gjennomførte Jacques Alexandre Charles den første flygningen med en ballong fylt med hydrogen. Oppfinnelsen viste seg å være svært velegnet til å samle inn meteorologiske data fra atmosfæren. Men fordi ballonger var prisgitt værgudenes luner, sendte de første ballongskipperne opp små prøveballonger før de lettet selv.\\
+I 1783 gjennomførte Jacques Alexandre Charles den første flygningen med en luftballong som var fylt med hydrogen. Det viste seg at oppfinnelsen var svært velegnet til å samle inn meteorologiske data fra atmosfæren. Fordi det kunne være livsfarlig å sende opp luftballonger i atmosfæren med tanke på lyn og dårlig vær, sende de første ballongskipperne opp små testballonger før de lettet selv.\cite{nettside:historienet3}\\
 
-\subsection{Utveksling av værdata}
-Admiral Francis Beaufort foreslo i 1806 å dele vindstyrken i en skala på 12 trinn – den såkalte beaufortskalaen. Dette ga meteorologene en felles referanse. Da telegrafen ble oppfunnet senere på 1800-tallet, ble det for første gang praktisk mulig å innhente værdata fra større områder, og eksempelvis sende ut stormvarsler. I 1849 opprettet Smithsonian Institution et meteorologisk nettverk på tvers av USA, og lignende samarbeidsprosjekter mellom meteorologer ble etablert i Europa de neste 50 årene.\\
-
-\subsection{Beregning av morgendagens værdata}
-I 1922 fremla briten Lewis Fry Richardson i verket «Weather Prediction by Numerical Process» en rekke formler som gjorde det mulig å beregne morgendagens vær noenlunde sikkert. Problemet var bare at det tok 24 timer å foreta alle de kompliserte utregningene. Dermed var morgendagen over før værmeldingen var klar. Richardson planla å samle 64 000 meteorologer på ett sted, slik at de kunne løse hver sin del av regnestykket, men ideen ble aldri noe av.\\
-
-\subsection{Radiosonden et stort framskritt}
-Meteorologene fikk adgang til enda bedre data da to vitenskapsmenn i 1927 sendte meteorologiske måleinstrumenter opp i en ballong utstyrt med en radiosender. Målingene ble dermed sendt trådløst hjem, og verdens første radiosonde var en realitet. Ti år senere opprettet USAs meteorologiske institutt en fast værtjeneste basert på radiosonder i ballonger. Under andre verdenskrig ble radioteknikken utviklet videre, og midt i 1950-årene gjorde bedre materialer det mulig å sende opp gigantiske ballonger. Radiosondene kunne nå komme opp i 50 kilometers høyde og samle inn svært nøyaktige data.\\
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.75\textwidth]{radiosonde}
-  \caption{Radiosonde}
+  \includegraphics[width=0.60\textwidth]{ballongferd}
+  \caption{Figuren viser den andre ballongferden gjort av Jacques Alexandre Charles 1. desember 1793}
+\end{figure}
+
+\subsection{Utveksling av værdata}
+Den irske admiralen Francis Beaufort foreslo i 1806 å dele vindstyrken i en skala på 12 trinn – som han kalte senere beaufortskalaen. Dette ga meteorologene på den tiden en felles referanse. Da telegrafen ble oppfunnet senere på 1800-tallet, ble det for første gang praktisk mulig å innhente værdata fra større områder, og eksempelvis sende ut stormvarsler. I 1849 opprettet Smithsonian Institution et meteorologisk nettverk på tvers av USA, og lignende samarbeidsprosjekter mellom meteorologer ble etablert i Europa etterhvert de neste 50 årene.\cite{nettside:historienet4}\\
+
+
+\subsection{Beregning av morgendagens værdata}
+I 1922 fremla den britiske meteorlogen Lewis Fry Richardson verket «Weather Prediction by Numerical Process» som var en rekke formler som gjorde det mulig å beregne været framover i tid. Problemet var bare at det tok 24 timer å foreta alle de kompliserte utregningene. Dermed var morgendagen over før værmeldingen var klar. Richardson hadde store tanker om å samle 64 000 meteorologer på ett sted, slik at de kunne løse hver sin del av utregningene, men ideen ble aldri noe av.\cite{nettside:historienet5}\\
+
+\subsection{Radiosonden et stort framskritt}
+
+I 1927 sendte to vitenskapsmenn opp luftballonger med måleinstrumenter, utstyrt med en radiosender. Dette resulterte med at meteorologene fikk tilgang til enda bedre data. Målingene ble da sendt trådløst hjem, og verdens første radiosonde var en realitet. Ti år senere opprettet USAs meteorologiske institutt en fast værtjeneste basert på radiosonder i ballonger. Under andre verdenskrig ble radioteknikken utviklet videre, og midt i 1950-årene gjorde bedre materialer det mulig å sende opp gigantiske luftballonger. Radiosondene kunne nå komme opp i 50 kilometers høyde og samle inn svært nøyaktige data.\cite{nettside:historienet6}\\
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.65\textwidth]{radiosonde}
+  \caption{Et eksempel på en radiosonde}
 \end{figure}
 
 \subsection{Første værsatellitt}
-Da de første datamaskinene ble bygd på 1950-tallet, kunne meteorologene beregne værets utvikling et helt døgn frem. Men ettersom de tidligste «elektronhjernene» bare hadde en brøkdel av kapasiteten til moderne datamaskiner, tok beregningene fremdeles nesten 24 timer. Nettopp fordi meteorologiske beregninger er så kompliserte, egner de seg for databehandling, og meteorologien var derfor med på å videreutvikle datateknologien.\\
-Fra 1960-årene brakte værsatellittene enda flere data. Den første, Vanguard 2, ble sendt opp av den amerikanske marinen i 1959. Den skulle måle skydekkets tykkelse, men kom ut av kurs. Det gikk bedre med den neste værsatellitten, TIROS-1, sendt opp av NASA i 1960. Nå kunne all datainnsamling foregå automatisk.\\
+Da de første datamaskinene ble bygd på 1950-tallet, kunne meteorologene beregne værets utvikling et helt døgn frem. Men ettersom de tidligste datamaskinene bare hadde en brøkdel av kapasiteten til moderne datamaskiner, tok beregningene fremdeles nesten 24 timer. Det er fordi meteorologiske beregninger er så kompliserte, egner de seg for databehandling, og meteorologien var derfor med på å videreutvikle datateknologien.\cite{nettside:historienet7}\\
+Fra 1960-årene fikk meteorologene tilgang på enda mere data, fordi de startet å sende opp flere værsatelitter. Den første, Vanguard 2, ble sendt opp av den amerikanske marinen i 1959. Den skulle måle skydekkets tykkelse, men den kom ut av kurs og dermed ble ubrukelig.\cite{nettside:Vanguard2} Det gikk bedre med den neste værsatellitten, TIROS-1, sendt opp av NASA i 1960\cite{nettside:TIROS1}. Nå kunne all datainnsamling foregå automatisk.\\
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.75\textwidth]{satellit}
-  \caption{Første vellykkede værsatellitten}
+  \includegraphics[width=0.65\textwidth]{satellit}
+  \caption{Den første vellykkede værsatellitten}
 \end{figure}
 
 \section{Hvordan det blir målt}
 
 \subsection{Måling av lufttrykk}
-De meteorologiske målingene tar sikte på å finne den romlige fordelingen av det hydrostatiske trykk\cite{nettside:snl1}, som igjen bestemmer den storstilte luftsirkulasjonen. Lufttrykk angis i enheten pascal (Pa), men innen meteorologien nyttes enheten hektopascal (hPa) som gir tallverdi lik den tidligere nyttede enheten millibar (mb). Til mange tekniske formål angis trykket i atmosfærer eller mm kvikksølv (Hg). Én atmosfære (atm) gir uttrykk for tilnærmet normalt lufttrykk ved havnivå; 1 atm = 1013,25 hPa = 760 mm Hg. 1000 hPa = 750 mm Hg. Apparater for måling av lufttrykk kan være for eksempel et barometer.\\
+De meteorologiske målingene tar sikte på å finne den romlige fordelingen av det hydrostatiske trykk\cite{nettside:snl1}, som igjen bestemmer den storstilte luftsirkulasjonen. Lufttrykk angis i enheten pascal (forkortet Pa), men innen meteorologien brukes heller enheten hektopascal (hPa) som gir en tallverdi lik den tidligere enheten som brukes, millibar (mb). Lufttrykket blir angitt i atmosfærer eller mm kvikksølv (Hg). Én atmosfære (atm) er omtrent det lufttrykket som er ved havnivå. 1 atmosfære blir da 1013,25 hPa som tilsvarer 760 mm Hg. 1000 hPa = 750 mm Hg. Apparater eller instrumenter for måling av lufttrykk kan være for eksempel et barometer.\\
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\textwidth]{barometer}
+  \caption{Et eksempel på et moderne barometer som måler lufttrykk}
+\end{figure}
 
 \subsection{Måling av vind}
 
-Den øyeblikkelige vind vil alltid variere\cite{nettside:snl2}. I forbindelse med meteorologiske observasjoner og varsler gis, etter internasjonal overenskomst, vindens middelverdi for 10 minutter, som også ligger til grunn ved bruk av Beauforts vindskala.\\
-Vindens fart øker med høyden. Nede på selve bakken er farten null, mens økningen skjer raskt de første metrene. Videre oppover øker farten, men ikke like raskt. Det er internasjonalt bestemt at vindmålinger for værvarslings- og klimaformål skal gjøres 10 m over bakken. I noen hundre meters høyde dreier vindretningen etter hvert til høyre (på den nordlige halvkule), men i nærheten av åser, fjell og fjellkjeder er vinden i stor grad styrt av terrenget og høyde-endringen kan arte seg annerledes. \\
+Vinden vil alltid variere. Derfor er internasjonal standard å måle middelverdien for vinden i 10 minutter, som også ligger til grunn ved bruk av Beauforts vindskala.\\
+Vindens fart øker med høyden. Det kan være omtrent vindstille langs bakken, men ved noen få meters høyde kan det være kraftig vind. Vinden vil alltid bli større jo lengre opp man kommer, men etter et visst punkt vil hastigheten avta noe. Derfor er det er internasjonalt bestemt at vindmålinger for værvarslings- og klimaformål skal gjøres 10 meter over bakken. \cite{nettside:snl2} \\
 
 
 \subsubsection{Vindfarten}
-Vindfarten oppgis i m/s, knop eller km/h. Begrepet vindhastighet omfatter i streng forstand både fart og retning, men brukes ofte bare om fart.
-Både i forbindelse med observasjoner og varsler har en internasjonal vindskala stor utbredelse. Den bygger på Beauforts vindskala, som opprinnelig ble tatt i bruk først på 1800-tallet av den britiske admiral Francis Beaufort (1774–1857). Skalaen bygde opprinnelig på vindens virkning på seilfartøyer og er senere tilpasset instrumentmålinger av vindhastigheten. Vind angitt i skalaintervaller benevnes gjerne vindstyrke.
+Vindfarten oppgis i m/s, knop eller km/h. Begrepet vindhastighet beskriver både fart og retning, men brukes ofte bare om fart.
+Vindfarten bygger på Beauforts vindskala, som opprinnelig ble tatt i bruk på 1800-tallet av den britiske admiral Francis Beaufort. Skalaen ble i utgangspunket laget for seilfartøyer, og ble senere tilpasset instrumentmålinger av vindhastigheten. Vind angitt i skalaintervaller benevnes gjerne vindstyrke. På neste side er Beauforts vindskala oppsummert, som er hentet fra det store norske leksikon. \cite{nettside:snl2}
 
 
-\subsubsection{Vindskalaen}
 
+
+
+\begin{table}
  \begin{tabular}{ | p{2cm} | p{2cm} | p{2cm} | p{2cm} | p{2cm} | p{2cm} | }
  \hline
      Beauforts skala & Navn på vindstyrken & Vindstyrke i knop & Vindstyrke i m/s & Virkning på land & Virkning på sjøen \\ \hline
@@ -98,20 +114,32 @@ Både i forbindelse med observasjoner og varsler har en internasjonal vindskala 
      4 & Laber bris & 11 - 16 & 5,5 - 7,9 & Løfter støv og løse papirer, rører på kvister og smågrener, strekker større flagg og vimpler & Bølgene blir lengre \\ \hline
      5 & Frisk bris & 17 - 21 & 8,0 - 10,7 & Småtrær med løv begynner å svaie, på vann begynner småbølgene å toppe seg & Middelstore bølger som har en mer utpreget langstrakt form og med mange skumskavler. Sjøsprøyt fra toppene kan forekomme \\ \hline
      \end{tabular}
+\caption{Første del av Beauforts vindskala}
+\label{table:PartOne}
+\end{table}
 
+\begin{table}
  \begin{tabular}{ | p{2cm} | p{2cm} | p{2cm} | p{2cm} | p{2cm} | p{2cm} | } \hline
      6 & Liten kuling & 22 - 27 & 10,8 - 13,8 & Store grener og mindre stammer rører seg, det hviner i telefontrådene, det er vanskelig å bruke paraply, man merker motstand når man går & Store bølger begynner å dannes. Skumskavlene er større overalt. Gjerne noe sjøsprøyt \\ \hline
      7 & Stiv kuling & 28 - 33 & 13,9 - 17,1 & Hele trær rører seg, tungvint å gå mot vinden & Sjøen hoper seg opp, og hvitt skum fra bølgetopper som brekker, begynner å blåse i strimer i vindreningen \\ \hline
      8 & Sterk kuling & 34 - 40 & 17,2 - 20,7 & Brekker kvister av trærne, tungt å gå mot vinden & Middels høye bølger av større lengde. Bølgekammene begynner å brytes opp til sjørokk, som driver i tydelig markerte strimer med vinden \\ \hline
      9 & Liten storm & 41 - 47 & 20,8 - 24,4 & Hele store trær svaier og hiver, takstein kan blåse ned & Høye bølger. Tette skumstrimer driver i vindretningen. Sjørokket kan minske synsvidden \\ \hline
 \end{tabular}
+\caption{Andre del av Beauforts vindskala}
+\label{PartTwo}
+\end{table}
 
 
+\begin{table}
  \begin{tabular}{ | p{2cm} | p{2cm} | p{2cm} | p{2cm} | p{2cm} | p{2,2cm} | } \hline
      10 & Full storm & 48 - 55 & 24,5 - 28,4 & Sjelden inne i landet, trær rykkes opp med rot, store skader på hus & Meget høye bølger med lange overhengende kammer. Skummet, som dannes i store flak, driver med vinden i tette hvite strimer, så sjøen får et hvitaktig utseende. Synsvidden nedsettes \\ \hline
      11 & Sterk storm & 56 - 63 & 28,5 - 32,6 & Meget sjeldent, følges av store ødeleggelser & Ualminnelig høye bølger. Sjøen er fullstendig dekket av lange, hvite skumflak som ligger i vindens retning. Overalt blåser bølgekammene til frådelignende skum. Sjørokket nedsetter synsvidden \\ \hline
 12 & Orkan & Over 63 & Over 32,6 & Sjeldent. Store ødeleggelser & Luften er fylt av skum og sjørokk som nedsetter synsvidden betydelig. Sjøen er fullstendig hvit av drivende skum \\ \hline
 \end{tabular}
+\caption{Tredje del av Beauforts vindskala}
+\label{PartThree}
+\end{table}
+
 
 \subsection{Vindretning}
 
@@ -119,7 +147,7 @@ De to mest praktiske måtene å måle vindretningen på er med en vindpølse ell
 
 \subsubsection{Vindfløy}
 
-Vindfløy er et enkelt instrument som viser vindretningen. Vanligvis er en vindfløy utført som en usymmetrisk figur som kan dreie seg om en vertikal akse. Figurens tyngdepunkt er normalt sammenfallende med omdreiningsaksen. Derved vil ikke vindføyen påvirkes om aksen avviker noe fra vertikal. Figurens areal er imidlertid utført slik at det er større på den ene siden, den «tyngste» siden. Dermed vil denne siden svinge fra vinden. Ofte er det til fløystangen festet et kors eller en sirkel med angivelse av himmelretninger. En moderne form for vindføy, Vindex, formet som en (liten) pil med (stor) styrefjær, brukes på seilfartøyer\cite{nettside:wikipedia2}\\
+Vindfløy er et instrument som viser vindretningen. Vanligvis er en vindfløy utført som en usymmetrisk figur som kan dreie seg om en vertikal akse, som da kan vise vindens retning. Vindfløyens areal er laget slik at den er større på den ene siden, den siden som er tyngst. Dermed vil denne siden svinge fra vinden. Svært ofte er det festet til et kors eller en sirkel med angivelse av himmelretninger på fløystangen.\cite{nettside:vindflQy}\\
 
 \begin{figure}[H]
   \centering
@@ -129,29 +157,29 @@ Vindfløy er et enkelt instrument som viser vindretningen. Vanligvis er en vindf
 
 \subsubsection{Vindpølse}
 
-Vindpølse er en stor konisk tekstilsekk, åpen i begge ender, som viser vindretning og vindhastighet. Vindpølser er mest brukt på flyplasser, helikopterplasser og på bruer.\cite{nettside:wikipedia1}\\
+En vindpølse er gjerne en stor konisk-formet sekk som er laget av tekstil. Vindpølsa er åpen i begge ender og den viser vindretning og vindhastighet. Vindpølser er mest brukt på flyplasser, helikopterplasser og på bruer.\cite{nettside:vindpQlse}\\
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.60\textwidth]{vindpolse}
-  \caption{En typisk vindpølse}
+  \caption{En typisk vindpølse plassert på en liten flyplass}
 \end{figure}
 
-Vindpølser skal generelt tilfredsstille følgende krav:
+\textbf{Vindpølsers generelle krav:}\cite{nettside:vindpQlse}
 \begin{itemize}
-\item den skal gi presis indikasjon på vindretning og grov indikasjon på vindstyrke.
-\item den skal være traktformet og åpen i begge ender.
-\item den skal være oransje eller oransje og hvit. Dersom oransje og hvit velges, skal fargene være i form av 5 sirkulære bånd der første og siste bånd er oransje.
+\item Vindpølsa skal gi presis indikasjon på vindretning og grov indikasjon på vindstyrke.
+\item Vindpølsa skal være traktformet og åpen i begge ender.
+\item Vindpølsa skal være oransje eller oransje og hvit. Dersom oransje og hvit velges, skal fargene være i form av 5 sirkulære bånd der første og siste bånd er oransje.
 \end{itemize}
-I tillegg for flyplasser:
+\textbf{I tillegg for flyplasser:}
 \begin{itemize}
-\item lengden skal være minst 3,6 meter.
-\item den største åpningen skal ikke være mindre enn 0,9 m, og den minste åpningen ikke mindre enn 0,3 m.
+\item Lengden på vindpølsa skal være minst 3,6 meter.
+\item Vindpølsas største åpningen skal ikke være mindre enn 0,9 m, og den minste åpningen ikke mindre enn 0,3 m.
 \end{itemize}
-I tillegg for helikopterplasser:
+\textbf{I tillegg for helikopterplasser:}
 \begin{itemize}
-\item lengden skal være minst 2,4 meter,
-\item den største åpningen skal ikke være mindre enn 0,6 m, og den minste åpningen ikke mindre enn 0,3 m,
+\item Lengden på vindpølsa skal være minst 2,4 meter,
+\item Vindpølsas største åpningen skal ikke være mindre enn 0,6 m, og den minste åpningen ikke mindre enn 0,3 m,
 \end{itemize}
 
 

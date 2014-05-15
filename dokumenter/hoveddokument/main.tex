@@ -11,10 +11,11 @@
 \usepackage{float}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{sidecap}
 
 
 
-\input{meta}       % Use this to fill in author, title and other metadata used on front page
+\input{metaNO}       % Use this to fill in author, title and other metadata used on front page
 \input{defs}        % DO NOT CHANGE
 
 \makeindex
@@ -24,8 +25,7 @@
 % FRONT MATTER
     % DO NOT CHANGE
     %-------------------------------------------------    
-    \includepdf[pages={1, {}}] {titlepage_NO} % Make your own catchy PDF title page, named titlepage.pdf
-    \includepdf[pages={1, {}}] {titlepage_EN} 
+    \includepdf[pages={1, {}}] {titlepage_NO} % Make your own catchy PDF title page, named titlepage.pdf 
     \maketitle
 	\input{preface}
     \input{abstract}

@@ -2,7 +2,7 @@
 \chapter{Planlegging}
 \label{chap:planning} 
 
-I dette kapittelet tar vi for oss planleggingsfasen av proskjetet og hvordan vi har tenkt til å utforme produktet. Det skal også være en komplett beskrivelse av hele systemet og hvordan det fungerer. 
+I dette kapittelet tar vi for oss planleggingsfasen av prosjektet og hvordan vi har tenkt til å utforme produktet. Det skal også være en komplett beskrivelse av hele systemet og hvordan det fungerer. 
 
 \section{Planlegging}
 
@@ -22,7 +22,24 @@ Vi tenker å fordele arbeidsoppgavene slik at noen holder på med programmeringe
 Vi vil først lage et par prototyper før vi bestemmer oss for det endelige produktet. Vi vil gjerne få hele systemet til å gå før vi tenker på hva slags design og fysisk beskyttelse vi skal ha til de forskjellige komponentene.
 
 \section {Maskinvare}
-I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen av hardware.
+I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen av maskinvare.
+
+\subsection{Ethernut 2.1}
+Ethernut 2.1 er et lite brett som består av en 8-bit AVR Atmel ATmega128 RISC mikrokontroller og SMCS' LAN91C111 ethernet kontroller. Den er en del av en serie med Open Source Hardware referansebrett. Noen av hovedfunksjonene er:
+\begin{itemize}
+\item Full duplex 10/100 Mbps ethernet kontroller.
+\item 128 kByte programerbar flash ROM
+\item 512 kByte Static RAM
+\item Inntil 28 programerbare digitale inn- og utganger.
+\item 10-bit ADC med 8 kanaler.
+\item To 8-bit og to 16-bit timer/tellere.
+\item Watchdog timer.
+\item Tåler temperaturer fra -40 \textsuperscript{o}C til 85 \textsuperscript{o}C
+\end{itemize}
+
+Den viktigste delen av Ethernut 2.1 er mikrokontrolleren ATmega128, denne er beskrevet i datablad levert av Atmel.
+Programmering av mikrokontrolleren skjed ved å bruke JTAG-grensesnittet. Dette er en ekstern port som vi kobler til en datamaskin med en adapter og en RS-232 seriekabel.
+Ethernut 2.1 har også en RS-232 serieport som blant annet kan brukes til å se utskrift fra applikasjonen som kjører.\cite{nettside:EthernutHardwareManual}
 
 \subsection{Sensorer}
 Når det kommer til valg av sensorer vi vil benytte så er det noen kriterier å ta hensyn til: 
@@ -34,7 +51,7 @@ Når det kommer til valg av sensorer vi vil benytte så er det noen kriterier å
 Vi har satt $-40\,^{\circ}\mathrm{C}$ som den laveste temperaturen sensorene må tåle da den laveste tempteraturen i løpet av 2013 var $-34,8\,^{\circ}\mathrm{C}$ \cite{nettside:yr150313}.
 \newline
 \newline
-Ut i fra disse kriteriene, nevnt ovenfor, har vi bestemt oss for disse sensorene:
+Ut i fra disse kriteriene har vi bestemt oss for disse sensorene:
 
 \begin{figure}[H]
         \centering
@@ -67,6 +84,82 @@ Disse sensorene tilfredsstiller alle kravene, bortsett fra BMP180 som ikke har b
 
 BMP180\cite{nettside:lufttrykk}, SHT10\cite{nettside:temperatur}, WRG2/O50\cite{nettside:vindretning} og WG2/=50\cite{nettside:vindhastighet}.
 
+\subsection{Sensorer - Teknisk informasjon}
+
+\subsubsection{SHT10}
+
+\begin{itemize}
+\item Måler temperatur og luftfuktighet.
+\item Digital utverdi.
+\item Operasjonsområde fra $-40\,^{\circ}\mathrm{C}$ til $120\,^{\circ}\mathrm{C}$.
+\item Fargekode på koblingspunkter hvor grønn:jord, blå:data, gul:klokke og rød:VDD.
+\item Spenningskilde: min 2.4V og maks 5.5V.
+\end{itemize}
+
+Ytterlig informasjon kan finnes databladet\cite{nettside:DatasheetSHT10} til SHT10. Hvordan SHT10 kommuniserer med mikrokontrolleren blir beskrevet i delkapittel \ref{subsec:Ethernut} 
+
+\subsubsection{BMP180}
+
+\begin{itemize}
+\item Måler lufttrykk.
+\item Digital utverdi.
+\item Operasjonsområde fra $-40\,^{\circ}\mathrm{C}$ til $85\,^{\circ}\mathrm{C}$.
+\item Måler lufttrykk fra 300 til 1100 hPa. (9000 til -500m i forhold til meter over havet)
+\item Koblingspunkter: VIN, 3V0, GND, SCL(data) og SDA(klokkke).
+\item Klargjort for 5V logikk med integrert 3.3V regulator.
+\end{itemize}
+
+Denne versjonen av BMP180, som vi skal bruke, er allerede klargjort for 5V logikk fra produsenten. Det vil si at koblingspunktet VIN er beregnet for 5V og 3V0 er beregnet for 1.6V til 3.6V. Ytterlig informasjon finnes i databladet\cite{nettside:DatasheetBMP180} til BMP180. Hvordan BMP180 kommuniserer med mikrokontrolleren blir beskrevet i delkapittel \ref{subsec:Ethernut}.  
+
+
+\subsubsection{WG2/O-10}
+
+\begin{itemize}
+\item Måler vindhastighet.
+\item Analog utverdi 0-10V.
+\item Operasjonsområdet fra $-40\,^{\circ}\mathrm{C}$ til $70\,^{\circ}\mathrm{C}$.
+\item Tåler en vindstyrke på 80 m/s i opp til 30 minutter.
+\item Måleområdet fra 0-50 m/s.
+\item Varmeelement for å forhindre at bevegelige deler fryser fast.
+\item Spenningstilførsel 13-30 V DC eller 24V AC/DC, maks 50 mA.
+\item Spenningstilførsel for varmeelement 24V AC/DC, maks 20W.
+\item Det er syv koblingspunkter:
+	\begin{enumerate}
+    \item Spenningstilførsel +
+    \item Spenningstilførsel -
+    \item Analog ut +
+    \item Analog ut -
+    \item Spenningstilførsel varmeelement +
+    \item Spenningstilførsel varmeelement - 
+    \item GND
+    \end{enumerate}
+\end{itemize}
+
+
+\subsubsection{WRG2/O-10}
+
+\begin{itemize}
+\item Måler vindretning.
+\item Analog utverdi 0-10V.
+\item Operasjonsområdet fra $-40\,^{\circ}\mathrm{C}$ til $70\,^{\circ}\mathrm{C}$.
+\item Tåler en vindstyrke på 80 m/s i opp til 30 minutter.
+\item Måleområdet fra 0-50 m/s.
+\item Varmeelement for å forhindre at bevegelige deler fryser fast.
+\item Spenningstilførsel 13-30 V DC eller 24V AC/DC, maks 50 mA.
+\item Spenningstilførsel for varmeelement 24V AC/DC, maks 20W.
+\item Det er syv koblingspunkter:
+	\begin{enumerate}
+    \item Spenningstilførsel +
+    \item Spenningstilførsel -
+    \item Analog ut +
+    \item Analog ut -
+    \item Spenningstilførsel varmeelement +
+    \item Spenningstilførsel varmeelement -
+    \item GND
+    \end{enumerate}
+\end{itemize}
+
+Hvordan avlesningen av WRG2- og WG2-sensoren blir gjort på mikrokontrolleren blir forklart i delkapittel \ref{subsec:Ethernut}.
 
 \subsection{Kretsskjema}
 
@@ -74,27 +167,29 @@ BMP180\cite{nettside:lufttrykk}, SHT10\cite{nettside:temperatur}, WRG2/O50\cite{
   \centering
   \includegraphics[width=0.60\textwidth]{SHT10}
   \caption{Kretsskjema for SHT10}
+  \label{fig:sht10krets}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.60\textwidth]{BMP180}
   \caption{Kretsskjema for BMP180}
+  \label{bmp180krets}
 \end{figure}
 
-BMP180 og SHT10 er digitale sensorer og disse krever en spenningstilførsel på 5V. Mikrokontrolleren  vi skal bruke har egne utganger for tilførsler på 5V. Det vi trengte å vite for å koble opp kretsene mellom disse sensorene og mikrokontrolleren stod godt beskrevet i databladene til sensorene.
+I figur \ref{fig:sht10} og \ref{fig:bmp180} ser du kretsskjema for SHT10 og IBMP180. Mikrokontrolleren har egne utganger for tilførsler på 5V. Det vi trengte å vite for lage kretsene mellom disse sensorene og mikrokontrolleren står godt beskrevet i databladene til sensorene.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.60\textwidth]{vindhastighet}
-  \caption{Kretsskjema for WG2/O50}
+  \caption{Kretsskjema for WG2/O10}
   \label{fig:vindhastighet}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.60\textwidth]{vindretning}
-  \caption{Kretsskjema for WRG2/O50}
+  \caption{Kretsskjema for WRG2/O10}
   \label{fig:vindretning}
 \end{figure}
 
@@ -137,6 +232,7 @@ Databasen som skal ta vare på værdata skal være lokalisert på en av skolens 
 \end{figure}
 
 \subsection{Visualisering av værdata}
+\label{subsec:visualisering}
 I vårt valg av hvilke teknologier vi skulle bruke for å presentere værdata på hessdalen.org, har vi tatt utangspunkt i de webprogrammeringsspråkene vi har grei kunskap om fra før. Det vil si JavaScript, PHP, og CGI-basert Python.
 
 For å best kunne vurdere hva vi skulle velge, satte vi opp en liste med fordeler og ulemper ved de forskjellige metodene.
@@ -193,9 +289,10 @@ Ulemper
   \caption{PHP-logo}
 \end{figure}
 
-På bakgrunn av dette har vi bestemt oss for å presentere data ved å hovedsaklig bruke JavaScript med AJAX-teknologi og 'Google Chart'\cite{nettside:googlevis} for tegning av grafer. Som backend for å hente værdata fra databasen og konvertere til JSON\cite{nettside:json} trenger vi et språk der kildekode blir kompilert på serveren, og ikke er synlig for bruker. Til dette har vi valgt PHP ettersom det er et utbredt og relativt raskt språk til å være på serversiden.
+På bakgrunn av dette har vi bestemt oss for å presentere data ved å hovedsaklig bruke JavaScript med AJAX-teknologi og 'Google Visualisation'\cite{nettside:googlevis} for tegning av grafer. Som backend for å hente værdata fra databasen og konvertere til JSON\cite{nettside:json} trenger vi et språk der kildekode blir kompilert på serveren, og ikke er synlig for bruker. Til dette har vi valgt PHP ettersom det er et utbredt og relativt raskt språk til å være på serversiden.
 
 \subsection{Serversiden}
+\label{subsec:Serversiden}
 Værstasjonen vil sende data som TCP-pakker ment for en bestemt IP og port på skolens server. For å ta imot disse pakkene og sørge for at data blir lagt inn i databasen riktig, må vi lage et program som håndterer dette. Her sto vi ganske åpent på hva slags platform vi skulle bruke, men vi valgte å bygge dette på det populære språket Java av to grunner. Java versjon 1.6\cite{nettside:java} er allerede installert på skolens server der dette programmet skal kjøre. Den andre grunnen er at Java er blitt veldig populært\cite{nettside:javapopular}, og god mengde dokumentasjon er tilgjengelig på internett.\\
 \begin{figure}[H]
   \centering
@@ -208,14 +305,27 @@ Serverprogramvaren vi skal bygge vil døgnet rundt ligge å vente på datapakker
 
 Mikrokontrolleren Ethernut 2.1 skal spille en sentral rolle i systemet. Det er dens oppgave å 
 lese av sensorene, og sende målingene til server for permanent lagring.
-På mikrokontrolleren kommer vi til å benytte det lille sanntidsoperativsystemet NutOS, som har blant annet implementert TCP/IP-stacken. Vår applikasjon kommer til å bli skrevet i språket C.\\
+På mikrokontrolleren kommer vi til å benytte det lille operativsystemet NutOS. Vår applikasjon kommer til å bli skrevet i språket C.
 
-Oppdragsgiver hadde følgende krav til funksjonaliteten til mikrokontrolleren:
+NutOS er et Open Source RTOS(Real Time Operating System) som er laget for mikrokontrollerene kalt Ethernut. Inkludert er også Nut/Net som er en implementasjon av TCP/IP-stakken. Funksjonalitet inkluderer støtte for tråder, events, timers og dynamisk allokering av minne. Nut/Net har støtte for protokoller som TCP, IP, UDP, DHCP. Det inkluderer også et API for sockets. Vi har også mulighet til å konfigurere operativsystemet for vårt bruk. Det følger med programvare som gjør det mulig å gjøre en rekke valg før man kompilerer operativsystemet.\cite{nettside:EthernutHomePage}
+
+For å skrive vår applikasjon må vi benytte oss av en kompilator, vi kommer til å bruke AVR-GCC(AVR-GNU Compiler Collection). Det er en kompilator som gir oss en rekke bibliotek som brukes med GCC. GCC er originalt skrevet for GNU operativsystemet.\cite{nettside:GNU-GCC}\\
+
+Under planlegging kom oppdragsgiver med følgende krav til funksjonalitet på mikrokontrolleren:
 \begin{itemize}
 \item Mikrokontrolleren skal gjøre ti målinger hvert femte minutt, og skal sende data for den siste timen til server. Fra disse målingene skal den høyeste og laveste verdi fjernes før det regnes ut gjennomsnitt. I tilfellet støy skulle ødelegge for målingene.
 \item Watchdog skal benyttes slik at mikrokontrolleren starter om hvis noe skulle gå galt, eller prosessoren skulle henge seg.
 \item Klokken på mikrokontrolleren skal stille seg selv ved å kontakte en server som kjører NTP (Network Time Protocol). Her har vi valgt å benytte NTP Pool Project sin server i Norge.
 \end{itemize}
+
+Utifra disse spesifikasjonene kan vi lage et flytskjema som beskriver hvordan applikasjonen skal fungere. Se figur \ref{fig:flytskjemaEthernut}
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[height=1.4\textwidth]{flowchart_ethernut}
+    \caption{Flytskjema for applikasjon på mikrokontrolleren}
+   	\label{fig:flytskjemaEthernut}
+\end{figure}
 
 \subsection{Grensesnitt mot sensorene}
 \subsubsection{BMP180}
@@ -243,7 +353,7 @@ Mikrokontrolleren må først sende en kommando til sensoren som bestemmer hva so
 \subsubsection{Vindretning- og hastighet}
 Vindretning- og hastighetsensorene er analoge. Disse vil vi lese av ved hjelp av mikrokontrollerens ADC (Analog to Digital Converter). Dette er en maskinvare-modul som er en del av mikrokontrolleren. ADC-en er dokumentert i mikrokontrollerens datablad. Her må vi kun lese av verdien på inngangene og konvertere de til respektive verdier.
 
-\section{Beskrivelse av hele systemet}
+\section{Oversikt av hele systemet}
 
 \begin{figure}[H]
   \centering
