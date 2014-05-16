@@ -1,6 +1,6 @@
 \documentclass[11pt,a4paper,twoside]{report} % DO NOT CHANGE, UNLESS IF CHANGING STYLE
 
-\usepackage{graphicx,listings,amssymb,url,paralist,tabularx,rotating,longtable,lscape}
+\usepackage{graphicx,listings,amssymb,amsmath,url,paralist,tabularx,rotating,longtable,lscape}
 \usepackage{layouts,hyperref,fancyhdr,listings,color,times,lipsum,chemfig,wasysym}
 \usepackage[utf8]{inputenc} 
 \usepackage[norsk]{babel} 
@@ -12,8 +12,8 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{sidecap}
-
-
+\usepackage{savesym} %kan være unødvendig
+\usepackage{glossaries}
 
 \input{metaNO}       % Use this to fill in author, title and other metadata used on front page
 \input{defs}        % DO NOT CHANGE
@@ -53,7 +53,11 @@
     %\cleardoublepage
     \lstlistoflistings
     \addcontentsline{toc}{chapter}{Kodeliste}
-    %\cleardoublepage
+    \clearpage
+    \addcontentsline{toc}{chapter}{Ordliste}
+    \input{glossary}
+    \printglossaries
+    \cleardoublepage
     %-------------------------------------------------
        
     \pagenumbering{arabic} % DO NOT CHANGE, OR REMOVE IF CHANGING STYLE

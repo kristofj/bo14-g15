@@ -23,7 +23,7 @@ Som tilbehør til vindsensorene fikk vi tak i en monteringsstang, vist i figur \
 \end{figure}
 \subsubsection{BMP180}
 \label{subsubsec:hardwarebmp180}
-Lufttrykksensoren BMP180 ble vi nødt til å montere i en koblingsboks da den ikke har noen form for beskyttelsesetui. Dette ble gjort ved å lodde fast sensoren til et koblingsbrett som ble skrudd fast inne i koblingsboksen. For å sikkre en tett kabelgjennomføring benyttet vi kabelnipler. Sensoren er også avhengig av luftgjennomstrøming i boksen for korrekt avlesning av lufttrykket. Dette ble løst ved å lage et lite hull i siden og et i bunnen for drenering av vann som kan renne inn.
+Lufttrykksensoren BMP180 ble vi nødt til å montere i en koblingsboks da den ikke har noen form for beskyttelsesetui. Dette ble gjort ved å lodde fast sensoren til et koblingsbrett som ble skrudd fast inne i koblingsboksen. For å sikkre en tett kabelgjennomføring benyttet vi kabelnipler. Sensoren er også avhengig av luftgjennomstrøming i boksen for at måling av lufttrykket skal bli korrekt. Dette ble løst ved å lage et lite hull i siden og et i bunnen for drenering av vann som kan renne inn.
 
 Festeanordningen til luftrykksensoren ved hovedstasjonen lagde vi av et bøybart metallbånd med hull i. Dette ble festet til boksen og deretter til masten ved å bøye metallbåndet rundt soltpene i masten og skru det fast med maskinskruer. Ved sekundærstasjonen ble boksen festet rett til treet ved bruk av treskruer. Dette ser du på figur \ref{fig:ferdigmontert} i avsnitt \ref{subsec:tilpassing}.
 
@@ -67,15 +67,19 @@ I figur \ref{fig:innredning} ser du hvordan vi har innredet kabinettet. Vi har t
 
 Varmeelementet er festet til en trekloss i lokket fremfor direkte til monteringsstripa i lokket. Slik unngår vi varmetapet som hadde oppstått om vi hadde festet det direkte til monteringsstripa. Denne plasseringen var også den mest taktiske for å unngå at strålingsvarmen fra elementet kan komme til å smelte i stykker komponenter rundt, og for å få plassert det så lavt som mulig.
 
-Termostaten, som styrer varmeelementet, er festet lavt i sideveggen på motsatt side av varmeelementet og strømforskyningene. Dette for å unngå at det blir påvirket av andre faktorer enn luften inne i kabinettet og fordi det er her det blir lavest temperatur.
+Termostaten, som styrer varmeelementet, er festet lavt i sideveggen på motsatt side av varmeelementet og strømforskyningene. Dette for å unngå at det blir påvirket av andre faktorer enn luften inne i kabinettet og fordi det er her det blir lavest temperatur. Det gjør også at varmeelementet bli slått på så rask temperaturen faller under $5\,^{\circ}\mathrm{C}$.
 
-På koblingsbrettet i kabinettet finner du kretsene til sensorene. Alt av ledninger fra mikrokontrolleren og sensorene er koblet sammen på dette koblingsbrettet bortsett fra strømforskyingene til vindsensorene. Disse koblet sammen i sukkerbiten. Dette for å skille på 5V og 24V. 
+På koblingsbrettet i kabinettet finner du kretsene til sensorene. Alt av ledninger fra mikrokontrolleren og sensorene er koblet sammen på dette koblingsbrettet bortsett fra strømforskyingene til vindsensorene. Disse kobles sammen i sukkerbiten. Dette for å skille mellom kretsene på 5V og 24V. 
 
-Ledningene fra sensorene kommer inn i bunnen av kabinettet. Isolasjonen rundt ledningene følger helt inn i kabinettet og er ikke terminert bort mer enn at ledningene når sine innganger på koblingsbrettet og i sukkerbiten. Kabelen som leder 230V inn i kabinettet er ført inn helt til høyre. Dette for å isolere best mulig bort fra sensorledningene. Her følger isolasjonen et godt stykke inn. Som du ser på figur \ref{fig:innredning} går den inn bak grenuttaket før den termineres til grenuttaket.
+Ledningene fra sensorene kommer inn i bunnen av kabinettet. Isolasjonen rundt ledningene følger helt inn i kabinettet og er ikke avisolert mer enn at ledningene når sine innganger på koblingsbrettet og i sukkerbiten . Alt av komponenter og ledninger på koblingsbretter er loddet fast. 
+
+Kabelen som leder 230V inn i kabinettet er ført inn helt til høyre. Dette for å isolere den best mulig bort fra sensorledningene. Her følger isolasjonen et godt stykke inn. Som du ser på figur \ref{fig:innredning} går den inn bak grenuttaket før den avmantles og kobles til grenuttaket. Dette har vi gjort ved å koble de sammen i en sukkerbit som er beskyttet av en kapsel.  
 
 \subsection{Problemer underveis}
+\label{subsec:monteringProblemer}
+Før vi isolerte kabinettet med isopor, brukte vi et materialet av elastisk plastikk. Grunnet isolasjonens elastiske egenskap gjorde det enkelt å få de utskjærte platene hele inn i kabinettet. I motsetning til isoporen som vi var nødt til å dele i mindre biter for å få på plass. Isolasjonen hadde god isolasjonsevne mot kulde, men når det kom til varme viste det seg å absorbere fremfor å isolere. Dette medførte at vi valgte isopor som isolasjon selvom den var litt mer trøblete å få inn i kabinettet.
 
-Før vi isolerte kabinettet med isopor, brukte vi et materialet av elastisk plastikk. Grunnet isolasjonens elastiske egenskap gjorde det enkelt å få de utskjærte platene hele inn i kabinettet. I motsetning til isoporen som vi var nødt til å dele i mindre biter for å få inn. Isolasjonen hadde god isolasjonsevne mot kulde, men når det kom til varme viste det seg å absorbere fremfor å isolere. Dette medførte at vi valgte isopor som isolasjon selvom den var litt mer trøblete å få inn i kabinettet.
+Før vi reiste opp til Hessdalen for å montere værstasjonen opplyste oppdragsgiver oss om at nettverksforbindelsen mellom hoved- og sekundærstasjonen er brutt. Nettverksforbindelsen går i en fiberkabel. Årsaken til brudd på forbindelsen var at et dyr hadde tygget i stykker kabelen. Oppdragsgiver fikk tak i en reparatør, men grunnet dårlige værforhold måtte reparasjonen utsettes. Dette gjør at værstasjonen vi monterte ved sekundærstasjonen ikke får sendt målingene sine til serveren før netterverksforbindelsen har blitt reparert.   
   
 
 \section{Programvare}
@@ -123,34 +127,68 @@ I transmit-modus, holder dette registeret på neste byte som skal sendes. I reci
 Før vi benytter oss av TWI-modulen må vi først initialisere den. Dette gjøres ved å først sette klokkefrekvensen. Klokkefrekvensen regner vi ut med formelen:
 
 \begin{equation}
-SCL\ frekvens = \frac{CPU\ Klokkefrekvens}{16+2*TWBR*4^{TWPS}}
+SCL\ frekvens = \frac{CPU\ Klokkefrekvens}{16+2\times TWBR\times 4^{TWPS}}
 \end{equation}
 
 Mikrokontrollerens CPU kjører på 14.7456 MHz\cite{nettside:EthernutHardwareManual}. Her velger vi TWBR til 17 og TWPS til 1:
 
 \begin{verbatim}
-TWSR = (0<<TWPS1) | (0<<TWPS0); //Setter prescalar til 1.
-TWBR = (1<<TWBR4) | (1<<TWBR0); //Setter bit rate til 17.
+    TWSR = (0<<TWPS1) | (0<<TWPS0); //Setter prescalar til 1.
+    TWBR = (1<<TWBR4) | (1<<TWBR0); //Setter bit rate til 17.
 \end{verbatim}
 
  Frekvensen havner da på cirka 97 kHz. Vi valgte denne frekvensen fordi kommunikasjon ved høyere frekvenser kan bli påvirket av støy og  avstanden kan også bli redusert\cite{nettside:I2CFAQ}. Vår applikasjon er heller ikke tidskritisk, vi skal kun benytte sensoren hvert 30. sekund.
 
 Deretter starter vi TWI-modulen ved å skrive til TWCR:
 \begin{verbatim}
-TWCR = (1<<TWEN); //Aktiverer TWI.
+    TWCR = (1<<TWEN); //Aktiverer TWI.
 \end{verbatim}
 
-Når vi skal kalkulere lufttrykket må vi først lese av kalibreringsparametere som er lagret på sensoren EEPROM(Electrically Erasable Programmable Read-Only Memory). Dette er elleve 16-bits registere som befinner seg på adresse 0xAA til og med 0xBF.
+Når vi skal kalkulere lufttrykket må vi først lese av kalibreringsparametere som er lagret på sensorens EEPROM(Electrically Erasable Programmable Read-Only Memory). Som vi ser på figur \ref{figure:bmp180_kalibreringsparametere} er dette elleve 16-bits registere som befinner seg på adresse 0xAA til og med 0xBF.
 
 \begin{figure}[H]
 	\centering
     \includegraphics[height=0.6\textwidth]{bmp180_kalibreringsparametere}
 	\caption{Kalibreringsparametere på BMP180}
+    \label{figure:bmp180_kalibreringsparametere}
 \end{figure}
 
-For å lese ut disse dataene må vi først sende ut START på bussen, før vi sender adressen til hvilken enhet vi vil kommunisere med. BMP180 befinner seg på adresse 0xEE for skriving, og 0xEF for lesing.\cite{nettside:DatasheetBMP180} Deretter sender vi hvilken adresse vi vil lese av. BMP180 vil da svare med verdien i registeret.
+For å lese ut disse dataene må vi først sende ut START på bussen, det gjør vi med registeret TWCR:
 
-Etter vi har mottatt og lagret alle kalibreringsparametere må vi sende en kommando til BMP180 som starter lesing av lufttrykk og temperatur. Grunnen til at vi også må lese temperatur er at den er en faktor i utregningen av lufttrykket. Som vi ser på figur \ref{figure:BMP180Tidsbruk} må vi skrive verdien 0x2E til kontrollregisteret 0xF4 for å måle temperatur. Vi må da vente i minst 4.5 ms. Når BMP180 har gjort seg ferdig, vil rådata ligge i registeret 0xF6.
+\begin{verbatim}
+    TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); //Sender START.
+    //Venter på at TWINT er satt.
+    while((TWCR & (1<<TWINT)) == 0) {
+        ...
+    }
+    //START har blitt send.
+\end{verbatim}
+
+Så må vi sende adressen til hvilken enhet vi vil kommunisere med. Det gjøres ved å laste inn adressen inn i TWDR, for så å starte sending med TWCR:
+
+\begin{verbatim}
+    //Laster byten inn i data-registeret. Klar for sending.
+    TWDR = data;
+    
+    //Starter sending av data i TWDR.
+    TWCR = (1<<TWINT) | (1<<TWEN);
+    
+    //Venter på at TWINT er satt.
+    while((TWCR & (1<<TWINT)) == 0) {
+        ...
+    }
+    //Data har blitt sendt.
+\end{verbatim}
+
+BMP180 befinner seg på adresse 0xEE for skriving, og 0xEF for lesing\cite{nettside:DatasheetBMP180} Deretter sender vi hvilken adresse vi vil lese av. BMP180 vil da svare med verdien i registeret.
+
+STOP sender vi når vi er ferdig med å kommunisere, ved å skrive til TWCR:
+
+\begin{verbatim}
+    TWCR = (1<<TWINT) | (1<<TWSTO) | (1<<TWEN); //Sender STOP.
+\end{verbatim}
+
+Etter vi har mottatt og lagret alle kalibreringsparametere må vi sende en kommando til BMP180 som starter lesing av lufttrykk og temperatur. Grunnen til at vi også må lese temperatur er at den er en faktor i utregningen av lufttrykket. Fra figur \ref{figure:BMP180Tidsbruk} kan vi se at verdien 0x2E må skrives til kontrollregisteret 0xF4 for å måle temperatur. BMP180 vil da bruke minst 4.5ms på å fullføre målingen. Når BMP180 har gjort seg ferdig, vil rådata ligge i registeret 0xF6:
 
 Når vi skal lese av rådata for lufttrykket må vi også velge hvilken nøyaktighet vi ønsker. Dette er bestemt av OSS(Oversampling Setting) som er et tall mellom 0-3. Som vi ser på figur ~\ref{figure:BMP180Tidsbruk} bruker BMP180 lengre tid på å måle når vi ønsker bedre nøyaktighet.
 
@@ -161,11 +199,11 @@ Når vi skal lese av rådata for lufttrykket må vi også velge hvilken nøyakti
     \label{figure:BMP180Tidsbruk}
 \end{figure}
 
-Vi har valgt å benytte OSS=3 for best nøyaktighet. Det innebærer av vi må skrive verdien 0xF4 til kontrollregisteret 0xF4 og vente i minst 25.5 ms før vi leser av registeret 0xF6. Slik vil det se ut når vi ønsker å lese råverdien for lufttrykk.
+Vi har valgt å benytte OSS=3 for best nøyaktighet. Det innebærer av vi må skrive verdien 0xF4 til kontrollregisteret 0xF4 og vente i minst 25.5 ms før vi leser 2 byte fra registeret 0xF6. Siden vi har valgt best nøyaktighet er det også en ekstra byte tilgjengelig i registeret 0xF8. Denne råverdien blir en del av en rekke utregninger som er beskrevet detaljert i datablad.
 
-\meta{Hvordan man bruker dataregister på mikrokontrolleren for I2C. Hvilke adresser som brukes på BMP180}
 \subsubsection{Implementasjon av grensesnitt mot SHT10}
-\meta{Litt om hvordan kommunikasjon foregår i detalj, ta med hvilke kommandoer som gjør hva ++}
+\meta{Litt om hvordan kommunikasjon foregår i detalj, ta med hvilke kommandoer som gjør hva. Sleng med bilder av komm. Noen eksempler}
+Kommunikasjon med SHT10 må implementeres med bit banging. \cite{nettside:DatasheetSHT10}
 
 \subsubsection{Implementasjon av ADC}
 \meta{Kort om register for å styre/lese av ADC}
@@ -173,7 +211,7 @@ Vi har valgt å benytte OSS=3 for best nøyaktighet. Det innebærer av vi må sk
 \subsubsection{Implementasjon av nettverk}
 \meta{Hvordan nettverket blir tatt i bruk med NutOS, hvordan man henter ut tid fra NTP-server. Bruk av tråd for å sende }
 
-\subsubsection{Implemtasjon av hovedløkke}
+\subsubsection{Implementasjon av hovedløkke}
 \meta{Hvordan hele applikasjonen er satt sammen. Skjema over hele gangen i hovedløkken.}
 
 \subsection{Serverside}
@@ -196,19 +234,46 @@ Vi har valgt å kompilere den ferdige serveren som en JAR-fil. Dette er gjort i 
 \subsubsection{Sikkerhet}
 For at en «Network Socket» skal kunne ta imot tilkoblinger og data utenfor lokalnettet, må den relevante porten åpnes(ref) i router/brannmur for tilkoblinger utenfra. I enkelt tilfeller kan det være en sikkerhetsrisiko å ha porter åpne, men det er kun dersom programmet som mottar disse pakkene kan feiltolke innholdet og gjøre noe uforventet. Programmet vi har laget avviser alle pakker som ikke kommer med korrekt formatert JSON etter vår mal, så dette skal ikke være noe problem. Allikevel er det en dobbelsikring på plass. Porten vi bruker er nemlig kun åpnet for data fra de relevante IP-adressene værstasjonene sender fra. Det vil si at tilkoblinger på denne porten blir avvist fra alle andre adresser på internet. Av sikkerhetsårsaker nevner vi verken hvilken port eller hvilke IP-adresser dette gjelder.
 
-\subsubsection{Crontab(ref)}
-\meta{Kristoffa. U wanna write? Litt om hva, hvorfor og hvordan.}
+\subsubsection{Cron}
+Vi ønsket å garantere at serveren kjører til en hver tid. Vi har derfor tatt i bruk programmet cron. Cron er et program på *nix-operativsystemer som gjør det mulig å planlegge kjøring av et program/skript. Dette gjøres ved å skrive inn når og hva i en crontab(Cron tabell). Systemet vil da gjøre gitt oppgave på gitt tid.\cite{nettside:CrontabManPage} Vi har ført opp følgende linje i vår crontab på serveren:
 
-\subsubsection{Problemer underveis}
-\meta{Var det noen problemer? Hvis så, hvilke?}
+\begin{verbatim}
+59 * * * * /local/hessdalen/hessdalenweather/hws-make-run.sh
+\end{verbatim}
+
+Skriptet hws-make-run.sh vil da bli kjørt hver hele time på det 59. minuttet. Dette passer bra da mikrokontrolleren sender data hver hele time. Skriptet sjekker om vår server kjører, og starter den dersom den ikke gjør det:
+
+\begin{verbatim}
+#!/bin/bash
+#hws-make-run.sh
+#Passer på at HessdalenWeatherServer kjører.
+
+program=hessdalen16.jar
+
+if ps aux | grep -v grep | grep $program > /dev/null
+    then
+        exit
+else
+        java -jar $program & #Programmet kjører ikke, starter på nytt.
+fi
+exit
+\end{verbatim}
 
 \subsection{Datapresentasjon}
-\meta{Kan Mikael skrive her hvordan du jobbet, og hvilken løsninger du hadde, og litt om koden? Kan sikkert ta med eksempelkode også}
+For å presentere måledata på hessdalen.org, valgte vi slik beskrevet i avsnitt \ref{subsec:visualisering} å lage \textbf{\gls{frontend}} på JavaScript, og \textbf{\gls{backend}} på PHP. Her går vi litt i dybden på hvilke ulike teknikker og metoder vi har brukt når vi bygde denne datapresentasjonen. I figur \ref{figure:jsDiagram} kan du se hvordan de ulike funksjonene i JavaScriptet kommuniserer sammen, og hvordan \textbf{\gls{backend}} og databasen jobber sammen med dette.
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=1\textwidth]{jsDiagram}
+	\caption{Oversikt over hvordan de ulike funksjonene i JavaScriptet kommuniserer sammen, og med back-end.}
+    \label{figure:jsDiagram}
+\end{figure}
+
+Det er mange skjermdumper av nettsiden for å beskrive dens oppbygging i dette avsnittet, men for å få den fulle opplevelsen og fortståelsen for hvordan siden fungerer, anbefales det at du besøker www.hessdalen.org og velger 'Været'('The weather' i den engelske versjonen) i menyen til venstre.
 
 \subsubsection{Backend}
-Selv om den største delen av fremvisningen ble bygd på JavaScript, så måtte vi også lage en «backend» for å kommunisere med databasen. Grunnen til at dette er som beskrevet i \ref{subsec:visualisering} at JavaScript er et språk som blir kompilert der og da av nettleseren. Med andre ord hadde tilkoblingsinformasjonen til databasen vært fritt tilgjengelig for alle som besøkte siden. For å omgå dette, måtte vi bruke et språk som kompileres på serversiden, og kildekoden dermed ikke fritt tilgjengelig. Vi valgte slik også beskrevet i \ref{subsec:visualisering} å lage «backend» i PHP.
+Selv om den største delen av fremvisningen ble bygd på JavaScript, så måtte vi også lage en \textbf{\gls{backend}} for å kommunisere med databasen. Grunnen til at dette er som beskrevet i avsnitt \ref{subsec:visualisering} at JavaScript er et språk som blir kompilert der og da av nettleseren. Med andre ord hadde tilkoblingsinformasjonen til databasen vært fritt tilgjengelig for alle som besøkte siden. For å omgå dette, måtte vi bruke et språk som kompileres på serversiden, og kildekoden dermed ikke fritt tilgjengelig. Vi valgte slik også beskrevet i avsnitt \ref{subsec:visualisering} å lage \textbf{\gls{backend}} i PHP.
 
-Det denne koden gjør er å lese av de superglobale HTTP-variablene(ref) sendt gjennom linken, hente ut relevant måledata fra databasen og skrive ut JSON-formatert data på siden. Dette blir mye enklere å forstå hvis vist i praksis, så her er et eksempel:\\\\
+Det denne koden gjør er å lese av de superglobale \textbf{\glslink{HTTP-variabler}{HTTP-variablene}} sendt gjennom linken, hente ut relevant måledata fra databasen og skrive ut JSON-formatert data på siden. Dette blir mye enklere å forstå hvis vist i praksis, så her er et eksempel:\\\\
 Åpner «dbToJson.php» med denne URL:
 \begin{verbatim}
 dbToJson.php?type=temperature&from=2014-5-8%2000:00:00
@@ -246,7 +311,7 @@ Den første linken ovenfor henter dermed ut fra databasen og konverterer til JSO
 (Merk: Dette ville egentlig blitt veldig mange målinger, så de er kuttet ned til å vise første og siste for lesbarhet. Prikkene mellom målingene indikerer der de andre ville vært.)\\\\
 Det blir altså vist som en array av JSON-elementer. Dette blir senere tolket og brukt til presentering i JavaScript.
 
-«Backend» brukes også i første lasting av siden for å hente ut når første og siste måling ble gjort. Dette brukes for å begrense tilgjengelige datoer i kalenderene der brukeren velger tidsrom for datapresentasjon.
+\textbf{\Gls{backend}} brukes også i første lasting av siden for å hente ut når første og siste måling ble gjort. Dette brukes for å begrense tilgjengelige datoer i kalenderene der brukeren velger tidsrom for datapresentasjon.
 
 \subsubsection{Biblioteker brukt}
 Dette er JavaScript-bibliotekene vi har tatt i bruk for å lage datapresentasjonen.
@@ -264,7 +329,7 @@ Dette er JavaScript-bibliotekene vi har tatt i bruk for å lage datapresentasjon
 I figur \ref{figure:brukervalg} vises de ulike valgene brukeren kan ta for å påvirke datapresentasjonen. 
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=1\textwidth]{brukervalg}
+    \includegraphics[width=0.7\textwidth]{brukervalg}
 	\caption{Valgene presentert for brukeren.}
     \label{figure:brukervalg}
 \end{figure}
@@ -276,40 +341,114 @@ Disse brukervalgene har blitt valgt på bakgrunn av to kriterier:
 For å sikre at ikke brukeren skal kunne gjøre noen feil når de velger, blir alle feltene sjekket hver gang det blir gjort en endring. Det vil si at brukeren kan for eksempel ikke huke bort alle timesvalgene uten at «Standard» blir automatisk huket på igjen. Lignende sikring er laget for stasjonsvalget. I kalenderen som åpnes når tekstfeltene markert «Fra» og «Til» trykkes, er det ikke mulig å verken velge datoer der det ikke er målinger (Altså før stasjone  ble montert, og etter nåtid). Det er heller ikke mulig å sette en senere fradato enn den valgte tildatoen. Alle disse sikringene kombinert, gjør at det er tilnærmet umulig å utføre brukerfeil.
 
 \subsubsection{Dynamisk innholdslasting}
-\meta{Hva, hvorfor(fordeler) og hvordan? Stikkord: AJAX}
+\meta{onChange}
+Siden er bygd opp slik at brukeren aldri trenger å trykke noen dedikert knapp for å laste data. Så fort et brukervalg blir endret, oppdaterer datapresentasjonen seg selv for å reflektere de nye valgene. Dette sørger for en veldig dynamisk følelse på hele siden, og forbedrer brukeropplevelsen.
+
+Måten dette har blitt oppnådd på, er ved å bruke en teknologi kalt \textbf{\Gls{ajax}}. Dette gjør det altså mulig for nettleseren å hente ny data fra \textbf{\gls{backend}} uten at selve siden må lastes på nytt. Det er mulig å lage \textbf{\Gls{ajax}}-basert datalasting i JavaScript uten noen ekstra bibliotker, men vi har valgt å bruke jQuery for å forenkle prosessen.
 
 \subsubsection{Grafisk fremvisning}
-\meta{Hva, hvorfor og hvordan? Stikkord: Google Visualisation og begrensninger satt}
+For å ha muligheten til å vise frem måledata på graf-/diagramform, bestemte vi oss altså for å bruke biblioteket Google Visualisation. I dette biblioteket var det mange ulike måter å presentere data på, men vi bestemte oss for å bruke linjedigram da dette er den meste konvensjonelle og oversiktlige måten å presentere værdata på. Slik beskrevet i punktet om 'Brukervalg' ovenfor, står brukeren ganske fritt til å velge hvilke målinger som skal vises i diagrammet. X-aksen på diagrammet viser tid, og Y-aksen viser målingsverdi. Google Visualisation sørger for at akseverdiene justerer seg til de mest praktiske verdiene. Med det menes det at dersom man for eksempel kun har temperaturmålinger mellom 20 og 25 grader i tidsrommet valgt, vil verdiene på Y-aksene justere seg for å best reflektere dette. Dersom brukeren velger et stort tidsrom, reduseres antall målinger vist om dagen slik:
+\begin{description}
+  \item[1-10 dager] \hfill \
+  \begin{itemize}
+    \item Standard: Alle målinger vises(24 i døgnet).
+    \item Brukervalg: Kan vise alle fire (kl 00, 06, 12 og 18).
+  \end{itemize}
+  \item[11-30 dager] \hfill \
+  \begin{itemize}
+    \item Standard: To målinger i per døgn vises (kl 06 og 12).
+    \item Brukervalg: Kan vise alle fire (kl 00, 06, 12 og 18).
+  \end{itemize}
+  \item[Over 30 dager] \hfill \
+  \begin{itemize}
+    \item Standard: En måling per døgn (kl 12).
+    \item Brukervalg: Kan vise èn av fire (kl 00, 06, 12 og 18).
+  \end{itemize}  
+\end{description}
+Hovedgrunnene til at intervallet mellom målingene må begrenses i grafisk visning er at lesbarheten vil gå ned, og datakraften nødvendig vil gå opp ved for mange punkter vist.
+
+På figur \ref{figure:grafiskfremvisning} kan du se hvordan det ser ut når alle temperaturmålinger mellom 8. mai og 14. mai vises.
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=1\textwidth]{grafiskfremvisning}
+    \includegraphics[width=0.7\textwidth]{grafiskfremvisning}
 	\caption{Måledata for temperatur presentert med linjediagram.}
     \label{figure:grafiskfremvisning}
 \end{figure}
 
 \subsubsection{Tabellvisning}
-\meta{Hva, hvorfor og hvordan? Stikkord: html-tabeller}
+Tabellvisningen (vist i figur \ref{figure:tabellvisning} er bygd dynamisk av JavaScriptet på vanlige HTML-tabeller basert på hvilken måledata som skal vises. Denne tabellen erstatter diagrammets plass på siden når brukeren velger å vise måledata på tabellform.
+
+Å vise data på denne måten, begrenser ikke antall målinger hentet ut fra databasen dersom «Standard»-verdien er satt, uansett tidsrom. Vi har valgt å gjøre det slik, da det å vise en tabell ikke krever nevneverdig mer av maskinen eller reduserer lesbarheten, samme hvor mange målinger som vises. Du kan forøvrig fremdeles velge å begrense hvilke timer måledata skal vises fra selv.
 \begin{figure}[H]
 	\centering
-    \includegraphics[width=1\textwidth]{tabellvisning}
+    \includegraphics[width=0.7\textwidth]{tabellvisning}
 	\caption{Måledata for temperatur presentert på tabellform.}
     \label{figure:tabellvisning}
 \end{figure}
 
+\subsubsection{Praktisk informasjon}
+For å gi brukeren litt praktisk informasjon om værstasjonene, har vi laget en egen boks (se figur \ref{figure:praktiskInformasjon} på siden dedikert til nettopp dette. Her er det beskrevet når stasjonene ble montert, hvor de står og litt informasjon om hvordan den grafiske fremvisningen begrenses av størrelsen på tidsrommet.
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=0.4\textwidth]{beskrivelsenorsk}
+	\caption{Praktisk informasjon om værstasjonene vist på siden.}
+    \label{figure:praktiskInformasjon}
+\end{figure}
+
 \subsubsection{Feilhåndering}
-\meta{Hvordan håndteres tidsavbrudd, ikke-eksisterende data, osv.}
+Her var målet å skrive koden med så god feilhåndtering at ingenting skal stoppe opp selv om det mangler hele målinger eller er uhåndterbare verdier i databasen. I tillegg til dette har fokuset vært å gjøre opplevelsen av presentasjonsdataen god, selv om noe slikt skulle oppstå. Ettersom stasjon 2 ikke er i stand til å sende værdata før den får nettverk igjen (se avsnitt \ref{subsec:monteringProblemer}), har vi et godt eksempel på dette i figur \ref{figure:grafiskfremvisning}.
+
+Dersom JavaScriptet skulle få problemer med å hente ut data produsert av «backend» pga. av treg databasetilkobling, eller lignende, får brukeren beskjed om det. Denne beskjeden lyder som følger «Tidsavbrudd. Fortsetter å prøve...». Så fort tilkoblingen er gjenopprettet, vises data slik brukeren ba om.
 
 \subsubsection{Design}
-\meta{Hva har det vært fokus på? Hvordan har dette blitt gjort i praksis. Stikkord: enkelt/lettforståelig, oversiktlig, CSS og brukerinfo(tekstboks)}
+Hovedfokuset her har vært å lage en side som er oversiktlig og lett å bruke. Slik beskrevet i punktet om 'Brukervalg' ovenfor, skal det heller ikke være nødvendig å måtte bruke tid på å forstå hvordan siden skal brukes.
 
+Videre har vi valgt et design som skal være enkelt, men appellerende for brukeren. Slik vist på figur \ref{figure:fullSide}, er siden delt inn i tre områder:
+\begin{description}
+  \item[Brukervalg] \hfill \
+  \begin{itemize}
+    \item Plassering: Nederste på siden.
+    \item Formål: La brukeren påvirke hvilke data som skal vises.
+  \end{itemize}
+  \item[Datafremvisning] \hfill \
+  \begin{itemize}
+    \item Plassering: Til venstre på siden.
+    \item Formål: Fremvise måledata enten via diagram eller tabell.
+  \end{itemize}
+  \item[Informasjon] \hfill \
+  \begin{itemize}
+    \item Plassering: Til høyre på siden.
+    \item Formål: Vise praktisk informasjon i sammenheng med værstasjonene.
+  \end{itemize}
+\end{description}
+\begin{figure}[H]
+        \centering
+        \begin{subfigure}[H]{0.46\textwidth}
+                \includegraphics[width=\textwidth]{fullSide}
+                \caption{Med linjediagram}
+                \label{figure:fullSideDiagram}
+                \quad
+        \end{subfigure}
+        \begin{subfigure}[H]{0.52\textwidth}
+                \includegraphics[width=\textwidth]{fullSideTabell}
+                \caption{Med tabell}
+                \label{figure:fullSideTabell}
+                \quad
+        \end{subfigure}
+        \caption{Det ferdige designet på siden med de ulike metodene for å vise data.}
+        \label{figure:fullSide}
+\end{figure}
+For å få til dette i praksis, har vi brukt CSS3\cite{nettside:css3}, som er en \textbf{\glslink{stilark}{stilarkteknologi}}. Hele designet er bygd ved hjelp av denne teknologien.
 \subsubsection{Engelsk versjon}
-\meta{Hvorfor, og hvordan? Hvilke filer måtte endres}
+Oppdragsgivers nettside www.hessdalen.org er tilgjengelig på både Norsk og Engelsk. Dette innbar at vi måtte lage en engelsk versjon av datafremvisningen også. For å lage denne, ble vi nødt til å oversette flere variabler og strenger i JavaScriptet, og teksten skrevet i HTML-filen.
+
+Alle figurene i dette avsnittet er hentet fra den Norske versjonen av siden, men den Engelske versjonen ligger også fritt tilgjengelig på www.hessdalen.org.
 
 \subsubsection{Sikkerhet}
-\meta{Hvilke sikkerhetsaspekter måtte tas hensyn til, og hvordan ble de løst? Stikkord: SQL-injection}
+Det eneste sikkertsaspektet vi har måtte ta hensyn til i denne koden, er såkalt 'SQL-injection'. Det vil si at noen kan prøve å bruke «backend» til å sende inn ondsinnede spørringer til databasen. Som for eksempel å avslutte en streng (semikolon) sendt til databasen og følge opp med en 'DROP TABLE...'-setning. Dette har vi sikret oss mot ved å ta i bruk funksjonen 'mysql\underline{\hspace{.07in}}real\underline{\hspace{.07in}}escape\underline{\hspace{.07in}}string'\cite{nettside:phpescape} i PHP. Denne sørger for at det blir lagt på en '\textbackslash' foran tegn MySQL kan tolke. Slik blir de gjort ubrukelige, og 'SQL-injection' umulig.
 
 \subsubsection{Implementasjon på hessdalen.org}
-\meta{Hvordan ble dette gjort? Stikkord: CSS-konflikter}
+Da vi var ferdig med produksjonen av datafremvisningen, skulle den implementeres på www.hessdalen.org. Dette ble gjort i tett samarbeid med oppdragsgiver, og det eneste utfordringen vi støtte på var en CSS-konflikt der siden vår overstyrte stilsettet på www.hessdalen.org sine tabeller. Dette ble raskt løst ved å sette spesifikke ID'er på tabellene i datapresentasjonen.
 \begin{figure}[H]
 	\centering
     \includegraphics[width=1\textwidth]{implementertsystem}
