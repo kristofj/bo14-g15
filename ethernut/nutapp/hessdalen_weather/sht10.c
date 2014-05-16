@@ -93,7 +93,7 @@ uint8_t read_byte(uint8_t ack)
 		SCK_HIGH;
 		PULSE_SHORT;
 		if(read_data_pin()) {
-			val = (val | i);
+			val = (val | i); //Leser en bit
 		}
 		SCK_LOW;
 		PULSE_SHORT;
@@ -153,16 +153,22 @@ void start_transmission(void)
 	set_data_output();
 	DATA_HIGH;
 	PULSE_SHORT;
+	
 	SCK_HIGH;
 	PULSE_SHORT;
+	
 	DATA_LOW;
 	PULSE_SHORT;
+	
 	SCK_LOW;
 	PULSE_SHORT;
+	
 	SCK_HIGH;
 	PULSE_SHORT;
+	
 	DATA_HIGH;
 	PULSE_SHORT;
+	
 	SCK_LOW;
 	PULSE_SHORT;
 
@@ -233,6 +239,7 @@ void set_data_output(void)
 
 void set_data_input(void)
 {
+	//Setter data til input og aktiverer pullup-motstand.
 	GpioPinConfigSet(PORT_B, DATA_PIN, GPIO_CFG_PULLUP);
 }
 
