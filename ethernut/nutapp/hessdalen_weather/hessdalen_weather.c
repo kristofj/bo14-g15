@@ -470,7 +470,7 @@ void wait_30_sec(void) {
 	for(;;) {
 		datetime = get_current_time();
 		if(measured == 1) { //Venter slik at vi ikke gjør flere målinger hvert 30.sek.
-			while(1) {
+			for(;;) {
 				datetime = get_current_time();
 				if((datetime->tm_sec % 30) != 0)
 					break;
