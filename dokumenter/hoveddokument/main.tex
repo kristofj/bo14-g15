@@ -12,10 +12,11 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{sidecap}
-\usepackage{savesym} %kan være unødvendig
 \usepackage{glossaries}
+\usepackage{fixltx2e}
 
 \input{metaNO}       % Use this to fill in author, title and other metadata used on front page
+\cleardoublepage
 \input{defs}        % DO NOT CHANGE
 
 \makeindex
@@ -27,6 +28,7 @@
     %-------------------------------------------------    
     \includepdf[pages={1, {}}] {titlepage_NO} % Make your own catchy PDF title page, named titlepage.pdf 
     \maketitle
+    \includepdf[pages={1}]{metaENp}
 	\input{preface}
     \input{abstract}
     \addcontentsline{toc}{chapter}{Sammendrag}
@@ -38,21 +40,17 @@
     \addcontentsline{toc}{chapter}{Takk Til}
     %-------------------------------------------------
 
-	%\cleardoublepage % DO NOT CHANGE    
+	\cleardoublepage % DO NOT CHANGE    
 	\setcounter{tocdepth}{1}
     \tableofcontents  % DO NOT CHANGE    
-    %\cleardoublepage % DO NOT CHANGE    
+    \cleardoublepage % DO NOT CHANGE    
     
     % OPTIONAL
     %-------------------------------------------------
     \listoffigures
     \addcontentsline{toc}{chapter}{Figurliste}
-    %\cleardoublepage
     \listoftables
     \addcontentsline{toc}{chapter}{Tabelliste}
-    %\cleardoublepage
-    \lstlistoflistings
-    \addcontentsline{toc}{chapter}{Kodeliste}
     \clearpage
     \addcontentsline{toc}{chapter}{Ordliste}
     \input{glossary}

@@ -2,18 +2,44 @@
 \chapter{Produksjon}
 \label{chap:production} 
 
-I dette kapittelet vil vi ta for oss hvordan vi har produsert resultatene i proskjetet og beskrive selve produktet. Vi tar med hvilke verktøy vi har brukt, hvordan produksjonen foregikk, delegering av oppgaver og hvordan vi har løst problemer som har oppstått.
+%I dette kapittelet vil vi ta for oss hvordan vi har produsert resultatene i proskjetet og beskrive selve produktet. Vi tar med hvilke verktøy vi har brukt, hvordan produksjonen foregikk, delegering av oppgaver og hvordan vi har løst problemer som har oppstått.
+
+\section{Arbeidsprosessen}
+Vi har valgt å dele ansvaret mellom gruppemedlemmene på følgende måte:
+\begin{itemize}
+	\item Mikael Grimstad
+    	\begin{itemize}
+        	\item Serverside.
+            \item Visualisering av værdata.
+        \end{itemize}
+    \item Kristian Karlsen
+    	\begin{itemize}
+        	\item Planlegge fysisk beskyttelse av værstasjon og sensorer.
+            \item Lage maskinvarekretser.
+            \item Utstyrsbestilling.
+        \end{itemize}
+    \item Kristoffer Jensen
+    	\begin{itemize}
+        	\item Programmering av mikrokontroller.
+            \item Lage maskinvarekretser.
+        \end{itemize}
+    \item Morten Lindstad
+    	\begin{itemize}
+        	\item Bakgrunnsanalyse.
+            \item Hjelpe til der det trengs.
+        \end{itemize}
+\end{itemize}
+
+Utover dette har alle i gruppen vært med på å sette sammen værstasjonene og installere de i Hessdalen.
 
 \section{Maskinvare}
 \label{sec:HardwareDelen}
-
-\meta{Ting å nevne: jobbet på verkstedet på skolen.. etc.. loddet sammen komponenter, bygd deksel og beskyttelse til sensorene.} \\
 
 \subsection{Tilpassing for montering i felt}
 
 Vi har laget to værstasjoner som skal monteres på to forskjellige steder. Den ene skal festes til en mast ved hovedstasjonen og den andre skal festes til et tre ved sekundærstasjonen.
 \subsubsection{Vindsensorene}
-Som tilbehør til vindsensorene fikk vi tak i en monteringsstang, vist i figur \ref{fig:monteringsstang}, fra samme produsent som er beregnet for disse sensorene. Sensorene festes og løsnes enkelt fra monteringsstangen ved å skru på to låseskiver som sitter rett over lendningen ut fra sensorene. Selve monteringsstangen festes til ønsket plass ved hjelp av to metallbånd og tilhørende låsemekanisme. 
+Som tilbehør til vindsensorene fikk vi tak i en monteringsstang, vist i figur \ref{fig:monteringsstang}, fra samme produsent som er beregnet for disse sensorene. Sensorene festes og løsnes enkelt fra monteringsstangen ved å skru på to låseskiver som sitter rett over ledningen ut fra sensorene. Selve monteringsstangen festes til ønsket plass ved hjelp av to metallbånd og tilhørende låsemekanisme. 
 
 \begin{figure}[H]
   \centering
@@ -21,11 +47,12 @@ Som tilbehør til vindsensorene fikk vi tak i en monteringsstang, vist i figur \
   \caption{Monteringsstang for vindsensorene}
   \label{fig:monteringsstang}
 \end{figure}
+
 \subsubsection{BMP180}
 \label{subsubsec:hardwarebmp180}
 Lufttrykksensoren BMP180 ble vi nødt til å montere i en koblingsboks da den ikke har noen form for beskyttelsesetui. Dette ble gjort ved å lodde fast sensoren til et koblingsbrett som ble skrudd fast inne i koblingsboksen. For å sikkre en tett kabelgjennomføring benyttet vi kabelnipler. Sensoren er også avhengig av luftgjennomstrøming i boksen for at måling av lufttrykket skal bli korrekt. Dette ble løst ved å lage et lite hull i siden og et i bunnen for drenering av vann som kan renne inn.
 
-Festeanordningen til luftrykksensoren ved hovedstasjonen lagde vi av et bøybart metallbånd med hull i. Dette ble festet til boksen og deretter til masten ved å bøye metallbåndet rundt soltpene i masten og skru det fast med maskinskruer. Ved sekundærstasjonen ble boksen festet rett til treet ved bruk av treskruer. Dette ser du på figur \ref{fig:ferdigmontert} i avsnitt \ref{subsec:tilpassing}.
+Festeanordningen til luftrykksensoren ved hovedstasjonen lagde vi av et bøybart metallbånd med hull i. Dette ble festet til boksen og deretter til masten ved å bøye metallbåndet rundt stolpene i masten og skru det fast med maskinskruer. Ved sekundærstasjonen ble boksen festet rett til treet ved bruk av treskruer. Dette ser du på figur \ref{fig:ferdigmontert} i avsnitt \ref{subsec:tilpassing}.
 
 \subsubsection{SHT10}
 For at temperaturmålingene ikke skal bli påvirket av direkte sollys har vi valgt å feste sensoren i en hvit koblingsboks. Koblingsboksen har tillstrekklig med åpninger for gjennomlufting slik at luften inne i boksen holder samme temperatur som på utsiden. Måten den er montert ved de to stasjonene er gjort på samme vis som ved BMP180, beskrevet i avsnittet ovenfor. 
@@ -33,9 +60,9 @@ For at temperaturmålingene ikke skal bli påvirket av direkte sollys har vi val
 \subsection{Tilpassing av kabinettet}
 \label{subsec:tilpassing}
 
-Det vi valge å bruke som kabinett på værstasjonen er et skap av stål med beskyttelsesgrad IP 66. Dette er mer en tilstrekkelig for utendørs montering. Vi har også gjort ett par tillegsmodifikasjoner. Innvendig har vi isolert det med isopor og montert en termostat som styrer et varmeelement for å forhindre kondes og frost. Termostaten slår på varmeelementet ved  $5\,^{\circ}\mathrm{C}$ og av ved $15\,^{\circ}\mathrm{C}$.
+Det vi valgte å bruke som kabinett på værstasjonen er et skap av stål med beskyttelsesgrad IP 66. Dette er mer en tilstrekklig for utendørs montering. Vi har også gjort ett par tillegsmodifikasjoner. Innvendig har vi isolert det med isopor og montert en termostat som styrer et varmeelement for å forhindre kondens og frost. Termostaten slår på varmeelementet ved  $5\,^{\circ}\mathrm{C}$ og av ved $15\,^{\circ}\mathrm{C}$.
 
-Komponentene som skal huses i kabinettet er skrudd fast i tilhørende monterinsplate som fulgte med kabinettet. Selve festeanordningen til kabinettetene for å feste de ved hovedstasjon og sekundærstasjonen er laget av metallbånd med skruehull. På figur \ref{fig:ferdigmontert}  ser du hvordan dette ble gjort. 
+Komponentene som skal huses i kabinettet er skrudd fast i tilhørende monteringsplate som fulgte med kabinettet. Selve festeanordningen til kabinettetene for å feste de ved hovedstasjon og sekundærstasjonen er laget av metallbånd med skruehull. På figur \ref{fig:ferdigmontert}  ser du hvordan dette ble gjort. 
 
 \begin{figure}[H]
         \centering
@@ -56,7 +83,7 @@ Komponentene som skal huses i kabinettet er skrudd fast i tilhørende monterinsp
 
 \subsubsection{Innredning i kabinettet}
 
-I figur \ref{fig:innredning} ser du hvordan vi har innredet kabinettet. Vi har tatt høyde for at kablene til strømforskyningene kan fåresake støy som kan påvirke avlesningen av sensorene. Defor har vi lagt disse mest mulig utenom mikrokontrolleren, koblingsbrettet og sensorledningene.   
+I figur \ref{fig:innredning} ser du hvordan vi har innredet kabinettet. Vi har tatt høyde for at kablene til strømforskyningene kan forårsake støy som kan påvirke avlesningen av sensorene. Derfor har vi lagt disse mest mulig utenom mikrokontrolleren, koblingsbrettet og sensorledningene.   
 
 \begin{figure}[H]
 	\centering
@@ -67,9 +94,9 @@ I figur \ref{fig:innredning} ser du hvordan vi har innredet kabinettet. Vi har t
 
 Varmeelementet er festet til en trekloss i lokket fremfor direkte til monteringsstripa i lokket. Slik unngår vi varmetapet som hadde oppstått om vi hadde festet det direkte til monteringsstripa. Denne plasseringen var også den mest taktiske for å unngå at strålingsvarmen fra elementet kan komme til å smelte i stykker komponenter rundt, og for å få plassert det så lavt som mulig.
 
-Termostaten, som styrer varmeelementet, er festet lavt i sideveggen på motsatt side av varmeelementet og strømforskyningene. Dette for å unngå at det blir påvirket av andre faktorer enn luften inne i kabinettet og fordi det er her det blir lavest temperatur. Det gjør også at varmeelementet bli slått på så rask temperaturen faller under $5\,^{\circ}\mathrm{C}$.
+Termostaten, som styrer varmeelementet, er festet lavt i sideveggen på motsatt side av varmeelementet og strømforsyningene. Dette for å unngå at den blir påvirket av andre faktorer enn luften inne i kabinettet og fordi det er her det blir lavest temperatur. Det gjør også at varmeelementet blir slått på så rask temperaturen faller under $5\,^{\circ}\mathrm{C}$.
 
-På koblingsbrettet i kabinettet finner du kretsene til sensorene. Alt av ledninger fra mikrokontrolleren og sensorene er koblet sammen på dette koblingsbrettet bortsett fra strømforskyingene til vindsensorene. Disse kobles sammen i sukkerbiten. Dette for å skille mellom kretsene på 5V og 24V. 
+På koblingsbrettet i kabinettet finner du kretsene til sensorene. Alt av ledninger fra mikrokontrolleren og sensorene er koblet sammen på dette koblingsbrettet, bortsett fra strømforsyningene til vindsensorene. Disse kobles sammen i sukkerbiten. Dette for å skille mellom kretsene på 5V og 24V. 
 
 Ledningene fra sensorene kommer inn i bunnen av kabinettet. Isolasjonen rundt ledningene følger helt inn i kabinettet og er ikke avisolert mer enn at ledningene når sine innganger på koblingsbrettet og i sukkerbiten . Alt av komponenter og ledninger på koblingsbretter er loddet fast. 
 
@@ -77,60 +104,63 @@ Kabelen som leder 230V inn i kabinettet er ført inn helt til høyre. Dette for 
 
 \subsection{Problemer underveis}
 \label{subsec:monteringProblemer}
-Før vi isolerte kabinettet med isopor, brukte vi et materialet av elastisk plastikk. Grunnet isolasjonens elastiske egenskap gjorde det enkelt å få de utskjærte platene hele inn i kabinettet. I motsetning til isoporen som vi var nødt til å dele i mindre biter for å få på plass. Isolasjonen hadde god isolasjonsevne mot kulde, men når det kom til varme viste det seg å absorbere fremfor å isolere. Dette medførte at vi valgte isopor som isolasjon selvom den var litt mer trøblete å få inn i kabinettet.
+Før vi isolerte kabinettet med isopor, brukte vi et materiale av elastisk plastikk. Grunnet isolasjonens elastiske egenskap gjorde det enkelt å få de utskjærte platene hele inn i kabinettet. I motsetning til isoporen som vi var nødt til å dele i mindre biter for å få på plass. Den isolerte heller ikke godt nok for vår bruk. Dette medførte at vi valgte isopor som isolasjon selvom den var litt mer trøblete å få inn i kabinettet.
 
-Før vi reiste opp til Hessdalen for å montere værstasjonen opplyste oppdragsgiver oss om at nettverksforbindelsen mellom hoved- og sekundærstasjonen er brutt. Nettverksforbindelsen går i en fiberkabel. Årsaken til brudd på forbindelsen var at et dyr hadde tygget i stykker kabelen. Oppdragsgiver fikk tak i en reparatør, men grunnet dårlige værforhold måtte reparasjonen utsettes. Dette gjør at værstasjonen vi monterte ved sekundærstasjonen ikke får sendt målingene sine til serveren før netterverksforbindelsen har blitt reparert.   
-  
+Før vi reiste opp til Hessdalen for å montere værstasjonen opplyste oppdragsgiver oss om at nettverksforbindelsen mellom hoved- og sekundærstasjonen er brutt. Nettverksforbindelsen går i en fiberkabel. Årsaken til brudd på forbindelsen var at et dyr hadde tygget i stykker kabelen. Oppdragsgiver fikk tak i en reparatør, men grunnet dårlige værforhold måtte reparasjonen utsettes. Dette gjør at værstasjonen vi monterte ved sekundærstasjonen ikke får sendt målingene sine til serveren før netterverksforbindelsen har blitt reparert.
 
 \section{Programvare}
-\meta{Kort intro}
 \subsection{Ethernut 2.1}
 \label{subsec:Ethernut}
 
 \subsubsection{Implementasjon av grensesnitt mot BMP180}
 BMP180 benytter I\textsuperscript{2}C/TWI for kommunikasjon med mikrokontrolleren. Dette er en egen maskinvaremodul på mikrokontrolleren, som aksesseres gjennom dataregister. Disse registrene er dokumentert i databladet til mikrokontrolleren, og vi må benytte oss av disse fire:
 \begin{itemize}
-\item TWI Bit Rate Register (TWBR)
+\item TWI Bit Rate Register (TWBR)(Figur \ref{fig:twbr})
 
 Brukes sammen med TWSR for å sette klokkefrekvensen i master-modus.
 \begin{figure}[H]
 	\centering
     \includegraphics[width=1\textwidth]{twi_twbr}
 	\caption{TWBR fra datablad}
+    \label{fig:twbr}
 \end{figure}
-\item TWI Control Register (TWCR)
+\item TWI Control Register (TWCR)(Figur \ref{fig:twcr})
 
 Brukes for å kontrollere TWI-modulen. Her er vi interessert i bit 5, som sender START ut på bussen. Bit 4, som sender STOPP og bit 2 som aktiverer TWI-modulen.
 \begin{figure}[H]
 	\centering
     \includegraphics[width=1\textwidth]{twi_twcr}
 	\caption{TWCR fra datablad}
+    \label{fig:twcr}
 \end{figure}
-\item TWI Status Register (TWSR)
+\item TWI Status Register (TWSR)(Figur \ref{fig:twsr})
 
 Bit 7-3 brukes for å sjekke status på TWI-modulen. Bit 1-0 er brukt til å skalere klokkefrekvensen.
 \begin{figure}[H]
 	\centering
     \includegraphics[width=1\textwidth]{twi_twsr}
 	\caption{TWSR fra datablad}
+    \label{fig:twsr}
 \end{figure}
-\item TWI Data Register (TWDR)
+\item TWI Data Register (TWDR)(Figur \ref{fig:twdr})
 
 I transmit-modus, holder dette registeret på neste byte som skal sendes. I recieve-modus vil dette registeret inneholde data som ble mottatt.
 \begin{figure}[H]
 	\centering
     \includegraphics[width=1\textwidth]{twi_twdr}
 	\caption{TWDR fra datablad}
+    \label{fig:twdr}
 \end{figure}
 \end{itemize}
 
-Før vi benytter oss av TWI-modulen må vi først initialisere den. Dette gjøres ved å først sette klokkefrekvensen. Klokkefrekvensen regner vi ut med formelen:
+Før vi benytter oss av TWI-modulen må vi først initialisere den. Dette gjøres ved å først sette klokkefrekvensen(SCL). Klokkefrekvensen regner vi ut med formelen \ref{equation:twi_scl}
 
 \begin{equation}
-SCL\ frekvens = \frac{CPU\ Klokkefrekvens}{16+2\times TWBR\times 4^{TWPS}}
+\label{equation:twi_scl}
+SCL = \frac{CPU\ Klokkefrekvens}{16+2\times TWBR\times 4^{TWPS}}
 \end{equation}
 
-Mikrokontrollerens CPU kjører på 14.7456 MHz\cite{nettside:EthernutHardwareManual}. Her velger vi TWBR til 17 og TWPS til 1:
+Mikrokontrollerens CPU kjører på 14,7456 MHz\cite{nettside:EthernutHardwareManual}. Her velger vi TWBR til 17 og TWPS til 1:
 
 \begin{verbatim}
     TWSR = (0<<TWPS1) | (0<<TWPS0); //Setter prescalar til 1.
@@ -144,14 +174,14 @@ Deretter starter vi TWI-modulen ved å skrive til TWCR:
     TWCR = (1<<TWEN); //Aktiverer TWI.
 \end{verbatim}
 
-Når vi skal kalkulere lufttrykket må vi først lese av kalibreringsparametere som er lagret på sensorens EEPROM(Electrically Erasable Programmable Read-Only Memory). Som vi ser på figur \ref{figure:bmp180_kalibreringsparametere} er dette elleve 16-bits registere som befinner seg på adresse 0xAA til og med 0xBF.
+Når vi skal kalkulere lufttrykket må vi først lese av kalibreringsparametere som er lagret på sensorens EEPROM(Electrically Erasable Programmable Read-Only Memory). Som vi ser i tabell  \ref{figure:bmp180_kalibreringsparametere} er dette elleve 16-bits registere som befinner seg på adresse 0xAA til og med 0xBF.
 
-\begin{figure}[H]
+\begin{table}[H]
 	\centering
     \includegraphics[height=0.6\textwidth]{bmp180_kalibreringsparametere}
 	\caption{Kalibreringsparametere på BMP180}
     \label{figure:bmp180_kalibreringsparametere}
-\end{figure}
+\end{table}
 
 For å lese ut disse dataene må vi først sende ut START på bussen, det gjør vi med registeret TWCR:
 
@@ -164,7 +194,7 @@ For å lese ut disse dataene må vi først sende ut START på bussen, det gjør 
     //START har blitt send.
 \end{verbatim}
 
-Så må vi sende adressen til hvilken enhet vi vil kommunisere med. Det gjøres ved å laste inn adressen inn i TWDR, for så å starte sending med TWCR:
+Så må vi sende adressen til hvilken enhet vi vil kommunisere med. BMP180 befinner seg på adresse 0xEE for skriving, og 0xEF for lesing\cite{nettside:DatasheetBMP180}. Vi sender adressen ved å laste den inn i TWDR, for så å starte sending med TWCR:
 
 \begin{verbatim}
     //Laster byten inn i data-registeret. Klar for sending.
@@ -180,59 +210,419 @@ Så må vi sende adressen til hvilken enhet vi vil kommunisere med. Det gjøres 
     //Data har blitt sendt.
 \end{verbatim}
 
-BMP180 befinner seg på adresse 0xEE for skriving, og 0xEF for lesing\cite{nettside:DatasheetBMP180} Deretter sender vi hvilken adresse vi vil lese av. BMP180 vil da svare med verdien i registeret.
+Deretter sender vi hvilken adresse vi vil lese av. BMP180 vil da svare med verdien i registeret.
 
-STOP sender vi når vi er ferdig med å kommunisere, ved å skrive til TWCR:
+STOP sender vi når vi er ferdig med å kommunisere, ved å skrive følgende:
 
 \begin{verbatim}
     TWCR = (1<<TWINT) | (1<<TWSTO) | (1<<TWEN); //Sender STOP.
 \end{verbatim}
 
-Etter vi har mottatt og lagret alle kalibreringsparametere må vi sende en kommando til BMP180 som starter lesing av lufttrykk og temperatur. Grunnen til at vi også må lese temperatur er at den er en faktor i utregningen av lufttrykket. Fra figur \ref{figure:BMP180Tidsbruk} kan vi se at verdien 0x2E må skrives til kontrollregisteret 0xF4 for å måle temperatur. BMP180 vil da bruke minst 4.5ms på å fullføre målingen. Når BMP180 har gjort seg ferdig, vil rådata ligge i registeret 0xF6:
+Etter vi har mottatt og lagret alle kalibreringsparametere må vi sende en kommando til BMP180 som starter lesing av lufttrykk og temperatur. Grunnen til at vi også må lese temperatur er at den er en faktor i utregningen av lufttrykk. Fra tabell \ref{fig:BMP180Tidsbruk} kan vi se at verdien 0x2E må skrives til kontrollregisteret 0xF4 for å måle temperatur. BMP180 vil da bruke minst 4.5ms på å fullføre målingen. Når BMP180 har gjort seg ferdig, vil rådata ligge i registeret 0xF6.
 
-Når vi skal lese av rådata for lufttrykket må vi også velge hvilken nøyaktighet vi ønsker. Dette er bestemt av OSS(Oversampling Setting) som er et tall mellom 0-3. Som vi ser på figur ~\ref{figure:BMP180Tidsbruk} bruker BMP180 lengre tid på å måle når vi ønsker bedre nøyaktighet.
+Når vi skal lese av rådata for lufttrykket må vi også velge hvilken nøyaktighet vi ønsker. Dette er bestemt av OSS(Oversampling Setting) som er et tall mellom 0-3. Som vi ser i tabell \ref{fig:BMP180Tidsbruk} bruker BMP180 lengre tid på å måle når vi ønsker bedre nøyaktighet.
 
-\begin{figure}[H]
+\begin{table}[H]
 	\centering
     \includegraphics[width=0.75\textwidth]{bmp180_oss_time}
 	\caption{Tidsbruk for BMP180}
-    \label{figure:BMP180Tidsbruk}
-\end{figure}
+    \label{fig:BMP180Tidsbruk}
+\end{table}
 
-Vi har valgt å benytte OSS=3 for best nøyaktighet. Det innebærer av vi må skrive verdien 0xF4 til kontrollregisteret 0xF4 og vente i minst 25.5 ms før vi leser 2 byte fra registeret 0xF6. Siden vi har valgt best nøyaktighet er det også en ekstra byte tilgjengelig i registeret 0xF8. Denne råverdien blir en del av en rekke utregninger som er beskrevet detaljert i datablad.
+Vi har valgt å benytte OSS=3 for best nøyaktighet. Det innebærer av vi må skrive verdien 0xF4 til kontrollregisteret 0xF4 og vente i minst 25.5 ms før vi leser 2 byte fra registeret 0xF6. Siden vi har valgt best nøyaktighet er det også en ekstra byte tilgjengelig i registeret 0xF8. Denne råverdien blir en del av en rekke utregninger som er beskrevet detaljert i datablad. \cite{nettside:DatasheetBMP180}
 
 \subsubsection{Implementasjon av grensesnitt mot SHT10}
-\meta{Litt om hvordan kommunikasjon foregår i detalj, ta med hvilke kommandoer som gjør hva. Sleng med bilder av komm. Noen eksempler}
-Kommunikasjon med SHT10 må implementeres med bit banging. \cite{nettside:DatasheetSHT10}
+SHT10 benytter sin egen protokoll for kommunikasjon som må implementeres med bit banging, det innebærer å styre SCK(klokken) og DATA manuelt i programvaren. For å styre de to utgangene, og ha mulighet til å endre DATA til inngang/utgang i programmet. Kommer vi til å benytte oss av et GPIO(General-purpose input/output)-bibliotek inkludert i NutOS.
+
+Biblioteket brukes med enkle funksjonskall, hvis vi ønsker å sette klokkeutgangen høy gjøres det slik:
+
+\begin{verbatim}
+    GpioPinSetHigh(PORT_B, SCK_PIN);
+\end{verbatim}
+
+eller sette datautgangen til inngang:
+
+\begin{verbatim}
+    //Setter data til input og aktiverer pullup-motstand.
+    GpioPinConfigSet(PORT_B, DATA_PIN, GPIO_CFG_PULLUP);
+\end{verbatim}
+
+I databladet finner vi hvordan vi skal kommunisere med SHT10. Før en kommando sendes må vi først initialisere kommunikasjon med en transmission-start som visst på figur \ref{fig:sht10_start}.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=0.8\textwidth]{sht10_start}
+    \caption{Transmission-start}
+    \label{fig:sht10_start}
+\end{figure}
+
+Dette implementeres i C på følgende måte:
+
+\begin{verbatim}
+    #define SCK_LOW		GpioPinSetLow(PORT_B, SCK_PIN)
+    #define SCK_HIGH	GpioPinSetHigh(PORT_B, SCK_PIN)
+    #define DATA_LOW	GpioPinSetLow(PORT_B, DATA_PIN)
+    #define DATA_HIGH	GpioPinSetHigh(PORT_B, DATA_PIN)
+
+    void start_transmission(void)
+    {
+        SCK_LOW;
+        set_data_output();
+        DATA_HIGH;
+        PULSE_SHORT; //Venter i 3ms.
+	
+        SCK_HIGH;
+        PULSE_SHORT;
+	
+        DATA_LOW;
+        PULSE_SHORT;
+	
+        SCK_LOW;
+        PULSE_SHORT;
+	
+        SCK_HIGH;
+        PULSE_SHORT;
+	
+        DATA_HIGH;
+        PULSE_SHORT;
+	
+        SCK_LOW;
+        PULSE_SHORT;
+
+        set_data_input();
+    }
+\end{verbatim}
+
+Etter transmission-start sendes en 8-bits kommando hvor de første 3 er adresse-bits og de siste 5 er kommando-bits. I tabell \ref{fig:sht10_commands} ser vi en oversikt over kommandoene.
+
+\begin{table}[H]
+	\centering
+    \includegraphics[width=0.75\textwidth]{sht10_commands}
+    \caption{Kommandoer til SHT10}
+    \label{fig:sht10_commands}
+\end{table}
+
+Etter vi har sendt ut en kommando, må vi vente i maks 80/320ms for en 12/14-bit måling\cite{nettside:DatasheetSHT10}. Fuktighet måles med 12-bit og temperatur med 14-bit nøyaktighet. SHT10 signaliserer at den er ferdig ved å dra DATA-linjen lav. Da kan vi lese verdien fra sensoren ved å sette SCK høy og styre den til vi har lest all data.
+
+For å finne temperaturen bruker vi formel \ref{equation:sht10_temp}, hvor SO\textsubscript{T} er målt råverdi.
+
+\begin{equation}
+\label{equation:sht10_temp}
+T = d_1 + d_2 \times SO_T
+\end{equation}
+
+Parameterene får vi fra datablad som vist i tabell \ref{fig:sht10_temp_param}. Vi benytter VDD=5V og 14-bit nøyaktighet.
+
+\begin{table}[H]
+	\centering
+    \includegraphics[width=0.8\textwidth]{sht10_temp_param}
+    \caption{Parametere for temperatur}
+    \label{fig:sht10_temp_param}
+\end{table}
+
+Når vi skal måle relativ luftfuktighet må vi benytte formelen \ref{equation:sht10_humi}, hvor SO\textsubscript{RH} er målt råverdi.
+
+\begin{equation}
+\label{equation:sht10_humi}
+RH_{linear} = c_1 + c_2 \times SO_{RH} + c_3 \times {SO_{RH}}^2
+\end{equation}
+
+Parametere for formelen finner vi i datablad og er vist i tabell \ref{fig:sht10_humi_param1}. Vi måler med 12-bit nøyaktighet.
+
+\begin{table}[H]
+	\centering
+    \includegraphics[width=0.8\textwidth]{sht10_humi_param1}
+    \caption{Parametere for lufttrykk}
+    \label{fig:sht10_humi_param1}
+\end{table}
+
+Siden vi også har målt temperatur kan vi nå regne ut relativ luftfuktighet kompansert med temperatur. Dette gjør vi i formel  \ref{equation:sht10_humi_temp}. Her er T\textsubscript{\textsuperscript{o}C} temperaturen vi regnet ut tidligere. Med parametere i tabell \ref{fig:sht10_humi_param2}.
+
+\begin{equation}
+\label{equation:sht10_humi_temp}
+RH_{true} = (T_{^oC} - 25) \times (t_1 + t_2 \times SO_{RH}) + RH_{linear}
+\end{equation}
+
+\begin{table}[H]
+	\centering
+    \includegraphics[width=0.6\textwidth]{sht10_humi_param2}
+    \caption{Parametere for lufttrykk kompansert med temperatur}
+    \label{fig:sht10_humi_param2}
+\end{table}
 
 \subsubsection{Implementasjon av ADC}
-\meta{Kort om register for å styre/lese av ADC}
+For å bruke ADC må man benytte følgende dataregister:
+\begin{itemize}
+\item ADC Multiplexer Selection Register(ADMUX)(Figur \ref{fig:adc_admux})
 
-\subsubsection{Implementasjon av nettverk}
-\meta{Hvordan nettverket blir tatt i bruk med NutOS, hvordan man henter ut tid fra NTP-server. Bruk av tråd for å sende }
+Brukes til å bestemme referansespenning og hvilken kanal vi vil lese av. Her er vi interessert i bit 7-6 som velger referansespenning, og bit 4-0 som bestemmer hvilken kanal vi vil benytte.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=1\textwidth]{adc_admux}
+    \caption{ADMUX-registeret}
+    \label{fig:adc_admux}
+\end{figure}
+
+\item ADC Control and Status Register (ADCSRA)(Figur \ref{fig:adc_adcsra})
+
+Brukes til å kontrollere ADC. Her er vi interessert i bit 7 som starter ADC, og bit 6 som starter lesing på analog inngang. Bit 2-0 benyttes til å bestemme skalering på klokkefrekvensen til ADC.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=1\textwidth]{adc_adcsra}
+    \caption{ADCSRA-registeret}
+    \label{fig:adc_adcsra}
+\end{figure}
+
+\item ADCH og ADCL(Figur \ref{fig:adc_adch_adcl})
+
+Disse holder på den innleste verdien.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=1\textwidth]{adc_adch_adcl}
+    \caption{ADCH og ADCL}
+    \label{fig:adc_adch_adcl}
+\end{figure}
+\end{itemize}
+
+Når vi vil lese av verdien på en analog inngang må vi først bestemme referansespenning og klokkehastighet. Referansespenningen bestemmer blant annet høyeste spenning som kan måles. Vi har valgt å benytte \glslink{mikrokontroller}{mikrokontrollerens} interne spenning på 5 volt. Det gjør vi ved å skrive til ADMUX:
+\begin{verbatim}
+     ADMUX = (1 << REFS0); //Setter Vref til AVCC = 5V.
+\end{verbatim}
+
+Fra datablad har vi at klokkefrekvensen til ADC må settes til lavere enn 200kHz hvis vi ønsker en nøyaktighet på 10 bit\cite{nettside:atmega128Datablad}. Klokkefrekvensen regner vi ut i formel \ref{equation:adc_clk}, hvor klokkefrekvensen til CPU er 14,7456 MHz\cite{nettside:EthernutHardwareManual}.
+
+\begin{equation}
+\label{equation:adc_clk}
+Klokkefrekvens = \frac{CPU klokkefrekvens}{ADC Prescaler}
+\end{equation}
+
+ADC Prescaler setter vi til 128 i registeret ADCSRA, det fører til en klokkefrekvens på ca. 115 kHz. For å initialisere ADC skriver vi til ADCSRA:
+
+\begin{verbatim}
+    //Skrur på ADC og setter ADC-klokkehastighet til 115.2kHz.
+    ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
+\end{verbatim}
+
+Nå må vi velge hvilken kanal vi vil lese av. Dette gjør vi ved å skrive verdi vist i tabell \ref{fig:adc_channels} til ADMUX.
+
+\begin{table}[H]
+	\centering
+    \includegraphics[height=0.45\textwidth]{adc_channels}
+    \caption{Kanalvalg på ADC}
+    \label{fig:adc_channels}
+\end{table}
+
+Eksempelvis kan vi velge kanal ADC1 og lese fra denne ved å skrive til ADCSRA. Så venter vi på at konverteringen er ferdig og leser verdien fra ADCL og ADCH:
+
+\begin{verbatim}
+    //Endrer til kanal ACD1.
+    ADMUX = (1 << REFS0) | (1 << MUX0);
+    
+    //Starter lesing
+    ADCSRA |= (1 << ADSC);
+    
+    //Venter på at lesing er ferdig. Da er ADSC satt til 0.
+    while (ADCSRA & (1 << ADSC));
+    
+    //Leser verdien på ADC.
+    lsb = ADCL;
+    msb = ADCH;
+
+    //Innlest verdi.
+    raw = (msb << 8) | (lsb);
+\end{verbatim}
+
+Råverdien vi leser fra ADC er et tall mellom 0-1023. For å finne spenningen bruker vi formel \ref{equation:adc_voltage}.
+
+\begin{equation}
+    \label{equation:adc_voltage}
+    Spenning = \frac{R\text{\r{a}} verdi \times Ref.spenning}{1023}
+\end{equation}
+
+Nå som vi har regnet om til spenning kan vi konvertere dette til vindhastighet med formel \ref{equation:adc_speed} og vindretning med formel \ref{equation:adc_dir}.
+
+\begin{equation}
+	\label{equation:adc_speed}
+    Vindhastighet = \frac{Spenning \times Maks hastighet}{Ref.spenning}
+\end{equation}
+
+Maks hastighet fra vindhastighetsensoren er 50 m/s. \cite{nettside:DatasheetVindhastighet}
+
+\begin{equation}
+	\label{equation:adc_dir}
+    Vindhastighet = \frac{Spenning \times Maks retning}{Ref.spenning}
+\end{equation}
+
+Maks hastighet fra vindretningsensoren er 360 grader. \cite{nettside:DatasheetVindretning}
+
+\subsubsection{Implementasjon av nettverkskommunikasjon}
+Nettverksfunksjonalitet er implementert i NutOS, og vi trenger kun enkle funksjonskall for å benytte den. Før vi begynner å bruke ethernet-modulen må den først initialiseres. Vi skal også benytte DHCP for å få tak i IP-adresse. Dette gjøres slik:
+
+\begin{verbatim}
+    //Registrerer ethernet-kontroller.
+    NutRegisterDevice(&DEV_ETHER, 0, 0);
+    
+    //Konfigurerer DHCP.
+    NutDhcpIfConfig(DEV_ETHER_NAME, mac, 0);
+\end{verbatim}
+
+Vår applikasjon er avhengig av å holde orden på tiden. For å hente tid fra en NTP server gjør vi slik:
+
+\begin{verbatim}
+    //Holder på tiden
+    time_t ntp_time = 0;
+
+    //Adresse til NTP-server.
+    uint32_t timeserver = inet_addr("85.252.162.7");
+
+    //Henter tid fra server.
+    NutSNTPGetTime(&timeserver, &ntp_time);
+
+    //Setter klokken på Ethernut.
+    //Ethernut holder nå orden på tiden.
+    stime(&ntp_time);
+\end{verbatim}
+
+Mikrokontrolleren teller nå tiden selv, og vi trenger kun å gjøre et funksjonskall for å få nåværende tid.
+Når vi skal sende data til serveren gjøres dette ved hjelp av TCP. NutOS har innebygde funksjoner for TCP, og vi trenger da å bruke en socket. For å benytte en socket gjør vi følgende:
+
+\begin{verbatim}
+    //Lager socketen som vi skal bruke.
+    TCPSOCKET *sock = NutTcpCreateSocket();
+
+    //Kobler til server.
+    NutTcpConnect(sock, inet_addr(FREJA_IP), FREJA_PORT);
+
+    //Sender data med bytes-lengde.
+    NutTcpSend(sock, data, bytes);
+
+    //Lukker socket.
+    NutTcpCloseSocket(sock);
+\end{verbatim}
+
+Mikrokontrolleren har et begrenset buffer, og kan sende maksimalt 1460 byte på en gang. Når vi ønsker å sende flere bytes i en socket må vi løse dette i en løkke:
+
+\begin{verbatim}
+    //Sender data til server. Kan sende maks 1460 bytes av gangen.
+    //Kjører til alle bytes har blitt sendt.
+    while ((sent = NutTcpSend(sock, args->data, bytes)) != bytes) {
+        //Regner ut resterende bytes som må sendes.
+        bytes -= sent;
+    
+        //Flytter resterende bytes til begynnelsen i bufferet.
+        memcpy(args->data, &args->data[sent], bytes);
+    }
+\end{verbatim}
+
+\subsubsection{Watchdog}
+Watchdog er en maskinvaremodul som teller ned fra gitt tid. Hvis applikasjonen ikke starter om nedtelleren vil modulen starte om applikasjonen.
+I kode implementeres det ved å benytte biblioteket "avr/wdt.h":
+\begin{verbatim}
+    //Setter watchdog-nedteller til 1.8s
+    wdt_enable(7);
+
+    //Starter watchdog på nytt.
+    wdt_reset();
+\end{verbatim}
 
 \subsubsection{Implementasjon av hovedløkke}
-\meta{Hvordan hele applikasjonen er satt sammen. Skjema over hele gangen i hovedløkken.}
+Som vi så på figur \ref{fig:flytskjemaEthernut} i kapittel \ref{subsec:EthernutProgramvare} er vår applikasjon avhengig av å gjøre oppgaver på forskjellige tidspunkt. Da vi skal gjøre ti målinger i minuttet, gjør vi en måling hvert 30. sekund. For å sjekke dette i kode gjør vi det enkelt med en løkke:
+\begin{verbatim}
+    for(;;) { //Evig løkke
+	    //Henter nåværende tid.
+        datetime = get_current_time();
+    
+        //Dette er en trettisekunder.
+        //F.eks 13:31:30, 14:32:00.
+        if((datetime->tm_sec % 30) == 0)
+            break;
+
+        ...
+    }
+\end{verbatim}
+
+Når vi  er på en trettisekunder henter vi en måling fra alle sensorer. Disse målingene lagrer vi i arrayer og holder orden på hvor mange målinger vi har tatt. For hver trettisekunder sjekker vi også om dette er en femminutter(f.eks 14:05, 15:40). Da skal vi regne ut gjennomsnitt, maksimum og minimum. Dette gjøres enkelt ved å traversere målingene vi har gjort, for så å lagre de utregnede verdiene i enda et array.
+
+Når vi er på en hel time, skal vi sende data til serveren. Dette gjør vi ved å lage en tråd som håndterer nettverksoperasjonen. Vi er avhengig av å benytte en tråd fordi nettverksoperasjonene tar så lang tid at vi ikke rekker å starte om watchdog-telleren.
+
+Tråder er implementert i NutOS og lages enkelt med THREAD-makroen:
+\begin{verbatim}
+    //Deklarerer en tråd som håndterer sending av data.
+    THREAD(DataThread, args)
+    {
+        ...
+    }
+\end{verbatim}
+
+Tråden startes ved å gjøre følgende funksjonskall:
+
+\begin{verbatim}
+    //Starter tråden som sender data med 512 bytes stack.
+    NutThreadCreate("DataThread", DataThread, args, 512); 
+\end{verbatim}
+
+Under testing av systemet kom vi over en feil som vi ikke klarte å fikse. Feilen var at nettverksmodulen på \glslink{mikrokontroller}{mikrokontrolleren} sluttet å fungere etter 2-3 sendinger. På grunn av tidsmangel løste vi denne feilen ved å starte om \glslink{mikrokontroller}{mikrokontrolleren} etter at den sendte data hver hele time. Dette er en relativt dårlig løsning, men det løser feilen.
+
+\subsubsection{Feilhåndtering}
+\begin{itemize}
+\item Ved oppstart vil \glslink{mikrokontroller}{mikrokontrolleren} prøve å få tid fra NTP-server. Den vil prøve 6 ganger før den gir opp og starter om programmet.
+\item Vi skanner hele TWI-bussen for å se om vi finner BMP180, hvis ikke vil den bli ignorert den neste timen. Da setter vi bare målt trykk til 0.
+\item SHT10 prøver vi å kontakte ved hver avlesning. Får vi tidsavbrudd setter vi temperatur og luftfuktighet til 0.
+\item Nettverksrelaterte feil blir funnet ved tidsavbrudd. Vi prøver å sende data 6 x 10 sekunder. Hvis vi ikke får koblet til serveren vil \glslink{mikrokontroller}{mikrokontrolleren} starte om og vi vil miste data fra den siste timen.
+\end{itemize}
+
+\subsection{Database}
+\label{subsec:databaseproduksjon}
+Slik beskrevet i avsnitt \ref{subsec:databaseplan}, bruker vi MySQL med InnoDB for lagring av værdata. I modelleringen av databasen, var hovedfokuset å lage en modell(se figur \ref{figure:dbmodell}) som overholdt første, andre og tredje normalform fra \glslink{normaliseringsregler}{normaliseringsreglene}. 
+\begin{description}
+  \item[Første normalform (1NF)] \hfill \
+  \begin{itemize}
+    \item Hva: Krever at på hvert krysningspunkt mellom rader og kolonner i tabellen finnes det én enkelt verdi, og aldri en liste over verdier. 
+    \item Hvordan: Dette har vi overholdt ved å ha alle ulike verdier i egne kolonner, og kun ha èn måling i hver rad.
+  \end{itemize}
+  \item[Andre normalform (2NF)] \hfill \
+  \begin{itemize}
+    \item Hva: Krever at hver ikke-nøkkelkolonne er helt avhengig av hele primærnøkkelen, ikke bare en del av nøkkelen.
+    \item Hvordan: I denne modellen er dette irrelevant, da vi ikke har delte primærnøkler. Tabellen 'logId' kunne vært laget med en delt primærnøkkel på stasjonsnummer og tid, men for enkelhets skyld, valgte vi å lage en egen teller for dette.
+  \end{itemize}
+  \item[Tredje normalform (3NF)] \hfill \
+  \begin{itemize}
+    \item Hva: Krever at hver ikke-nøkkelkolonne må være avhengig av primærnøkkelen, og bare den. 
+    \item Hvordan: Overholdt ved at hver verdi i tabellene kun er avhengige av primærnøkkel.
+  \end{itemize}  
+\end{description}
+
+For at en modell skal overholde 3NF, må den også oppfylle kravene til 1NF og 2NF.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=1\textwidth]{dbmodell}
+	\caption{Databasemodellen laget for å lagre målingsdata.}
+    \label{figure:dbmodell}
+\end{figure}
 
 \subsection{Serverside}
-For å ta imot TCP-pakkene med JSON-formatert data og legge det inn i databasen, var vi avhengig av å ha en server kjørende på skolens nettverk. Denne serveren valgte vi som beskrevet i \ref{subsec:Serversiden} å bygge på Java\cite{nettside:java}.
+For å ta imot TCP-pakkene med \Gls{json}-formatert data og legge det inn i databasen, var vi avhengig av å ha en server kjørende på skolens nettverk. Denne serveren valgte vi som beskrevet i \ref{subsec:Serversiden} å bygge på \Gls{java}.
 
 \subsubsection{Pakkemottak og tråder}
-For å kunne motta datapakkene værstasjonen sender fra Hessdalen og ned til skolens server, bruker vi Sockets. Nærmere bestemt «TCP Stream Sockets»\cite{nettside:streamsockets}. Disse tillater pålitelig to-veis kommunikasjon mellom både værstasjonen og serveren. Dette fungerer i praksis slik at serveren venter til en tilkobling er gjort, og data mottatt før den behandler data slik beskrevet under, og sender «Done» tilbake til værstasjonen. Når serveren er ferdig med dette, er den klar til å motta ny data. Dette måtte imidlertidig bli gjort trådbasert for at begge stasjonene skulle kunne sende på likt. Dermed gjorde vi det slik at så fort en ny tilkobling blir opprettet til serveren, lages det en egen tråd for å behandle denne tilkoblingen. Prosessen er den samme som beskrevet ovenfor, bortsett ifra at serveren kan håndere alle tilkoblinger selv om de kommer på likt.
+For å kunne motta datapakkene værstasjonen sender fra Hessdalen og ned til skolens server, bruker vi \glslink{socket}{internett-sockets}. Nærmere bestemt 'TCP Stream Sockets'. Disse tillater pålitelig to-veis kommunikasjon mellom både værstasjonen og serveren. Dette fungerer i praksis slik at serveren venter til en tilkobling er gjort, og data mottatt før den behandler data slik beskrevet under, og sender «Done» tilbake til værstasjonen. Når serveren er ferdig med dette, er den klar til å motta ny data. Dette måtte imidlertidig bli gjort trådbasert for at begge stasjonene skulle kunne sende på likt. Dermed gjorde vi det slik at så fort en ny tilkobling blir opprettet til serveren, lages det en egen tråd for å behandle denne tilkoblingen. Prosessen er den samme som beskrevet ovenfor, bortsett ifra at serveren kan håndere alle tilkoblinger selv om de kommer på likt.
 
-\subsubsection{Konvertere JSON til SQL-spørringer}
-Vi har laget en egen klasse kalt «DbManager» for å håndere den mottatte JSON-formaterte datastrengen og bygge SQL-spørringer innsetting i databasen. Her valgte vi å bruke et lite ressurskrevende bibliotek kalt Json-lib\cite{nettside:jsonlib}. Med dette biblioteket bygger vi et JSON-objekt av strengen, og kan med det lett hente ut målingsdata. Med dette bygger vi SQL-spørringer som kjøres ved hjelp av en klasse laget for å håndere databasen. Det er mer om denne prosessen i neste punkt.
+\subsubsection{Konvertere \Gls{json} til SQL-spørringer}
+Vi har laget en egen klasse kalt «DbManager» for å håndere den mottatte \Gls{json}-formaterte datastrengen og bygge SQL-spørringer innsetting i databasen. Her valgte vi å bruke et lite ressurskrevende bibliotek kalt Json-lib. Med dette biblioteket bygger vi et \Gls{json}-objekt av strengen, og kan slik lett hente ut målingsdata. Med dette bygger vi SQL-spørringer som kjøres ved hjelp av en klasse laget for å håndere databasen. Det er mer om denne prosessen i neste punkt.
 
 \subsubsection{Databasebehandling}
-Klassen «Db» har to oppgaver. Den første er å kjøre SQL-spørringene generert i «DbManager», og den andre er å returnere den autogenererte nøkkelen MySQL lager ved innsetting av data. Denne nøkkelen er svært viktig når det kommer til å få koblet riktige rader i databasen sammen og overholdt restriksjonene for fremmednøkler. Det er mer om databaseoppbygningen i (ref).
+Klassen «Db» har to oppgaver. Den første er å kjøre SQL-spørringene generert i «DbManager», og den andre er å returnere den autogenererte nøkkelen \Gls{mysql} lager ved innsetting av data. Denne nøkkelen er svært viktig når det kommer til å få koblet riktige rader i databasen sammen og overholdt restriksjonene for fremmednøkler. Det er mer om databaseoppbygningen i avsnitt \ref{subsec:databaseproduksjon}.
 
-For at Java-serveren skal kunne koble seg til og håndere databasetilkoblinger, var vi avhengig av å bruke en driver fra MySQL kalt JDBC\cite{nettside:jdbc} (forkortelse for «Java Database Connectivity»). Dette er et slags bibliotek som utvider Java med muligheten for nettopp dette.   
+For at Java-serveren skal kunne koble seg til og håndere databasetilkoblinger, var vi avhengig av å bruke en driver fra \Gls{mysql} kalt \Gls{jdbc}. Dette er et bibliotek som utvider \Gls{java} med muligheten for nettopp dette.   
 
 \subsubsection{Kompilert JAR-fil}
 Vi har valgt å kompilere den ferdige serveren som en JAR-fil. Dette er gjort i den hensikt å slippe å ha en relativt stor mengde klasser og biblioteker liggende løst der programmet skal kjøres fra. Ved å JAR-kompilere kan vi få med alle klasser og biblioteker i samme fil, og det blir dermed et mye mer ryddig produkt.
 
 \subsubsection{Sikkerhet}
-For at en «Network Socket» skal kunne ta imot tilkoblinger og data utenfor lokalnettet, må den relevante porten åpnes(ref) i router/brannmur for tilkoblinger utenfra. I enkelt tilfeller kan det være en sikkerhetsrisiko å ha porter åpne, men det er kun dersom programmet som mottar disse pakkene kan feiltolke innholdet og gjøre noe uforventet. Programmet vi har laget avviser alle pakker som ikke kommer med korrekt formatert JSON etter vår mal, så dette skal ikke være noe problem. Allikevel er det en dobbelsikring på plass. Porten vi bruker er nemlig kun åpnet for data fra de relevante IP-adressene værstasjonene sender fra. Det vil si at tilkoblinger på denne porten blir avvist fra alle andre adresser på internet. Av sikkerhetsårsaker nevner vi verken hvilken port eller hvilke IP-adresser dette gjelder.
+For at \glslink{socket}{nettverk-sockets} skal kunne ta imot tilkoblinger og data utenfor lokalnettet, må den relevante porten åpnes i router/brannmur for tilkoblinger utenfra. I enkelt tilfeller kan det være en sikkerhetsrisiko å ha porter åpne, men det er kun dersom programmet som mottar disse pakkene kan feiltolke innholdet og gjøre noe uforventet. Programmet vi har laget avviser alle pakker som ikke kommer med korrekt formatert \Gls{json} etter vår mal, så dette skal ikke være noe problem. Allikevel er det en dobbelsikring på plass. Porten vi bruker er nemlig kun åpnet for data fra de relevante IP-adressene værstasjonene sender fra. Det vil si at tilkoblinger på denne porten blir avvist fra alle andre adresser på internett. Av sikkerhetsårsaker nevner vi verken hvilken port eller hvilke IP-adresser dette gjelder.
 
 \subsubsection{Cron}
 Vi ønsket å garantere at serveren kjører til en hver tid. Vi har derfor tatt i bruk programmet cron. Cron er et program på *nix-operativsystemer som gjør det mulig å planlegge kjøring av et program/skript. Dette gjøres ved å skrive inn når og hva i en crontab(Cron tabell). Systemet vil da gjøre gitt oppgave på gitt tid.\cite{nettside:CrontabManPage} Vi har ført opp følgende linje i vår crontab på serveren:
@@ -241,7 +631,7 @@ Vi ønsket å garantere at serveren kjører til en hver tid. Vi har derfor tatt 
 59 * * * * /local/hessdalen/hessdalenweather/hws-make-run.sh
 \end{verbatim}
 
-Skriptet hws-make-run.sh vil da bli kjørt hver hele time på det 59. minuttet. Dette passer bra da mikrokontrolleren sender data hver hele time. Skriptet sjekker om vår server kjører, og starter den dersom den ikke gjør det:
+Skriptet hws-make-run.sh vil da bli kjørt hver hele time på det 59. minuttet. Dette passer bra da \glslink{mikrokontroller}{mikrokontrolleren} sender data hver hele time. Skriptet sjekker om vår server kjører, og starter den dersom den ikke gjør det:
 
 \begin{verbatim}
 #!/bin/bash
@@ -260,7 +650,7 @@ exit
 \end{verbatim}
 
 \subsection{Datapresentasjon}
-For å presentere måledata på hessdalen.org, valgte vi slik beskrevet i avsnitt \ref{subsec:visualisering} å lage \textbf{\gls{frontend}} på JavaScript, og \textbf{\gls{backend}} på PHP. Her går vi litt i dybden på hvilke ulike teknikker og metoder vi har brukt når vi bygde denne datapresentasjonen. I figur \ref{figure:jsDiagram} kan du se hvordan de ulike funksjonene i JavaScriptet kommuniserer sammen, og hvordan \textbf{\gls{backend}} og databasen jobber sammen med dette.
+For å presentere måledata på hessdalen.org, valgte vi slik beskrevet i avsnitt \ref{subsec:visualisering} å lage \gls{frontend} på \gls{javascript}, og \gls{backend} på \Gls{php}. Her går vi litt i dybden på hvilke ulike teknikker og metoder vi har brukt når vi bygde denne datapresentasjonen. I figur \ref{figure:jsDiagram} kan du se hvordan de ulike funksjonene i \glslink{javascript}{JavaScriptet} kommuniserer sammen, og hvordan \gls{backend} og databasen jobber sammen med dette.
 \begin{figure}[H]
 	\centering
     \includegraphics[width=1\textwidth]{jsDiagram}
@@ -271,20 +661,20 @@ For å presentere måledata på hessdalen.org, valgte vi slik beskrevet i avsnit
 Det er mange skjermdumper av nettsiden for å beskrive dens oppbygging i dette avsnittet, men for å få den fulle opplevelsen og fortståelsen for hvordan siden fungerer, anbefales det at du besøker www.hessdalen.org og velger 'Været'('The weather' i den engelske versjonen) i menyen til venstre.
 
 \subsubsection{Backend}
-Selv om den største delen av fremvisningen ble bygd på JavaScript, så måtte vi også lage en \textbf{\gls{backend}} for å kommunisere med databasen. Grunnen til at dette er som beskrevet i avsnitt \ref{subsec:visualisering} at JavaScript er et språk som blir kompilert der og da av nettleseren. Med andre ord hadde tilkoblingsinformasjonen til databasen vært fritt tilgjengelig for alle som besøkte siden. For å omgå dette, måtte vi bruke et språk som kompileres på serversiden, og kildekoden dermed ikke fritt tilgjengelig. Vi valgte slik også beskrevet i avsnitt \ref{subsec:visualisering} å lage \textbf{\gls{backend}} i PHP.
+Selv om den største delen av fremvisningen ble bygd på \Gls{javascript}, så måtte vi også lage en \gls{backend} for å kommunisere med databasen. Grunnen til at dette er som beskrevet i avsnitt \ref{subsec:visualisering} at \Gls{javascript} er et språk som blir kompilert der og da av nettleseren. Med andre ord hadde tilkoblingsinformasjonen til databasen vært fritt tilgjengelig for alle som besøkte siden. For å omgå dette, måtte vi bruke et språk som kompileres på serversiden, og kildekoden dermed ikke fritt tilgjengelig. Vi valgte slik også beskrevet i avsnitt \ref{subsec:visualisering} å lage \gls{backend} i \Gls{php}.
 
-Det denne koden gjør er å lese av de superglobale \textbf{\glslink{HTTP-variabler}{HTTP-variablene}} sendt gjennom linken, hente ut relevant måledata fra databasen og skrive ut JSON-formatert data på siden. Dette blir mye enklere å forstå hvis vist i praksis, så her er et eksempel:\\\\
+Det denne koden gjør er å lese av de superglobale \glslink{HTTP-variabler}{HTTP-variablene} sendt gjennom linken, hente ut relevant måledata fra databasen og skrive ut \Gls{json}-formatert data på siden. Dette blir mye enklere å forstå hvis vist i praksis, så her er et eksempel:\\\\
 Åpner «dbToJson.php» med denne URL:
 \begin{verbatim}
 dbToJson.php?type=temperature&from=2014-5-8%2000:00:00
 &to=2014-5-8%2023:59:59&hoursOverride=false
 \end{verbatim}
-Her ser vi at datatype er satt til å være temperatur, fradato til 08.05.14 kl 00:00 og tildato til 08.05.14 kl 23:59. \\Verdien «hoursOverride» er her satt til å være falsk, da vi velger å bruke visningens standardinstillinger for restriktering av data (merk:  ettersom dette kun er èn dag her, er standard å vise alle målinger i tidsrommet satt). Dersom brukeren har valgt å kun vise måledata fra kl 00 og 06 ville det sett slik ut:
+Her ser vi at datatype er satt til å være temperatur, fradato til 08.05.14 kl 00:00 og tildato til 08.05.14 kl 23:59. \\Verdien «hoursOverride» er her satt til å være falsk, da vi velger å bruke visningens standardinstillinger for restriktering av data. Ettersom dette kun er èn dag her, er standard å vise alle målinger i tidsrommet satt. Dersom brukeren har valgt å kun vise måledata fra kl 00 og 06 ville det sett slik ut:
 \begin{verbatim}
 hoursOverride=true&hours00=true&hours06=true
 &hours12=false&hours18=false
 \end{verbatim}
-Den første linken ovenfor henter dermed ut fra databasen og konverterer til JSON slik beskrevet ovenfor. Deretter skrives det ut og blir slik:
+Den første linken ovenfor henter dermed ut fra databasen og konverterer til \Gls{json} slik beskrevet ovenfor. Deretter skrives det ut og blir slik:
 \begin{verbatim}
 [
   {
@@ -308,17 +698,17 @@ Den første linken ovenfor henter dermed ut fra databasen og konverterer til JSO
   }
 ]
 \end{verbatim}
-(Merk: Dette ville egentlig blitt veldig mange målinger, så de er kuttet ned til å vise første og siste for lesbarhet. Prikkene mellom målingene indikerer der de andre ville vært.)\\\\
-Det blir altså vist som en array av JSON-elementer. Dette blir senere tolket og brukt til presentering i JavaScript.
+Merk: Dette ville egentlig blitt veldig mange målinger, så de er kuttet ned til å vise første og siste for lesbarhet. Prikkene mellom målingene indikerer der de andre ville vært.\\\\
+Det blir altså vist som en array av \Gls{json}-elementer. Dette blir senere tolket og brukt til presentering i \Gls{javascript}.
 
-\textbf{\Gls{backend}} brukes også i første lasting av siden for å hente ut når første og siste måling ble gjort. Dette brukes for å begrense tilgjengelige datoer i kalenderene der brukeren velger tidsrom for datapresentasjon.
+\Gls{backend} brukes også i første lasting av siden for å hente ut når første og siste måling ble gjort. Dette brukes for å begrense tilgjengelige datoer i kalenderene der brukeren velger tidsrom for datapresentasjon.
 
 \subsubsection{Biblioteker brukt}
-Dette er JavaScript-bibliotekene vi har tatt i bruk for å lage datapresentasjonen.
+Dette er \Gls{javascript}-bibliotekene vi har tatt i bruk for å lage datapresentasjonen.
 \begin{description}
   \item[jQuery\cite{nettside:jquery}] \hfill \\
   jQuery er et bibliotek laget for å simplifisere programmeringsprosessen. Mottoet deres er 'write less, do more', og gjengir ganske godt hva det går ut på. 
-  I vår kode brukes primært jQuery for å forenkle AJAX-basert datalasting (beskrevet dypere i senere punkt), men også i enkelte for-løkker og andre småfunksjoner.
+  I vår kode brukes primært jQuery for å forenkle \Gls{ajax}-basert datalasting (beskrevet dypere i senere punkt), men også i enkelte for-løkker og andre småfunksjoner.
   \item[jQuery UI\cite{nettside:jqueryUI}] \hfill \\
   jQuery UI er et bibliotek som samhandler med jQuery for å tilby ulike visualiseringsløsninger. I vår kode brukes dette for bygge kalenderen der bruker kan velge tidsrom for datapresentasjon. 
   \item[Google Visualisation\cite{nettside:googlevis}] \hfill \\
@@ -326,6 +716,7 @@ Dette er JavaScript-bibliotekene vi har tatt i bruk for å lage datapresentasjon
 \end{description}
 
 \subsubsection{Brukervalg}
+\label{subsec:brukervalg}
 I figur \ref{figure:brukervalg} vises de ulike valgene brukeren kan ta for å påvirke datapresentasjonen. 
 \begin{figure}[H]
 	\centering
@@ -341,13 +732,12 @@ Disse brukervalgene har blitt valgt på bakgrunn av to kriterier:
 For å sikre at ikke brukeren skal kunne gjøre noen feil når de velger, blir alle feltene sjekket hver gang det blir gjort en endring. Det vil si at brukeren kan for eksempel ikke huke bort alle timesvalgene uten at «Standard» blir automatisk huket på igjen. Lignende sikring er laget for stasjonsvalget. I kalenderen som åpnes når tekstfeltene markert «Fra» og «Til» trykkes, er det ikke mulig å verken velge datoer der det ikke er målinger (Altså før stasjone  ble montert, og etter nåtid). Det er heller ikke mulig å sette en senere fradato enn den valgte tildatoen. Alle disse sikringene kombinert, gjør at det er tilnærmet umulig å utføre brukerfeil.
 
 \subsubsection{Dynamisk innholdslasting}
-\meta{onChange}
 Siden er bygd opp slik at brukeren aldri trenger å trykke noen dedikert knapp for å laste data. Så fort et brukervalg blir endret, oppdaterer datapresentasjonen seg selv for å reflektere de nye valgene. Dette sørger for en veldig dynamisk følelse på hele siden, og forbedrer brukeropplevelsen.
 
-Måten dette har blitt oppnådd på, er ved å bruke en teknologi kalt \textbf{\Gls{ajax}}. Dette gjør det altså mulig for nettleseren å hente ny data fra \textbf{\gls{backend}} uten at selve siden må lastes på nytt. Det er mulig å lage \textbf{\Gls{ajax}}-basert datalasting i JavaScript uten noen ekstra bibliotker, men vi har valgt å bruke jQuery for å forenkle prosessen.
+Måten dette har blitt oppnådd på, er ved å bruke en teknologi kalt \Gls{ajax}. Dette gjør det altså mulig for nettleseren å hente ny data fra \gls{backend} uten at selve siden må lastes på nytt. Det er mulig å lage \Gls{ajax}-basert datalasting i \Gls{javascript} uten noen ekstra biblioteker, men vi har valgt å bruke jQuery for å forenkle prosessen. Dette kombinert med å ha funksjonskallene til \glslink{javascript}{JavaScriptet} når brukeren endrer en av brukervalgene, sørger for denne dynamiske opplevelsen.
 
 \subsubsection{Grafisk fremvisning}
-For å ha muligheten til å vise frem måledata på graf-/diagramform, bestemte vi oss altså for å bruke biblioteket Google Visualisation. I dette biblioteket var det mange ulike måter å presentere data på, men vi bestemte oss for å bruke linjedigram da dette er den meste konvensjonelle og oversiktlige måten å presentere værdata på. Slik beskrevet i punktet om 'Brukervalg' ovenfor, står brukeren ganske fritt til å velge hvilke målinger som skal vises i diagrammet. X-aksen på diagrammet viser tid, og Y-aksen viser målingsverdi. Google Visualisation sørger for at akseverdiene justerer seg til de mest praktiske verdiene. Med det menes det at dersom man for eksempel kun har temperaturmålinger mellom 20 og 25 grader i tidsrommet valgt, vil verdiene på Y-aksene justere seg for å best reflektere dette. Dersom brukeren velger et stort tidsrom, reduseres antall målinger vist om dagen slik:
+For å ha muligheten til å vise frem måledata på graf-/diagramform, bestemte vi oss altså for å bruke biblioteket 'Google Visualisation'. I dette biblioteket var det mange ulike måter å presentere data på, men vi bestemte oss for å bruke linjedigram da dette er den meste konvensjonelle og oversiktlige måten å presentere værdata på. Slik beskrevet i punktet om 'Brukervalg' ovenfor, står brukeren ganske fritt til å velge hvilke målinger som skal vises i diagrammet. X-aksen på diagrammet viser tid, og Y-aksen viser målingsverdi. Google Visualisation sørger for at akseverdiene justerer seg til de mest praktiske verdiene. Med det menes det at dersom man for eksempel kun har temperaturmålinger mellom 20 og 25 grader i tidsrommet valgt, vil verdiene på Y-aksene justere seg for å best reflektere dette. Dersom brukeren velger et stort tidsrom, reduseres antall målinger vist om dagen slik:
 \begin{description}
   \item[1-10 dager] \hfill \
   \begin{itemize}
@@ -376,7 +766,7 @@ På figur \ref{figure:grafiskfremvisning} kan du se hvordan det ser ut når alle
 \end{figure}
 
 \subsubsection{Tabellvisning}
-Tabellvisningen (vist i figur \ref{figure:tabellvisning} er bygd dynamisk av JavaScriptet på vanlige HTML-tabeller basert på hvilken måledata som skal vises. Denne tabellen erstatter diagrammets plass på siden når brukeren velger å vise måledata på tabellform.
+Tabellvisningen (vist i figur \ref{figure:tabellvisning}) er bygd dynamisk av \glslink{javascript}{JavaScriptet} på vanlige HTML-tabeller basert på hvilken måledata som skal vises. Denne tabellen erstatter diagrammets plass på siden når brukeren velger å vise måledata på tabellform.
 
 Å vise data på denne måten, begrenser ikke antall målinger hentet ut fra databasen dersom «Standard»-verdien er satt, uansett tidsrom. Vi har valgt å gjøre det slik, da det å vise en tabell ikke krever nevneverdig mer av maskinen eller reduserer lesbarheten, samme hvor mange målinger som vises. Du kan forøvrig fremdeles velge å begrense hvilke timer måledata skal vises fra selv.
 \begin{figure}[H]
@@ -387,7 +777,7 @@ Tabellvisningen (vist i figur \ref{figure:tabellvisning} er bygd dynamisk av Jav
 \end{figure}
 
 \subsubsection{Praktisk informasjon}
-For å gi brukeren litt praktisk informasjon om værstasjonene, har vi laget en egen boks (se figur \ref{figure:praktiskInformasjon} på siden dedikert til nettopp dette. Her er det beskrevet når stasjonene ble montert, hvor de står og litt informasjon om hvordan den grafiske fremvisningen begrenses av størrelsen på tidsrommet.
+For å gi brukeren litt praktisk informasjon om værstasjonene, har vi laget en egen boks (se figur \ref{figure:praktiskInformasjon}) på siden dedikert til nettopp dette. Her er det beskrevet når stasjonene ble montert, hvor de står og litt informasjon om hvordan den grafiske fremvisningen begrenses av størrelsen på tidsrommet.
 \begin{figure}[H]
 	\centering
     \includegraphics[width=0.4\textwidth]{beskrivelsenorsk}
@@ -398,7 +788,7 @@ For å gi brukeren litt praktisk informasjon om værstasjonene, har vi laget en 
 \subsubsection{Feilhåndering}
 Her var målet å skrive koden med så god feilhåndtering at ingenting skal stoppe opp selv om det mangler hele målinger eller er uhåndterbare verdier i databasen. I tillegg til dette har fokuset vært å gjøre opplevelsen av presentasjonsdataen god, selv om noe slikt skulle oppstå. Ettersom stasjon 2 ikke er i stand til å sende værdata før den får nettverk igjen (se avsnitt \ref{subsec:monteringProblemer}), har vi et godt eksempel på dette i figur \ref{figure:grafiskfremvisning}.
 
-Dersom JavaScriptet skulle få problemer med å hente ut data produsert av «backend» pga. av treg databasetilkobling, eller lignende, får brukeren beskjed om det. Denne beskjeden lyder som følger «Tidsavbrudd. Fortsetter å prøve...». Så fort tilkoblingen er gjenopprettet, vises data slik brukeren ba om.
+Dersom \glslink{javascript}{JavaScriptet} skulle få problemer med å hente ut data produsert av \gls{backend} pga. av treg databasetilkobling, eller lignende, får brukeren beskjed om det. Denne beskjeden lyder som følger «Tidsavbrudd. Fortsetter å prøve...». Så fort tilkoblingen er gjenopprettet, vises data slik brukeren ba om.
 
 \subsubsection{Design}
 Hovedfokuset her har vært å lage en side som er oversiktlig og lett å bruke. Slik beskrevet i punktet om 'Brukervalg' ovenfor, skal det heller ikke være nødvendig å måtte bruke tid på å forstå hvordan siden skal brukes.
@@ -438,14 +828,14 @@ Videre har vi valgt et design som skal være enkelt, men appellerende for bruker
         \caption{Det ferdige designet på siden med de ulike metodene for å vise data.}
         \label{figure:fullSide}
 \end{figure}
-For å få til dette i praksis, har vi brukt CSS3\cite{nettside:css3}, som er en \textbf{\glslink{stilark}{stilarkteknologi}}. Hele designet er bygd ved hjelp av denne teknologien.
+For å få til dette i praksis, har vi brukt CSS3, som er en \glslink{stilark}{stilarkteknologi}. Hele designet er bygd ved hjelp av denne teknologien.
 \subsubsection{Engelsk versjon}
-Oppdragsgivers nettside www.hessdalen.org er tilgjengelig på både Norsk og Engelsk. Dette innbar at vi måtte lage en engelsk versjon av datafremvisningen også. For å lage denne, ble vi nødt til å oversette flere variabler og strenger i JavaScriptet, og teksten skrevet i HTML-filen.
+Oppdragsgivers nettside www.hessdalen.org er tilgjengelig på både Norsk og Engelsk. Dette innbar at vi måtte lage en engelsk versjon av datafremvisningen også. For å lage denne, ble vi nødt til å oversette flere variabler og strenger i \glslink{javascript}{JavaScriptet}, og teksten skrevet i HTML-filen.
 
 Alle figurene i dette avsnittet er hentet fra den Norske versjonen av siden, men den Engelske versjonen ligger også fritt tilgjengelig på www.hessdalen.org.
 
 \subsubsection{Sikkerhet}
-Det eneste sikkertsaspektet vi har måtte ta hensyn til i denne koden, er såkalt 'SQL-injection'. Det vil si at noen kan prøve å bruke «backend» til å sende inn ondsinnede spørringer til databasen. Som for eksempel å avslutte en streng (semikolon) sendt til databasen og følge opp med en 'DROP TABLE...'-setning. Dette har vi sikret oss mot ved å ta i bruk funksjonen 'mysql\underline{\hspace{.07in}}real\underline{\hspace{.07in}}escape\underline{\hspace{.07in}}string'\cite{nettside:phpescape} i PHP. Denne sørger for at det blir lagt på en '\textbackslash' foran tegn MySQL kan tolke. Slik blir de gjort ubrukelige, og 'SQL-injection' umulig.
+Det eneste sikkertsaspektet vi har måtte ta hensyn til i denne koden, er såkalt 'SQL-injection'. Det vil si at noen kan prøve å bruke \gls{backend} til å sende inn ondsinnede spørringer til databasen. Som for eksempel å avslutte en streng (semikolon) sendt til databasen og følge opp med en 'DROP TABLE...'-setning. Dette har vi sikret oss mot ved å ta i bruk funksjonen 'mysql\underline{\hspace{.07in}}real\underline{\hspace{.07in}}escape\underline{\hspace{.07in}}string'\cite{nettside:phpescape} i \Gls{php}. Denne sørger for at det blir lagt på en '\textbackslash' foran tegn \Gls{mysql} kan tolke. Slik blir de gjort ubrukelige, og 'SQL-injection' umulig.
 
 \subsubsection{Implementasjon på hessdalen.org}
 Da vi var ferdig med produksjonen av datafremvisningen, skulle den implementeres på www.hessdalen.org. Dette ble gjort i tett samarbeid med oppdragsgiver, og det eneste utfordringen vi støtte på var en CSS-konflikt der siden vår overstyrte stilsettet på www.hessdalen.org sine tabeller. Dette ble raskt løst ved å sette spesifikke ID'er på tabellene i datapresentasjonen.
@@ -456,11 +846,5 @@ Da vi var ferdig med produksjonen av datafremvisningen, skulle den implementeres
     \label{figure:implementertsystem}
 \end{figure}
 
-\subsubsection{Arbeidsprosessen}
-\meta{Hvilken rekkefølge ble ting gjort i? Stikkord: Hva vi begynte med, osv. Input fra arbeidsgiver}
-
-\subsubsection{Problemer underveis}
-\meta{Var det noen problemer? Hvis så, hvilke? Stikkord: Ikke all info i Google Visualisation API(ref) var helt oppdatert og mer tidkrevende enn antatt.}
-
-\section{Arbeidsprosessen}
-\meta{Si noe om hvordan vi har jobbet som gruppe. Arbeidsfordeling. Habbla Habbla.}
+\subsubsection{Samarbeid med oppdragsgiver}
+Ved flere anledninger har vi latt oppdragsgiver prøve ut prototyper av datapresentasjonen. Dette for å kunne få tilbakemelding på hva som var bra, og hva som kunne vært gjort annerledes. På grunn av et slikt samarbeid, har vi kunne lage et mye bedre produkt, som oppdragsgiver er veldig fornøyd med(se avsnitt \ref{subsec:opptilforventningene}). 

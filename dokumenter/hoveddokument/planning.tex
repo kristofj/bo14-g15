@@ -2,56 +2,57 @@
 \chapter{Planlegging}
 \label{chap:planning} 
 
-I dette kapittelet tar vi for oss planleggingsfasen av prosjektet og hvordan vi har tenkt til å utforme produktet. Det skal også være en komplett beskrivelse av hele systemet og hvordan det fungerer. 
+\section{Oppstartsfasen}
 
-\section{Planlegging}
-
-Bachelorprosjektet ble innledet ved at gruppen hadde et møte med veileder og oppdragsgiver. Da fikk vi vite litt mer detaljert hva vi skulle gjøre på selve oppdraget og litt om hva veilederens rolle er, gjennom prosjektperioden.
-
-
-\subsection{Oppstartsfasen}
+Bachelorprosjektet ble innledet ved at gruppen hadde et møte med veileder og oppdragsgiver. Da fikk vi vite litt mer detaljert hva vi skulle gjøre på selve oppdraget og litt om hva veilederens rolle er gjennom prosjektperioden.
 
 Etter jul startet vi opp med ukentlige møter med oppdragsgiver og møte med veileder hver 14. dag. Vi hadde også internmøter i gruppa, en til to ganger i uka, etter behov.
+Etter vi hadde skrevet forprosjektrapporten, delte vi oss så vi fikk forskjellige arbeidsoppgaver. Det vil bli mer effektivt arbeid hvis vi jobber med hver vår del, enn at alle sitter over en PC og prøver å samarbeide.
 
-Etter vi hadde skrevet forprosjektrapporten, delte vi hverandre inn til å gjøre forskjellige arbeidsoppgaver. Det vil bli mer effektivt arbeid hvis vi jobber med hver vår del, enn at alle sitter over en PC og prøver å samarbeide.
+\section{Utforming av produktet}
 
-\section{Hvordan utforme produktet}
+Vi fordelte arbeidsoppgavene slik at noen holder på med programmeringen mens noen andre kobler opp maskinvare. Vi benyttet oss av skolens verksted for å koble opp og montere værstasjonen.
 
-Vi tenker å fordele arbeidsoppgavene slik at noen holder på med programmeringen mens noen andre kobler opp maskinvare. Vi kommer til å benytte oss av skolens verksted for å koble opp og montere værstasjonen.
-
-Vi vil først lage et par prototyper før vi bestemmer oss for det endelige produktet. Vi vil gjerne få hele systemet til å gå før vi tenker på hva slags design og fysisk beskyttelse vi skal ha til de forskjellige komponentene.
+Vi lagde først et par prototyper før vi bestemte oss for det endelige produktet. Vi ville gjerne få hele systemet til å gå før vi tenkte på hva slags design og fysisk beskyttelse vi skulle ha til de forskjellige komponentene.
 
 \section {Maskinvare}
 I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen av maskinvare.
 
 \subsection{Ethernut 2.1}
-Ethernut 2.1 er et lite brett som består av en 8-bit AVR Atmel ATmega128 RISC mikrokontroller og SMCS' LAN91C111 ethernet kontroller. Den er en del av en serie med Open Source Hardware referansebrett. Noen av hovedfunksjonene er:
+En av hovedkomponentene i værstasjonen skal være Ethernut 2.1. Det er et lite brett som består av en 8-bit AVR Atmel ATmega128 RISC \gls{mikrokontroller} og SMCS' LAN91C111 \glslink{ethernet}kontroller. Den er en del av en serie med Open Source Hardware referansebrett. Noen av hovedfunksjonene er:
 \begin{itemize}
 \item Full duplex 10/100 Mbps ethernet kontroller.
-\item 128 kByte programerbar flash ROM
-\item 512 kByte Static RAM
+\item 128 kByte programerbar flash ROM(Read-Only Memory).
+\item 512 kByte Static RAM(Random-Access Memory).
 \item Inntil 28 programerbare digitale inn- og utganger.
-\item 10-bit ADC med 8 kanaler.
-\item To 8-bit og to 16-bit timer/tellere.
-\item Watchdog timer.
+\item 10-bit ADC(Analog to Digital Converter) med 8 kanaler.
+\item To 8-bit og to 16-bit tidtakere.
+\item Watchdog tidtaker.
 \item Tåler temperaturer fra -40 \textsuperscript{o}C til 85 \textsuperscript{o}C
 \end{itemize}
 
-Den viktigste delen av Ethernut 2.1 er mikrokontrolleren ATmega128, denne er beskrevet i datablad levert av Atmel.
-Programmering av mikrokontrolleren skjed ved å bruke JTAG-grensesnittet. Dette er en ekstern port som vi kobler til en datamaskin med en adapter og en RS-232 seriekabel.
-Ethernut 2.1 har også en RS-232 serieport som blant annet kan brukes til å se utskrift fra applikasjonen som kjører.\cite{nettside:EthernutHardwareManual}
+Den viktigste delen av Ethernut 2.1 er \glslink{mikrokontroller}{mikrokontrolleren} ATmega128, denne er beskrevet i datablad levert av Atmel \cite{nettside:EthernutHardwareManual}.
+Programmering av \glslink{mikrokontroller}{mikrokontrolleren} skjer ved å bruke JTAG-grensesnittet. Dette er en ekstern port som vi kobler til en datamaskin med en adapter og en RS-232 seriekabel.
+Ethernut 2.1 har også en RS-232 serieport som blant annet kan brukes til å se utskrift fra applikasjonen som kjører. Se figur \ref{fig:ethernut21b_point} for plasseringer på brettet. 
+
+\begin{SCfigure}[][h]	
+	\centering
+    \includegraphics[height=0.6\textwidth]{ethernut21b_point}
+    \caption{Ethernut 2.1. 1:RS-232 serieport, 2:Strømforsyning, 3:Ethernet-modul, 4:JTAG-grensesnitt, 5:ADC-innganger, 6:Digitale inn- og utganger}
+    \label{fig:ethernut21b_point}
+\end{SCfigure}
 
 \subsection{Sensorer}
 Når det kommer til valg av sensorer vi vil benytte så er det noen kriterier å ta hensyn til: 
 \begin{itemize}
-\item Må være kompatibel med mikrokontrolleren.
+\item Må være kompatibel med \glslink{mikrokontroller}{mikrokontrolleren}.
 \item Tåle temperaturer helt ned til $-40\,^{\circ}\mathrm{C}$.
 \item Helst være ferdig utrustet for utemontering.
 \end{itemize}
-Vi har satt $-40\,^{\circ}\mathrm{C}$ som den laveste temperaturen sensorene må tåle da den laveste tempteraturen i løpet av 2013 var $-34,8\,^{\circ}\mathrm{C}$ \cite{nettside:yr150313}.
+Vi har satt $-40\,^{\circ}\mathrm{C}$ som den laveste temperaturen sensorene må tåle da den laveste tempteratur i løpet av 2013 var -34,8\textsuperscript{o}C \cite{nettside:yr150313}.
 \newline
 \newline
-Ut i fra disse kriteriene har vi bestemt oss for disse sensorene:
+Ut ifra disse kriteriene har vi bestemt oss for disse sensorene:
 
 \begin{figure}[H]
         \centering
@@ -80,13 +81,11 @@ Ut i fra disse kriteriene har vi bestemt oss for disse sensorene:
         \end{subfigure}
         \caption{Sensorene vi skal bruke}\label{fig:Sensorer}
 \end{figure}
-Disse sensorene tilfredsstiller alle kravene, bortsett fra BMP180 som ikke har beskyttelse. Til denne må vi få tak i en innkapslingsboks som er vanntett og har tette kabelgjennomføringer. Det må også være en form for luftgjennomstrøming slik at lufttrykket blir riktig målt.
-
-BMP180\cite{nettside:lufttrykk}, SHT10\cite{nettside:temperatur}, WRG2/O10\cite{nettside:vindretning} og WG2/=10\cite{nettside:vindhastighet}.
+Disse sensorene tilfredsstiller alle krav, bortsett fra BMP180 som ikke har beskyttelse. Til denne må vi få tak i en innkapslingsboks som er vanntett og har tette kabelgjennomføringer. Det må også være en form for luftgjennomstrøming slik at lufttrykket blir riktig målt. 
 
 \subsection{Sensorer - Teknisk informasjon}
 
-\subsubsection{SHT10}
+\subsubsection{SHT10\cite{nettside:temperatur}}
 
 \begin{itemize}
 \item Måler temperatur og luftfuktighet.
@@ -96,9 +95,9 @@ BMP180\cite{nettside:lufttrykk}, SHT10\cite{nettside:temperatur}, WRG2/O10\cite{
 \item Spenningskilde: min 2.4V og maks 5.5V.
 \end{itemize}
 
-Ytterlig informasjon kan finnes databladet\cite{nettside:DatasheetSHT10} til SHT10. Hvordan SHT10 kommuniserer med mikrokontrolleren blir beskrevet i delkapittel \ref{subsec:Ethernut} 
+Ytterlig informasjon kan finnes i databladet\cite{nettside:DatasheetSHT10} til SHT10. Hvordan SHT10 kommuniserer med \glslink{mikrokontroller}{mikrokontrolleren} blir beskrevet i delkapittel \ref{subsec:Ethernut} 
 
-\subsubsection{BMP180}
+\subsubsection{BMP180\cite{nettside:lufttrykk}}
 
 \begin{itemize}
 \item Måler lufttrykk.
@@ -109,39 +108,15 @@ Ytterlig informasjon kan finnes databladet\cite{nettside:DatasheetSHT10} til SHT
 \item Klargjort for 5V logikk med integrert 3.3V regulator.
 \end{itemize}
 
-Denne versjonen av BMP180, som vi skal bruke, er allerede klargjort for 5V logikk fra produsenten. Det vil si at koblingspunktet VIN er beregnet for 5V og 3V0 er beregnet for 1.6V til 3.6V. Ytterlig informasjon finnes i databladet\cite{nettside:DatasheetBMP180} til BMP180. Hvordan BMP180 kommuniserer med mikrokontrolleren blir beskrevet i delkapittel \ref{subsec:Ethernut}.  
+Denne versjonen av BMP180, som vi skal bruke, er allerede klargjort for 5V logikk fra produsenten. Det vil si at koblingspunktet VIN er beregnet for 5V og 3V0 er beregnet for 1.6V til 3.6V. Ytterlig informasjon finnes i databladet\cite{nettside:DatasheetBMP180} til BMP180. Hvordan BMP180 kommuniserer med \glslink{mikrokontroller}{mikrokontrolleren} blir beskrevet i delkapittel \ref{subsec:Ethernut}.  
 
 
-\subsubsection{WG2/O-10}
+\subsubsection{WG2/O-10\cite{nettside:vindhastighet}}
 
 \begin{itemize}
 \item Måler vindhastighet.
 \item Analog utgang 0-10V.
-\item Operasjonsområdet fra $-40\,^{\circ}\mathrm{C}$ til $70\,^{\circ}\mathrm{C}$.
-\item Tåler en vindstyrke på 80 m/s i opp til 30 minutter.
-\item Måleområdet fra 0-50 m/s.
-\item Varmeelement for å forhindre at bevegelige deler fryser fast.
-\item Spenningstilførsel 13-30 V DC eller 24V AC/DC, maks 50 mA.
-\item Spenningstilførsel for varmeelement 24V AC/DC, maks 20W.
-\item Det er syv koblingspunkter:
-	\begin{enumerate}
-    \item Spenningstilførsel +
-    \item Spenningstilførsel -
-    \item Analog ut +
-    \item Analog ut -
-    \item Spenningstilførsel varmeelement +
-    \item Spenningstilførsel varmeelement - 
-    \item GND
-    \end{enumerate}
-\end{itemize}
-
-
-\subsubsection{WRG2/O-10}
-
-\begin{itemize}
-\item Måler vindretning.
-\item Analog utgang 0-10V.
-\item Operasjonsområdet fra $-40\,^{\circ}\mathrm{C}$ til $70\,^{\circ}\mathrm{C}$.
+\item Operasjonsområde fra $-40\,^{\circ}\mathrm{C}$ til $70\,^{\circ}\mathrm{C}$.
 \item Tåler en vindstyrke på 80 m/s i opp til 30 minutter.
 \item Måleområdet fra 0-50 m/s.
 \item Varmeelement for å forhindre at bevegelige deler fryser fast.
@@ -159,11 +134,35 @@ Denne versjonen av BMP180, som vi skal bruke, er allerede klargjort for 5V logik
     \end{enumerate}
 \end{itemize}
 
-Hvordan avlesningen av WRG2- og WG2-sensoren blir gjort på mikrokontrolleren blir forklart i delkapittel \ref{subsec:Ethernut}.
+
+\subsubsection{WRG2/O-10\cite{nettside:vindretning}}
+
+\begin{itemize}
+\item Måler vindretning.
+\item Analog utgang 0-10V.
+\item Operasjonsområde fra $-40\,^{\circ}\mathrm{C}$ til $70\,^{\circ}\mathrm{C}$.
+\item Tåler en vindstyrke på 80 m/s i opp til 30 minutter.
+\item Måleområde fra 0-50 m/s.
+\item Varmeelement for å forhindre at bevegelige deler fryser fast.
+\item Spenningstilførsel 13-30 V DC eller 24V AC/DC, maks 50 mA.
+\item Spenningstilførsel for varmeelement 24V AC/DC, maks 20W.
+\item Det er syv koblingspunkter:
+	\begin{enumerate}
+    \item Spenningstilførsel +
+    \item Spenningstilførsel -
+    \item Analog ut +
+    \item Analog ut -
+    \item Spenningstilførsel varmeelement +
+    \item Spenningstilførsel varmeelement -
+    \item GND
+    \end{enumerate}
+\end{itemize}
+
+Hvordan avlesningen av WRG2- og WG2-sensoren blir gjort på \glslink{mikrokontroller}{mikrokontrolleren} blir forklart i delkapittel \ref{subsec:Ethernut}.
 
 \subsection{Kretsskjema}
 
-I figur \ref{fig:sht10} og \ref{fig:bmp180} ser du kretsskjema for SHT10 og IBMP180. Mikrokontrolleren har egne utganger for tilførsler på 5V. Det vi trengte å vite for lage kretsene mellom disse sensorene og mikrokontrolleren står godt beskrevet i databladene til sensorene. Disse sensorene skal bruke jordingspunktet på mikrokontrolleren.
+I figur \ref{fig:sht10krets} og \ref{fig:bmp180krets} ser du kretsskjema for SHT10 og BMP180. \glslink{mikrokontroller}{Mikrokontrolleren} har egne utganger for tilførsler på 5V. Det vi trengte å vite for å lage kretsene mellom disse sensorene og \glslink{mikrokontroller}{mikrokontrolleren} står godt beskrevet i databladene til sensorene. Disse sensorene skal bruke jordingspunktet på \glslink{mikrokontroller}{mikrokontrolleren}.
 
 \begin{figure}[H]
   \centering
@@ -176,7 +175,7 @@ I figur \ref{fig:sht10} og \ref{fig:bmp180} ser du kretsskjema for SHT10 og IBMP
   \centering
   \includegraphics[width=0.60\textwidth]{BMP180}
   \caption{Kretsskjema for BMP180}
-  \label{bmp180krets}
+  \label{fig:bmp180krets}
 \end{figure}
 
 I figur \ref{fig:vindhastighet} og \ref{fig:vindretning} ser du kretskjema for de analoge vindsensorene vi har valgt ut. Disse krever en strømforsyning fra 15-30V AC/DC. Vi har valgt å bruke en strømforsyning på 24V DC da denne også kan brukes på varmefunksjonen disse sensorene har.
@@ -195,44 +194,62 @@ I figur \ref{fig:vindhastighet} og \ref{fig:vindretning} ser du kretskjema for d
   \label{fig:vindretning}
 \end{figure}
 
- Disse sensorene sender ut en analog spenning på 0-10V og denne spenningen må vi strupe ned til å matche mikrokontrolleren som ikke tåler mer enn 5V. Dette har vi løst ved å bruke en spenningsdeler til å dele spenningen ut fra sensorene på to. Dette gjøres ved at R1 og R2 har lik motstandsverdi. I vårt tilfelle valgte vi R1 og R2 lik 10K$\mathrm{\Omega}$. I utregning \ref{math:spenningsdeler}  ser du hvordan vi har bevist dette.
+ Disse sensorene sender ut en analog spenning på 0-10V og denne spenningen må vi redusere fordi  \glslink{mikrokontroller}{mikrokontrolleren} ikke tåler mer enn 5V. Dette har vi løst ved å bruke en spenningsdeler til å dele spenningen ut fra sensorene på to. Dette gjøres ved at R1 og R2 har lik motstandsverdi. I vårt tilfelle valgte vi R1 og R2 lik 10K$\mathrm{\Omega}$. I utregning \ref{math:spenningsdeler} ser du hvordan vi kom frem til dette.
 
 \begin{alignat}{5}
 \label{math:spenningsdeler}
-V_{ut} &= \frac{R_2}{R1+R2}\times V_{inn} \\[+4mm]
-\text{Hvis R1 = R2 får vi} \\[+4mm]
-V_{ut} &= \frac{1}{2}\times V_{inn} \\[+4mm]
-V_{ut} &= \frac{1}{2}\times 10V \\[+4mm]
-V_{ut} &= 5V
+U_{ut} &= \frac{R_2}{R_1+R_2}\times U_{inn} \\[+4mm]
+\text{Hvis R\textsubscript{1} = R\textsubscript{2} får vi} \\[+4mm]
+U_{ut} &= \frac{1}{2}\times U_{inn} \\[+4mm]
+U_{ut} &= \frac{1}{2}\times 10V \\[+4mm]
+U_{ut} &= 5V
 \end{alignat}
 
-Vi har også laget et lavpassfilter for å blokker signaler på mer en 10Hz. Så med en grensefrekvens på 10Hz og en kondensator på 100nF kan vi regne ut motstanden vi trenger. I utregning \ref{math:fg} finner vi at motstanden til lavpassfilteret må være 159K$\mathrm{\Omega}$.
+Vi har også laget et lavpassfilter for å blokke signaler på mer en 10Hz. Med en grensefrekvens på 10Hz og en kondensator på 100nF kan vi regne ut motstanden vi trenger. I utregning \ref{math:fg} finner vi at motstanden til lavpassfilteret må være ca. 159K$\mathrm{\Omega}$.
 
 \begin{alignat}{4}
 \label{math:fg}
  f_g &= \frac{1}{2\pi \times R_T \times C} &\quad \quad f_g &= 10Hz \\[+4mm] 
- R_T &= \frac{1}{2\pi \times f_g \times C} &\quad \quad C &= 100\times 10^{-9} nF \\[+4mm] 
+ R_T &= \frac{1}{2\pi \times f_g \times C} &\quad \quad C &= 100nF \\[+4mm] 
  &= \frac{1}{2\pi \times 10\times 100\times 10^{-9}} \\[+4mm]
  &= 159155 \approx 159K\Omega
 \end{alignat}
 
-For at ikke de analoge og digitale sensorene skal fåresake støy for hverandre har vi valgt å jorde de på forskjellige steder. Som nevt tidligere skal de digitale sensorene bruke jordingspunktet på mikrokontrolleren. Derfor velger vi å jorde de analoge sensorene til et jordingspunkt i kabinettet. 
+For at de analoge og digitale sensorene ikke skal forårsake støy for hverandre har vi valgt å jorde de på forskjellige steder. Som nevt tidligere skal de digitale sensorene bruke jordingspunktet på \glslink{mikrokontroller}{mikrokontrolleren}. Derfor velger vi å jorde de analoge sensorene til et jordingspunkt i kabinettet. 
+
+\subsubsection{Tilkobling til Ethernut 2.1}
+SHT10 og BMP180 må kobles på de digitale inn-/utgangene på \glslink{mikrokontroller}{mikrokontrolleren}. SHT10 kan kobles på hvilken som helst ledig port, vi har da valgt port B med klokke på bit 0 (pin 47) og data på bit 1 (pin 48). BMP180 må kobles på \glslink{mikrokontroller}{mikrokontrollerens} TWI-grensesnitt. Vi må da bruke port D med klokke på bit 0(pin 55) og data på bit 1(pin 56). Strømforsyning til begge disse sensorene finner vi på pin 3 og 4, jord finner vi på port 5-8. På figur \ref{fig:ethernut_digital_io} kan vi se en oversikt over plassering til de forskjellige pins.
+
+\begin{table}[H]
+	\centering
+    \includegraphics[height=0.8\textwidth]{ethernut_digital_io}
+    \caption{Digitale inn-/utganger på Ethernut 2.1}
+    \label{fig:ethernut_digital_io}
+\end{table}
+
+De analoge vindsensorene må kobles på ADC. Her har vi valgt å koble vindhastighetssensoren på port F, bit 0(pin 5). Vindretning har vi koblet på port F, bit 1(pin 7). Oversikten over de analoge inngangene vises på figur \ref{fig:ethernut_analog_io}.
+
+\begin{table}[H]
+	\centering
+    \includegraphics[width=0.7\textwidth]{ethernut_analog_io}
+    \caption{Analoge innganger på Ethernut 2.1}
+    \label{fig:ethernut_analog_io}
+\end{table}
 
 \subsection{Kabinettet til værstasjonene}
-Det er behov for et kabinett som kan beskytte mikrokontrolleren, strømforsyningene og kretsene mellom sensorene og mikrokontrolleren. \\ 
+Det er behov for et kabinett som kan beskytte \glslink{mikrokontroller}{mikrokontrolleren}, strømforsyningene og kretsene mellom sensorene og \glslink{mikrokontroller}{mikrokontrolleren}.
 
 Viktige kriterier for valg av kabinett:
 \begin{itemize}
 \item Vanntett
-\item Isolert mot kulde
+\item Godt isolert
 \item Beregnet for veggmontering 
-\item Må ha varmeelement og termostat
-\item Tett kabelgjennomføring
+\item Mulighet for varmeelement og termostat
 \item Monteringsplate for å skru fast komponenter
 \item Størrelsesmessig så lite som mulig
 \end{itemize}
 
-Med dette tatt i betrakning har vi valgt å gå for et skap i metall med monteringsplate i stål og en dør som er fulgt forseglet. Målene på skapet: høyde: 30cm, bredde: 20cm, dybde: 15,5cm.
+Med dette tatt i betrakning har vi valgt å gå for et skap i metall med monteringsplate i stål og en dør som er fullt forseglet. Målene på skapet: høyde: 30cm, bredde: 20cm, dybde: 15,5cm.
 
 \begin{figure}[H]
   \centering
@@ -241,107 +258,115 @@ Med dette tatt i betrakning har vi valgt å gå for et skap i metall med monteri
   \label{fig:kabinett}
 \end{figure}
 
-Dette skapet(\ref{fig:kabinett}) har en beskyttelsesgrad på IP 66, \textit{International Protection Marking}\cite{nettside:IP}, hvilket vil si at det kvalifiserer meget godt som kabinett for utendørsmontering. Eneste vi må forbedre er isolasjonsevne mot varme og kulde. Dette kan løses ved å bruke isopor innvendig, da det hverken leder kulde eller varme. I tillegg til etterisolasjon skal vi også montere et termostsatstyrt varmeelement for å være helt sikker på at det ikke oppstår kondens eller at komponentene fryser i stykker.  
+Dette skapet(\ref{fig:kabinett}) har en beskyttelsesgrad på IP 66, \textit{International Protection Marking}\cite{nettside:IP}, hvilket vil si at det kvalifiserer meget godt som kabinett for utendørsmontering. Eneste vi må forbedre er isolasjonsevnen. Dette kan løses ved å bruke isopor innvendig. I tillegg til etterisolasjon skal vi også montere et termostatstyrt varmeelement for å være helt sikker på at det ikke oppstår kondens eller at komponentene fryser.
 
 \section{Programvare}
-I dette delkapittelet vil vi forklare hvordan vi har tenkt under planleggningen av programvare.
 
 \subsection{Databasen}
-Databasen som skal ta vare på værdata skal være lokalisert på en av skolens servere (Freja). Vi har valgt å bruke den populære MySQL databasen med InnoDB-motoren. Denne beslutningen er tatt på bakgrunn av at vi har god kjennskap til MySQL og InnoDB fra tidligere kurs og at det er en av verdens meste brukte åpen kildekode database(trenger kilde). Vi kommer til å overholde minst første, andre og tredje normalform fra \textbf{\gls{normaliseringsreglene}} i databasemodellen vår.
+\label{subsec:databaseplan}
+Databasen ment til å ta vare på værdata skal være lokalisert på en av skolens servere. Vi har valgt å bruke den populære \Gls{mysql}(\ref{figure:mysql})-databasen med InnoDB-motoren. Denne beslutningen er tatt på bakgrunn av at vi har god kjennskap til \Gls{mysql} og InnoDB fra tidligere kurs og at det er en av verdens meste brukte åpen kildekode database\cite{nettside:db-enginesRanking}. Vi kommer til å overholde minst første, andre og tredje normalform fra {\glslink{normaliseringsregler}{normaliseringsreglene} i databasemodellen vår.
+
 \begin{figure}[H]
   \centering
   \includegraphics[height=0.15\textwidth]{mysql}
   \caption{MySQL-logo}
+  \label{figure:mysql}
 \end{figure}
 
 \subsection{Visualisering av værdata}
 \label{subsec:visualisering}
-I vårt valg av hvilke teknologier vi skulle bruke for å presentere værdata på hessdalen.org, har vi tatt utangspunkt i de webprogrammeringsspråkene vi har grei kunskap om fra før. Det vil si JavaScript, PHP, og CGI-basert Python.
+I vårt valg av hvilke teknologier vi skulle bruke for å presentere værdata på hessdalen.org, har vi tatt utgangspunkt i de webprogrammeringsspråkene vi har kunnskap om fra før. Det vil si CGI-basert Python(\ref{figure:python}), \Gls{javascript}(\ref{figure:javascript}) og \Gls{php}(\ref{figure:php}). For å best kunne vurdere hva vi skulle velge, satte vi opp en liste med fordeler og ulemper ved de forskjellige metodene.
 
-For å best kunne vurdere hva vi skulle velge, satte vi opp en liste med fordeler og ulemper ved de forskjellige metodene.
 \subsubsection{CGI-basert Python\cite{nettside:python} \cite{nettside:cgi}}
 Fordeler
 \begin{itemize}
 \item Den fulle kraften av Python implementert i nettsiden. 
-\item Mange muligheter, og en stort menge biblioteker tilgjengelig.
+\item Mange muligheter, og en stor mengde biblioteker tilgjengelig.
 \end{itemize}
 Ulemper
 \begin{itemize}
 \item Hvis man ikke bruker alternative måter å kjøre CGI på, kan det fort bli treg utførelsetid på serveren. \cite{nettside:cgislow}
-\item All kode kjøres også på serveren, noe som fører til høyere belastning.
+\item All kode kjøres på serveren, noe som fører til høyere belastning.
 \end{itemize}
 \begin{figure}[H]
   \centering
   \includegraphics[height=0.15\textwidth]{python}
   \caption{Python-logo}
+  \label{figure:python}
 \end{figure}
 
-\subsubsection{JavaScript\cite{nettside:javascript}}
+\subsubsection{\Gls{javascript}\cite{nettside:javascript}}
 Fordeler
 \begin{itemize}
 \item Laget for webprogrammering.
-\item Stor mengde relevante bilioteker for presentering av data (Grafer, diagrammer, osv.) 
-\item God samhandling med \textbf{\Gls{ajax}}-teknologi for sømløs lasting av innhold. 
+\item Stor mengde relevante biliotek for presentering av data (grafer, diagrammer, osv.) 
+\item God samhandling med \Gls{ajax}-teknologi for sømløs lasting av innhold. 
 \item Utbredt språk, så det er mye god dokumentasjon. Kode kjøres av nettleser, noe som fører til mindre belastning på server.
 \end{itemize}
 Ulemper 
 \begin{itemize}
-\item All kildekode er tilgjengelig for alle som leser nettsiden. Man kan altså ikke bruke JavaScript til sensitiv informasjon.
-\item Krever litt mer å debugge, men Firebug\cite{nettside:firebug} (utvidelse til Firefox og Chrome) ordner dette relativt greit.
+\item All kildekode er tilgjengelig for alle som leser nettsiden. Man kan altså ikke bruke \Gls{javascript} til sensitiv informasjon.
+\item Krever litt mer feilsøking, men Firebug (utvidelse for debugging til Firefox og Chrome) ordner dette relativt greit.
 \end{itemize}
+
 \begin{figure}[H]
   \centering
   \includegraphics[height=0.15\textwidth]{javascript}
   \caption{JavaScript-logo}
+  \label{figure:javascript}
 \end{figure}
 
-\subsubsection{PHP: Hypertext Preprocessor\cite{nettside:php}}
+\subsubsection{\Gls{php}: Hypertext Preprocessor\cite{nettside:php}}
 Fordeler
 \begin{itemize}
-\item Enkel syntaks og debugging.
+\item Enkel syntaks og feilsøking.
 \item Tilgivende språk (det meste fortsetter å kjøre selv om man har kodefeil).
 \end{itemize}
 Ulemper 
 \begin{itemize}
 \item Hatt mange problemer med sikkerhet i sin levetid.\cite{nettside:phpbad}
-\item All kode kjøres også på serveren, noe som fører til høyere belastning.\\
+\item All kode kjøres på serveren, noe som fører til høyere belastning.\\
 \end{itemize}
 \begin{figure}[H]
   \centering
   \includegraphics[height=0.15\textwidth]{php}
   \caption{PHP-logo}
+  \label{figure:php}
 \end{figure}
 
-På bakgrunn av dette har vi bestemt oss for å presentere data ved å hovedsaklig bruke JavaScript med \textbf{\Gls{ajax}}-teknologi og 'Google Visualisation'\cite{nettside:googlevis} for tegning av grafer. Som \textbf{\gls{backend}} for å hente værdata fra databasen og konvertere til JSON\cite{nettside:json} trenger vi et språk der kildekode blir kompilert på serveren, og ikke er synlig for bruker. Til dette har vi valgt PHP ettersom det er et utbredt og relativt raskt språk til å være på serversiden.
+På bakgrunn av dette har vi bestemt oss for å presentere data ved å hovedsaklig bruke \Gls{javascript} med \Gls{ajax}-teknologi og biblioteket 'Google Visualisation' for tegning av grafer. Som \gls{backend} for å hente værdata fra databasen og konvertere til \Gls{json} trenger vi et språk der kildekode blir kjørt på serveren, og ikke er synlig for bruker. Til dette har vi valgt \Gls{php} ettersom det er et utbredt og relativt raskt språk til bruk på serversiden.
 
 \subsection{Serversiden}
 \label{subsec:Serversiden}
-Værstasjonen vil sende data som TCP-pakker ment for en bestemt IP og port på skolens server. For å ta imot disse pakkene og sørge for at data blir lagt inn i databasen riktig, må vi lage et program som håndterer dette. Her sto vi ganske åpent på hva slags platform vi skulle bruke, men vi valgte å bygge dette på det populære språket Java av to grunner. Java versjon 1.6\cite{nettside:java} er allerede installert på skolens server der dette programmet skal kjøre. Den andre grunnen er at Java er blitt veldig populært\cite{nettside:javapopular}, og god mengde dokumentasjon er tilgjengelig på internett.\\
+Værstasjonen vil sende data som TCP-pakker ment for en bestemt IP og port på skolens server. For å ta imot disse pakkene og sørge for at data blir lagt inn i databasen riktig, må vi lage et program som håndterer dette. Her sto vi ganske åpent på hva slags platform vi skulle bruke, men vi valgte å bygge dette på det populære språket \Gls{java}(\ref{figure:java} av to grunner. \Gls{java} versjon 1.6\cite{nettside:java} er allerede installert på skolens server der dette programmet skal kjøre. Den andre grunnen er at Java er blitt veldig populært\cite{nettside:javapopular}, og god mengde dokumentasjon er tilgjengelig på internett.
+
 \begin{figure}[H]
   \centering
   \includegraphics[height=0.15\textwidth]{java}
   \caption{Java-logo}
+  \label{figure:java}
 \end{figure}
-Serverprogramvaren vi skal bygge vil døgnet rundt ligge å vente på datapakker fra værstasjonen. Når den mottar en pakke med værdata vil denne informasjonen bli lagt inn i databasen med en gang. vi planlegger å bygge dette med Sockets\cite{nettside:sockets} og en objektorientert løsning der andre klasser vil konvertere data fra JSON\cite{nettside:json} til setninger som kan kjøres inn i databasen. 
+
+Serverprogramvaren vi skal bygge vil døgnet rundt ligge og vente på datapakker fra værstasjonen. Når den mottar en pakke med værdata vil denne informasjonen bli lagt inn i databasen med en gang. Vi planlegger å bygge dette med \glslink{socket}{internett-sockets} og en objektorientert løsning der andre klasser vil konvertere data fra \Gls{json} til spørringer som kan kjøres inn i databasen. 
 
 \subsection{Programvare på Ethernut 2.1}
-
-Mikrokontrolleren Ethernut 2.1 skal spille en sentral rolle i systemet. Det er dens oppgave å 
+\label{subsec:EthernutProgramvare}
+\glslink{mikrokontroller}{Mikrokontrolleren} Ethernut 2.1 skal spille en sentral rolle i systemet. Det er dens oppgave å 
 lese av sensorene, og sende målingene til server for permanent lagring.
-På mikrokontrolleren kommer vi til å benytte det lille operativsystemet NutOS. Vår applikasjon kommer til å bli skrevet i språket C.
+På \glslink{mikrokontroller}{mikrokontrolleren} kommer vi til å benytte det lille operativsystemet NutOS. Vår applikasjon kommer til å bli skrevet i programmeringsspråket \gls{C}.
 
-NutOS er et Open Source RTOS(Real Time Operating System) som er laget for mikrokontrollerfamilien Ethernut. Inkludert er også Nut/Net som er en implementasjon av TCP/IP-stakken. Funksjonalitet inkluderer støtte for tråder, events, timers og dynamisk allokering av minne. Nut/Net har støtte for protokoller som TCP, IP, UDP, DHCP. Det inkluderer også et API for sockets. Vi har også mulighet til å konfigurere operativsystemet for vårt bruk. Det følger med programvare som gjør det mulig å gjøre en rekke valg før man kompilerer operativsystemet.\cite{nettside:EthernutHomePage}
+NutOS er et Open Source RTOS(Real Time Operating System) som er laget for mikrokontrollerfamilien Ethernut. Inkludert er også Nut/Net som er en implementasjon av TCP/IP-stakken. Funksjonalitet inkluderer støtte for tråder, hendelser, tidtakere og dynamisk allokering av minne. Nut/Net har støtte for protokoller som TCP(Transmission Control Protocol), IP(Internet Protocol), UDP(User Datagram Protocol), DHCP(Dynamic Host Configuration Protocol). Det inkluderer også et \gls{API} for \glslink{socket}{sockets}. Vi har mulighet til å konfigurere operativsystemet for vårt bruk. Det følger med programvare som gjør det mulig å gjøre en rekke valg før man kompilerer operativsystemet.\cite{nettside:EthernutHomePage}
 
-For å skrive vår applikasjon må vi benytte oss av en kompilator, vi kommer til å bruke AVR-GCC(AVR-GNU Compiler Collection). Det er en kompilator som gir oss en rekke bibliotek som brukes med GCC. GCC er originalt skrevet for GNU operativsystemet.\cite{nettside:GNU-GCC}\\
+For å skrive vår applikasjon må vi benytte en \gls{kompilator}, vi kommer til å bruke AVR-GCC(AVR-GNU Compiler Collection). Det er en \gls{kompilator} som gir oss en rekke bibliotek som brukes med GCC. GCC er originalt skrevet for GNU operativsystemet.\cite{nettside:GNU-GCC}\\
 
-Under planlegging kom oppdragsgiver med følgende krav til funksjonalitet på mikrokontrolleren:
+Under planlegging kom oppdragsgiver med følgende krav til funksjonalitet på \glslink{mikrokontroller}{mikrokontrolleren}:
 \begin{itemize}
-\item Mikrokontrolleren skal gjøre ti målinger hvert femte minutt, og skal sende data for den siste timen til server. Fra disse målingene skal den høyeste og laveste verdi fjernes før det regnes ut gjennomsnitt. I tilfellet støy skulle ødelegge for målingene.
-\item Watchdog skal benyttes slik at mikrokontrolleren starter om hvis noe skulle gå galt, eller prosessoren skulle henge seg.
-\item Klokken på mikrokontrolleren skal stille seg selv ved å kontakte en server som kjører NTP (Network Time Protocol). Her har vi valgt å benytte NTP Pool Project sin server i Norge.
+\item \glslink{mikrokontroller}{Mikrokontrolleren} skal gjøre ti målinger hvert femte minutt, og skal sende data for den siste timen til server. Fra disse målingene skal den høyeste og laveste verdi fjernes før det regnes ut gjennomsnitt. I tilfellet støy skulle ødelegge for målingene.
+\item Watchdog skal benyttes slik at \glslink{mikrokontroller}{mikrokontrolleren} starter om hvis noe skulle gå galt, eller prosessoren skulle henge seg.
+\item Klokken på \glslink{mikrokontroller}{mikrokontrolleren} skal stille seg selv ved å kontakte en NTP(Network Time Protocol)-server. Her har vi valgt å benytte NTP Pool Project sin server i Norge.
 \end{itemize}
 
-Utifra disse spesifikasjonene kan vi lage et flytskjema som beskriver hvordan applikasjonen skal fungere. Se figur \ref{fig:flytskjemaEthernut}
+Ut ifra disse spesifikasjonene kan vi lage et flytskjema som beskriver hvordan applikasjonen skal fungere. Se figur \ref{fig:flytskjemaEthernut}
 
 \begin{figure}[H]
 	\centering
@@ -352,7 +377,8 @@ Utifra disse spesifikasjonene kan vi lage et flytskjema som beskriver hvordan ap
 
 \subsection{Grensesnitt mot sensorene}
 \subsubsection{BMP180}
-BMP180 benytter den kjente kommunikasjonsbusen I\textsuperscript{2}C (Inter-Integrated Circuit), også kalt TWI (Two-wire Serial Interface). Et TWI maskinvaregrensesnitt er tilgjengelig på mikrokontrolleren.
+BMP180 benytter den kjente kommunikasjonsbusen I\textsuperscript{2}C (Inter-Integrated Circuit), også kalt TWI (Two-wire Serial Interface). Et TWI maskinvaregrensesnitt er tilgjengelig på \glslink{mikrokontroller}{mikrokontrolleren}.
+
 I\textsuperscript{2}C er en flerbruker seriell databuss som benytter seg av et master-slave system. Vår implementasjon krever kun en master, Ethernut 2.1, men alle enheter har mulighet til å være master i en slik buss. Som vi ser på figur \ref{fig:i2c_bus} kobles alle enheter til to kabler, som er SCL (klokken) og SDA (data). Klokken styres av master når det foregår kommunikasjon. Hver enhet koblet til bussen har en adresse på 7 bit pluss en bit som bestemmer om man ønsker å skrive til, eller lese fra enheten.
 
 \begin{figure}[H]
@@ -370,9 +396,9 @@ Det er fire forskjellige moduser for hver enhet tilkoblet bussen:
 \item Slave recieve, hvor slave mottar data fra master.
 \end{itemize}
 
-Som vi ser på figur \ref{fig:i2c_bus_typical} stater typisk kommunikasjon mellom to enheter koblet til bussen med at en master sender et START-signal, da er master i transmit-modus. Dette etterfulges med å sende en 7-bit adresse(SLA), som er adressen til enheten den ønsker å kommunisere med. Deretter en bit som bestemmer om vi skal skrive til sensoren(SLA+W) eller motta fra sensoren(SLA+R).
+Som vi ser på figur \ref{fig:i2c_bus_typical} starter typisk kommunikasjon mellom to enheter koblet til bussen med at en master sender et START-signal, da er master i transmit-modus. Dette etterfulges med å sende en 7-bit adresse(SLA), som er adressen til enheten den ønsker å kommunisere med. Deretter en bit som bestemmer om vi skal skrive til sensoren(SLA+W) eller motta fra sensoren(SLA+R).
 Slaven svarer da master med en acknowledge(ACK). Hver databyte sendt vil da bli svart på med en ACK, unntatt siste byte.
-Etter ferdig sending, kan master igjen velge å sende et (RE)START-signal hvis den ønsker å kommunisere mer. Det må gjøres hvis for eksempel master ønsker å motta informasjon fra slaven. Da må man først sende adressen til registeret hos slaven man ønsker å lese fra, før man sender (RE)START. Slaven vil da sende data som ligger i det registeret. Master avslutter kommunikasjon ved å sende et STOP-signal.
+Etter ferdig sending, kan master igjen velge å sende et (RE)START-signal hvis den ønsker å kommunisere mer. Det må gjøres hvis for eksempel master ønsker å motta informasjon fra slaven. Da må man først sende adressen til registeret hos slaven man ønsker å lese fra, før man sender (RE)START. Slaven vil da sende data som ligger i det registeret. Master avslutter kommunikasjon ved å sende et STOP-signal.\cite{nettside:DatasheetBMP180}\cite{nettside:atmega128Datablad}
 
 \begin{figure}[H]
 \centering
@@ -381,13 +407,13 @@ Etter ferdig sending, kan master igjen velge å sende et (RE)START-signal hvis d
    	\label{fig:i2c_bus_typical}
 \end{figure}
 
-Fra datablad til BMP180 ser vi at mikrokontrolleren først må lese kalibreringsparametere som er lagret på sensoren. Deretter må sensoren få beskjed om å måle lufttrykket, før mikrokontrolleren leser av råverdien. Mikrokontrolleren må da bruke både råverdien og kalibreringsparameterene til å kalkulere lufttrykket. Implementasjonen er forklart i detalj i kapittel \ref{subsec:Ethernut}
+Fra datablad til BMP180 ser vi at \glslink{mikrokontroller}{mikrokontrolleren} først må lese kalibreringsparametere som er lagret på sensoren. Deretter må sensoren få beskjed om å måle lufttrykket, før \glslink{mikrokontroller}{mikrokontrolleren} leser av råverdien. \glslink{mikrokontroller}{Mikrokontrolleren} må da bruke både råverdien og kalibreringsparameterene til å kalkulere lufttrykket. Implementasjonen er forklart i detalj i kapittel \ref{subsec:Ethernut}
 \subsubsection{SHT10}
-SHT10 benytter sin egen kommunikasjonsprotokol som er relativt lik I\textsuperscript{2}C. Protokollen er  dokumentert i sensorens datablad. Kommunikasjon med sensoren må implementeres ved å bruke såkalt bit banging. Dette er en teknikk for seriekommunikasjon. Som går ut på å manuelt veksle de digitale utgangene i programvare, istedet for å bruke dedikert maskinvare. Pågrunn av mangel på dedikert maskinvare vil dette påvirke ytelsen, prosessoren må gjøre all jobb ved kommunikasjon. SHT10 må det styres med to utganger, SCK for klokke og DATA for data.
+SHT10 benytter sin egen kommunikasjonsprotokoll som er relativt lik I\textsuperscript{2}C. Protokollen er  dokumentert i sensorens datablad. Kommunikasjon med sensoren må implementeres ved å bruke såkalt bit banging, en teknikk for seriekommunikasjon. Det går ut på å manuelt veksle de digitale utgangene i programvare, istedet for å bruke dedikert maskinvare. På grunn av mangel på dedikert maskinvare vil dette påvirke ytelsen, prosessoren må gjøre all jobb ved kommunikasjon. SHT10 må styres med to utganger, SCK(klokke) og DATA.
 
-Mikrokontrolleren må først sende en kommando til sensoren som bestemmer hva som skal måles. Før sensoren sender råverdien til mikrokontrolleren. Denne råverdien brukes sammen med kalibreringsparametere, som er dokumentert i datablad, for å regne ut temperatur og luftfuktighet.
+\glslink{mikrokontroller}{Mikrokontrolleren} må først sende en kommando til sensoren som bestemmer hva som skal måles. Før sensoren sender råverdien til \glslink{mikrokontroller}{mikrokontrolleren}. Denne råverdien brukes sammen med kalibreringsparametere, som er dokumentert i datablad, for å regne ut temperatur og luftfuktighet.\cite{nettside:DatasheetSHT10}
 \subsubsection{Vindretning- og hastighet}
-Vindretning- og hastighetsensorene er analoge. Disse vil vi lese av ved hjelp av mikrokontrollerens ADC (Analog to Digital Converter). Dette er en maskinvare-modul som er en del av mikrokontrolleren. ADC-en er dokumentert i mikrokontrollerens datablad. Her må vi kun lese av verdien på inngangene og konvertere de til respektive verdier.
+Vindretning- og hastighetsensorene er analoge. Disse vil vi lese av ved hjelp av \glslink{mikrokontroller}{mikrokontrolleren} ADC (Analog to Digital Converter). Dette er en maskinvare-modul som er en del av \glslink{mikrokontroller}{mikrokontrolleren}. ADC-en er dokumentert i \glslink{mikrokontroller}{mikrokontrollerens} datablad. Her må vi kun lese av verdien på inngangene og konvertere de til respektive verdier.
 
 \section{Oversikt av hele systemet}
 
@@ -398,7 +424,7 @@ Vindretning- og hastighetsensorene er analoge. Disse vil vi lese av ved hjelp av
   \label{fig:Systemoversikt}
 \end{figure}
 
-I figur \ref{fig:Systemoversikt} ser du en oversikt over systemet og hvilke komponenter som kommuniserer med hverandre. Mikrokontrolleren leser av sensorene, behandler dataene og sender disse til serveren. På serveren blir dataene lagret i en database. Disse dataene blir hentet ut og visualisert på Project Hessdalen sin nettside.   
+I figur \ref{fig:Systemoversikt} ser du en oversikt over systemet og hvilke komponenter som kommuniserer med hverandre. \glslink{mikrokontroller}{Mikrokontrolleren} leser av sensorene, behandler dataene og sender disse til serveren. På serveren blir dataene lagret i en database. Disse dataene blir hentet ut og visualisert på Project Hessdalen sin nettside.   
 
 
 

@@ -2,41 +2,51 @@
 \chapter{Testing}
 \label{chap:evaluation} 
 
+I dette kapittelet vil vi ta for oss hvordan vi har testet produktet. Forklare hvordan de ulike delene av produktet har blitt testet. Forklare kort om hva vi var ute etter med testen og om produktet holdt mål.
 
-I dette kapittelet vil vi ta for oss hvordan vi har testet produktet. Forklare hvordan de ulike delene av produktet har blitt testet og hvem som har testet det. Forklare kort om hva vi var ute etter med testen og om produktet holdt mål.
+\section{Testing av Programvare}
+\subsection{Testing av mikrokontroller med sensorer}
+
+Hver sensor ble testet individuelt med mikrokontrolleren til vi fikk kommunisert med de.
+Etter alle sensorene var fungerende begynte vi å teste nettverksfunksjonalitet. Dette gjorde vi ved å sette opp en midlertidig server som kun tok imot data og printet de ut på skjerm. Da fikk vi raskt oversikt over hva som var feil.
+
+En feil som dukket opp var at nettverksmodulen på mikrokontrolleren sluttet å fungere etter 2-3 sendinger. Dette løste vi ved å starte om mikrokontrolleren hver hele time, noe som løste feilen.
+
+Vi testet også hva som skjedde hvis en sensor sluttet å fungere. Dette simulerte vi ved å plugge sensoren fra mikrokontrolleren. Vi implementerte løsninger som håndterer dette hvis det skulle skje med det ferdige produktet.
+
+\subsection{Testing av serveren}
+Hovedfokuset under testingen av serveren, har vært å se at riktig måledata blir plassert riktig i databasens tabeller. Dette har vi gjort ved å sammenligne mottatt måledata med det som blir lagt inn i databasen.
+
+En annen svært viktig del, har vært å se hvordan programmet håndterer ulike feil. Med dette mener vi tidsavbrudd, korrupte pakker, feilformatert JSON, o.l. Ved alle  disse feilene, har målet vært at programmet ikke krasjer, men heller går tilbake til en tilstand der det er klart for nytt datamottak.
+
+Det har også blitt testet for å se at den trådbaserte delen av programmet fungerer. Det vil si at vi har prøvd å sende flere tilkoblinger til serveren helt på likt.
+
+Alle disse testene var vellykket, og ingen feil ble funnet.
+
+\subsection{Testing av datapresentasjonen}
+I testingen av datapresentasjonen har fokuset vært todelt.
+
+Den ene delen har gått på å sjekke at riktig data blir hentet ut fra databasen og presentert på korrekt sted. Dette har vi gjort ved å sammenligne databasens verdier med det som blir presentert på nettsiden.
+
+Den andre delen har gått ut på å se om alle brukervalg blir håndert riktig i presentasjonen, og gir tilbake forventet resultat. Koden er skrevet på en slik måte at det ikke skal være mulig å gjøre brukerfeil på siden (slik beskrevet i avsnitt \ref{subsec:brukervalg}). Dette har også blitt testet ved å se om vi fant noen vei vi kunne lure presentasjonen til å vise noe vi ikke ønsket.
+
+Alle disse testene var vellykket, og ingen feil ble funnet.
+
+\section{Testing av kabinett}
+
+Da vi skulle kvalitetsteste kabinettet var vi ute etter å finne ut om det det holder på temperaturen når det blir kaldt ute. Det var også interessant å finne ut om termostaten fungerer og faktisk slår på varmeelementet når temperaturen synker under $5\,^{\circ}{\rm C}$. 
+
+Testen ble utført ved å legge kabinettet i en dypfryser som vi  forhåndsmålte til å holde rundt $-25\,^{\circ}{\rm C}$. For å kunne sjekke temperaturen i kabinettet la vi inn et termometer. 
+
+Etter tre timer sjekket vi tilstanden inne i kabinettet. Som forventet har termostaten reagert på temperaturfallet og skrudd på varmeelementet. Nå var temperaturen inne i kabinettet på $2\,^{\circ}{\rm C}$ som også tyder på at isolasjonen vi satt inn hjelper en god del.
+
+Testen var vellykket og viser at de tiltakene vi har tatt for å forhindre alt for lav temperatur fungerer.
 
 
-\section{Testing av sensorene}
+\section{Testing av systemet}
+Før systemet skulle settes i drift, langtidstestet vi det ved å la alt kjøre i to fulle døgn. Målet her var å finne feil som kunne oppstå under lengre kjøringer.
 
-Her kan vi skrive litt om hvordan vi testet de forskjellige sensorene.
-Kanskje undertittel(subsection) til hver måler?
+Måten dette ble utført på er at vi koblet systemet opp mot en datamaskin som lagret de feilmeldingene serveren og mikrokontrolleren sender ut dersom en av de skulle feile.
 
-\subsection{Testing av temperaturmåler}
-
-Tekst
-
-
-\section{Testing av systemet i Hessdalen}
-
-Mandag 5. mai dro bachelorgruppen med Erling Strand opp til Hessdalen. Det var planlagt lenge at vi skulle dra denne datoen og bruke denne uka til å montere værstasjonene i Hessdalen, hvis vi ble ferdige i tide.
-
-Turen oppover tok rundt 8 timer å kjøre med et par småstopp. Erling Strand hadde fått leid oss et hus vi skulle bo i under oppholdet. Mandags kveld ble brukt til den siste testingen av systemet og rette opp i eventuelle feil i koden som kunne få systemet til å krasje.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{sisteTest1}
-  \caption{Den aller siste testingen av værstasjonen}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{sisteTest2}
-  \caption{Den aller siste testingen av værstasjonen}
-\end{figure}
-
-Tirsdags morgen dro vi opp til Bluebox for å montere den første værstasjonen. Dette var omtrent 10 minutter fra der vi bodde\\
-
-Imens vi koblet opp den første værstasjonen kom NRK og lagde en repotasje om hessdalsfenomenet. Det var "Normal Galskap" med Are Sende Osen som programleder. Dette blir da sendt i løpet av høsten 2014.\\
-
-Etter vi var ferdige med å sette opp den første værstasjonen, gikk vi til det andre måletstedet som var et par hundre meter lengre opp i dalen der vi begynte å sette opp den andre værstasjonen. Vi brukte onsdag formiddag til å bli helt ferdige med å sette opp den andre værstasjonen.
+Denne testingen var svært vellykket. Vi mistet ingen målinger i løpet av disse to døgnene.
 
