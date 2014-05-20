@@ -1,0 +1,155 @@
+% Hiof bachelor report style -- modifications to the report style
+% Based on hiofreport ...
+
+%\usepackage[pdf]{pstricks}
+
+%%%%%
+%%%%%   PRELIMS
+%%%%%
+
+\typeout{Document Style Option `hiofreport' for latex2e <$Date: 12/31/2012 $>.}
+\typeout{Note that this tries to fulfill the 
+  requirements for bachelor reports from HiØ/IT but it is unofficial}
+
+% First thing we do is make sure that report has been loaded.  A
+% common error is to try to use hiofreport as a documentstyle.
+\@ifundefined{chapter}{\@latexerr{The `hiofreport' option should be used
+with the `report' document style}{You should probably read the
+hiofreport documentation.}}{}
+
+
+
+%%%%%
+%%%%%   SETUP MARGINS
+%%%%%
+
+\usepackage[a4paper,inner=25mm,outer=35mm,top=30mm,bottom=40mm]{geometry}
+
+
+\brokenpenalty=10000
+\pagestyle{headings}
+
+    % Fancy Header Style Options
+    %\pagestyle{fancy}                       % Sets fancy header and footer
+    %\fancyfoot{}                            % Delete current footer settings
+    \renewcommand{\chaptermark}[1]{         % Lower Case Chapter marker style
+    \markboth{\chaptername\ \thechapter.\ #1}{}}
+    \renewcommand{\sectionmark}[1]{         % Lower case Section marker style
+    \markright{\thesection.\ #1}}
+    \fancyhead[LE,RO]{\bfseries\thepage}    % Page number (boldface) in left on even
+                                            % pages and right on odd pages
+    \fancyhead[RE]{\bfseries\leftmark}      % Chapter in the right on even pages
+    \fancyhead[LO]{\bfseries\rightmark}     % Section in the left on odd pages
+    \renewcommand{\headrulewidth}{0.3pt}    % Width of head rule
+    %%% Clear Header %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Clear Header Style on the Last Empty Odd pages
+    \makeatletter
+    \def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else%
+        \hbox{}%
+        \thispagestyle{empty}%              % Empty header styles
+        \newpage%
+        \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+    \makeatother
+
+    \cleardoublepage
+    
+%%%%%%%%%%%%%%% TITLE PAGE
+
+ 
+
+
+\def\headerfont{\scriptsize}
+
+
+%\setlength{\TPHorizModule}{0.1\textwidth}
+\setlength{\TPHorizModule}{1mm}
+\setlength{\TPVertModule}{\TPHorizModule}
+\textblockorigin{\oddsidemargin}{\topmargin} % start everything near the top-left corner
+
+\makeatletter
+\renewcommand{\maketitle}{
+  \begin{titlepage}
+  \sffamily
+    \begin{textblock}{30}(27, 30)
+      \begin{flushleft}
+         \includegraphics[width=30mm]{hiof2.pdf}
+         %\include{hiof2}
+      \end{flushleft}
+    \end{textblock}
+    
+    \begin{textblock}{130}(67, 30)
+      \begin{flushleft}
+          \Huge \bfseries \em{ {\O}STFOLD} Unevercity College \\
+           \vskip 4mm
+          \headerfont \normalfont \em{ Faculty of Computer Science\\
+Remmen\\
+1757 Halden\\
+Phone number: 69 21 50 00\\
+URL: www.hiof.no}\\
+      \end{flushleft}
+    \end{textblock}
+ 
+\vspace*{25mm}
+\noindent \rule{1\textwidth}{0.5mm}\\
+\noindent \rule[3mm]{\textwidth}{1mm}
+%\hrulefill{10mm}
+\vspace*{-5mm}
+        \begin{center}
+          \huge \bfseries Bachelor's Project \par
+        \end{center}   
+
+\vspace{5mm}
+\small 
+ \hspace{-7mm}  
+ \begin{tabular}{|p{95mm}|p{0mm}|p{9mm}|p{36mm}}
+\cline{1-1} \cline{3-3}
+{\headerfont Prosjektkategori:} \newline  \categorye & & \freee & {\headerfont Fritt tilgjengelig} \\
+\cline{1-1} \cline{3-3}
+{\headerfont Omfgang i studiepoeng:} \newline \ectse & & \freeaftere & {\headerfont Fritt tilgjengelig etter} \\
+\cline{1-1} \cline{3-3}
+{\headerfont Fagområde:}  \newline \areae & & \freecustomere & {\headerfont Tilgjengelig etter avtale med oppdragsgiver} \\
+\cline{1-1} \cline{3-3}
+\end{tabular}
+
+ \vspace{5mm}
+ \hspace{-7mm}  
+ \begin{tabular}{|p{95mm}|p{50mm}|}
+\hline
+{\headerfont Title:} \newline \@title  & {\headerfont Dato:}  \newline \@date\\
+\hline
+{\headerfont Authors:}  \newline \@author & {\headerfont Veileder:}  \newline \tutore \\
+\hline
+{\headerfont Department/ Program:} \newline \departmente & {\headerfont Prosjektnummer: } \newline \projectnre\\
+\hline
+{\headerfont The boss:} \newline \customere & {\headerfont Kontaktperson hos oppdragsgiver:}  \newline \contacte\\
+\hline
+\end{tabular}
+
+\vspace{5mm}
+ \hspace{-7mm}  
+ \begin{tabular}{|p{149mm}|}
+\hline
+{\headerfont Abstract:}  \newline
+{%\headerfont 
+\abstracte}
+
+\\
+\hline
+\end{tabular}
+
+\vspace{5mm}
+ \hspace{-7mm}  
+ \begin{tabular}{p{25mm}|p{45mm}|}
+\cline{2-2}
+{\headerfont 3 keyword:}  &  \keyonee \\ 
+\cline{2-2}
+&  \keytwoe \\
+\cline{2-2}
+&  \keythreee \\
+\cline{2-2}
+\end{tabular}
+  
+        
+  \end{titlepage}
+  \setcounter{footnote}{0}
+} \makeatother
