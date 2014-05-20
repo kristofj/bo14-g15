@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<meta charset="UTF-8"/>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 		<title>bo14-g15</title>
 		<link rel="icon" type="image/ico" href="img/favicon.ico">
 		<link rel="stylesheet" type="text/css" href="style/style.css" />
